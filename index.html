@@ -278,37 +278,39 @@ footer{max-width:1280px;margin:0 auto;padding:10px 18px 40px;color:var(--muted);
 <!-- ======================= แท็บ 0: ทฤษฎีย่อ ======================= -->
 <section class="tab-panel active" id="tab-0">
   <div class="card hero">
-    <h2>Euler Method คืออะไร?</h2>
+    <h2>Euler's Method คืออะไร?</h2>
     <p>วิธีเชิงตัวเลขที่ง่ายที่สุดสำหรับแก้ Initial Value Problem (IVP) — ใช้เมื่อหาคำตอบแบบสูตรไม่ได้ หรือหาได้ยาก
-      แนวคิดคือ <b>"รู้ความชันตรงไหน ก็เดินตามความชันนั้นไปทีละก้าวเล็กๆ"</b></p>
-    <div class="formula" data-tex="y' = f(x,y),\quad y(x_0)=y_0 \qquad\Longrightarrow\qquad y_{n+1} = y_n + h\,f(x_n,y_n),\quad x_{n+1}=x_n+h" data-display="1"></div>
+      แนวคิดคือ <b>"รู้ความชันตรงไหน ก็เดินตามความชันนั้นไปทีละก้าวเล็กๆ"</b> ได้ค่าประมาณ w<sub>i</sub> ≈ y(t<sub>i</sub>) ที่ <b>mesh points</b></p>
+    <div class="formula" data-tex="\frac{dy}{dt} = f(t,y),\;\; a\le t\le b,\;\; y(a)=\alpha \quad\Longrightarrow\quad w_0=\alpha,\;\; w_{i+1} = w_i + h\,f(t_i,w_i)" data-display="1"></div>
   </div>
 
   <div class="grid-2">
     <div class="card">
-      <div class="card-title"><h3>① มาจาก Taylor series</h3></div>
-      <p>กระจาย y(x) รอบจุด x<sub>n</sub>:</p>
-      <div data-tex="y(x_n+h) = y(x_n) + h\,y'(x_n) + \frac{h^2}{2}y''(\xi)" data-display="1"></div>
-      <p>เพราะ <span data-tex="y'(x_n)=f(x_n,y_n)"></span> ถ้า <b>ตัดพจน์ h² ทิ้ง</b> จะได้</p>
-      <div data-tex="y_{n+1} \approx y_n + h\,f(x_n,y_n)" data-display="1"></div>
-      <p class="small muted">พจน์ที่ตัดทิ้ง <span data-tex="\tfrac{h^2}{2}y''(\xi)"></span> คือ <b>Local truncation error</b> ของแต่ละก้าว</p>
+      <div class="card-title"><h3>① มาจาก Taylor's Theorem</h3></div>
+      <p>ถ้า y(t) มีอนุพันธ์อันดับสองต่อเนื่องบน [a, b] สำหรับ i = 0, 1, …, N−1:</p>
+      <div data-tex="y(t_{i+1}) = y(t_i) + h\,y'(t_i) + \frac{h^2}{2}y''(\xi_i),\quad \xi_i\in(t_i,t_{i+1})" data-display="1"></div>
+      <p>เพราะ <span data-tex="y'(t_i)=f(t_i,y(t_i))"></span> ถ้า <b>ตัดพจน์ h² ทิ้ง</b> และใช้ <span data-tex="w_i\approx y(t_i)"></span> จะได้</p>
+      <div data-tex="w_0=\alpha,\qquad w_{i+1} = w_i + h\,f(t_i,w_i),\quad i=0,1,\dots,N-1" data-display="1"></div>
+      <p class="small muted">เรียกว่า <b>difference equation associated with Euler's method</b> · พจน์ที่ตัดทิ้ง <span data-tex="\tfrac{h^2}{2}y''(\xi_i)"></span> คือ Local truncation error</p>
     </div>
     <div class="card">
-      <div class="card-title"><h3>② มองเป็นความชัน (Slope)</h3></div>
-      <p>ความชัน = <span data-tex="\dfrac{\Delta y}{\Delta x}"></span> ถ้าเดินไปทางแกน x เป็นระยะ h:</p>
-      <div data-tex="\Delta y \approx \text{slope}\times\Delta x = f(x_n,y_n)\cdot h" data-display="1"></div>
-      <p>จึงได้ y ใหม่ = y เดิม + ระยะที่ขึ้น/ลง</p>
+      <div class="card-title"><h3>② Mesh points และ step size</h3></div>
+      <p>เลือกจำนวนเต็มบวก N แล้วแบ่ง [a, b] เท่าๆ กัน:</p>
+      <div data-tex="t_i = a + ih,\quad i=0,1,\dots,N,\qquad h=\frac{b-a}{N}=t_{i+1}-t_i" data-display="1"></div>
+      <p>มองเป็นความชัน: เดินไปทางแกน t ระยะ h → y เปลี่ยนไปประมาณ <span data-tex="h\cdot f(t_i,w_i)"></span></p>
       <div class="symbol-list">
-        <div><span data-tex="h"></span> step size ระยะก้าวบนแกน x</div>
-        <div><span data-tex="x_0,y_0"></span> จุดเริ่มต้น (initial condition)</div>
-        <div><span data-tex="f(x_n,y_n)"></span> ความชันที่จุดปัจจุบัน</div>
-        <div><span data-tex="n=\frac{x_{end}-x_0}{h}"></span> จำนวน step</div>
+        <div><span data-tex="t"></span> ตัวแปรอิสระ (เวลา)</div>
+        <div><span data-tex="[a,b]"></span> ช่วงที่ต้องการคำตอบ</div>
+        <div><span data-tex="\alpha"></span> ค่าเริ่มต้น y(a) = α</div>
+        <div><span data-tex="h"></span> step size</div>
+        <div><span data-tex="N"></span> จำนวน step</div>
+        <div><span data-tex="w_i"></span> ค่าประมาณของ y(tᵢ)</div>
       </div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title"><h3>③ ภาพเรขาคณิต: เดินตามเส้นสัมผัสทีละก้าว</h3><span class="spacer"></span><span class="badge">ตัวอย่าง y' = y, y(0)=1</span></div>
+    <div class="card-title"><h3>③ ภาพเรขาคณิต: เดินตามเส้นสัมผัสทีละก้าว</h3><span class="spacer"></span><span class="badge">ตัวอย่าง y' = y, 0 ≤ t ≤ 2, y(0)=1</span></div>
     <div class="row no-print" style="margin-bottom:10px">
       <span class="small muted">step size h:</span>
       <div class="seg" id="geo-h">
@@ -317,7 +319,7 @@ footer{max-width:1280px;margin:0 auto;padding:10px 18px 40px;color:var(--muted);
       <button class="btn sm" id="geo-step">ก้าวถัดไป ▶</button>
       <button class="btn sm ghost" id="geo-reset">เริ่มใหม่</button>
     </div>
-    <svg class="geo-svg" id="geo-svg" viewBox="0 0 720 340" role="img" aria-label="ภาพเรขาคณิตของ Euler Method"></svg>
+    <svg class="geo-svg" id="geo-svg" viewBox="0 0 720 340" role="img" aria-label="ภาพเรขาคณิตของ Euler's method"></svg>
     <p class="small muted" id="geo-caption" style="margin-top:8px"></p>
   </div>
 
@@ -326,35 +328,55 @@ footer{max-width:1280px;margin:0 auto;padding:10px 18px 40px;color:var(--muted);
       <div class="card-title"><h3>④ Error</h3></div>
       <ul>
         <li><b>Local truncation error</b> (ต่อ 1 ก้าว) = <span data-tex="O(h^2)"></span></li>
-        <li><b>Global error</b> (สะสมทั้งช่วง) = <span data-tex="O(h)"></span> เพราะเดิน <span data-tex="n=\frac{x_{end}-x_0}{h}"></span> ก้าว:
-          <div data-tex="n\cdot O(h^2) = \frac{L}{h}\cdot O(h^2)=O(h)" data-display="1"></div></li>
+        <li><b>Global error</b> (สะสมทั้งช่วง) = <span data-tex="O(h)"></span> เพราะเดิน <span data-tex="N=\frac{b-a}{h}"></span> ก้าว:
+          <div data-tex="N\cdot O(h^2) = \frac{b-a}{h}\cdot O(h^2)=O(h)" data-display="1"></div></li>
         <li>ลด h ลงครึ่งหนึ่ง → global error ลดลง <b>ประมาณครึ่งหนึ่ง</b> (first-order method)</li>
-        <li><span data-tex="\text{Absolute error}=|y_{exact}-y_{Euler}|"></span>,
-          <span data-tex="\text{Relative error}=\left|\frac{error}{y_{exact}}\right|\times100\%"></span></li>
+        <li><span data-tex="\text{Actual error}=|y(t_i)-w_i|"></span>,
+          <span data-tex="\text{Relative error}=\left|\frac{y(t_i)-w_i}{y(t_i)}\right|\times100\%"></span></li>
       </ul>
     </div>
     <div class="card">
       <div class="card-title"><h3>⑤ Algorithm</h3></div>
       <ol class="algo">
-        <li>รับ f, x₀, y₀, h, x_end</li>
-        <li>n = round((x_end − x₀)/h)</li>
-        <li>for k = 0 … n−1:</li>
-        <li>&nbsp;&nbsp;s = f(x_k, y_k)</li>
-        <li>&nbsp;&nbsp;y_{k+1} = y_k + h·s</li>
-        <li>&nbsp;&nbsp;x_{k+1} = x_k + h</li>
-        <li>return y_n ≈ y(x_end)</li>
+        <li>รับ f, a, b, α, N</li>
+        <li>h = (b − a)/N;  t = a;  w = α</li>
+        <li>for i = 0 … N−1:</li>
+        <li>&nbsp;&nbsp;w = w + h·f(t, w)</li>
+        <li>&nbsp;&nbsp;t = a + (i+1)h</li>
+        <li>&nbsp;&nbsp;output (t, w)</li>
+        <li>return w_N ≈ y(b)</li>
       </ol>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><h3>⑥ Error bound</h3></div>
+    <p><b>Theorem.</b> ให้ <span data-tex="D=\{(t,y)\mid a\le t\le b,\ -\infty<y<\infty\}"></span>, f ต่อเนื่องบน D และสอดคล้อง <b>Lipschitz condition</b> ในตัวแปร y ด้วย Lipschitz constant L
+      และมีค่าคงที่ M ที่ <span data-tex="|y''(t)|\le M"></span> ทุก t ∈ [a, b] แล้ว</p>
+    <div data-tex="|y(t_i)-w_i| \le \frac{hM}{2L}\left[e^{L(t_i-a)}-1\right]" data-display="1"></div>
+    <div class="grid-2">
+      <div>
+        <p class="small"><b>หา L:</b> ถ้า <span data-tex="\left|\frac{\partial f}{\partial y}(t,y)\right|\le L"></span> ทุก (t,y) ∈ D (D convex) แล้ว f เป็น Lipschitz ด้วยค่าคงที่ L</p>
+        <p class="small"><b>หา M:</b> ค่าสูงสุดของ <span data-tex="|y''(t)|"></span> บน [a, b] (ใช้ exact solution หรือ <span data-tex="y''=f_t+f_y\,f"></span>)</p>
+        <p class="small"><b>ตัวอย่าง:</b> <span data-tex="y'=y-t^2+1,\ 0\le t\le 2,\ y(0)=0.5,\ h=0.2"></span><br>
+          exact <span data-tex="y(t)=(t+1)^2-0.5e^t"></span>, <span data-tex="y''=2-0.5e^t"></span> → <span data-tex="M=0.5e^2-2"></span>, และ <span data-tex="\left|\partial f/\partial y\right|=1"></span> → L = 1</p>
+        <p class="small muted">ข้อสังเกต: bound มากกว่า error จริงเสมอ และห่างขึ้นเรื่อยๆ เมื่อ t เพิ่ม</p>
+      </div>
+      <div>
+        <div class="table-wrap" style="margin-top:0" id="eb-table"></div>
+        <p class="small muted" style="margin-top:6px">ตารางนี้คำนวณสดด้วยโค้ด · ลองในเครื่องช่วยคิดได้ด้วยตัวอย่าง "y − t² + 1"</p>
+      </div>
     </div>
   </div>
 
   <div class="grid-3">
     <div class="card"><h3>✅ ข้อดี</h3><ul class="pros">
-      <li>เข้าใจง่าย เขียนโปรแกรมง่าย</li><li>ใช้ f แค่ 1 ครั้งต่อ step (เร็ว)</li><li>เป็นพื้นฐานของ Heun, RK4</li></ul></div>
+      <li>เข้าใจง่าย เขียนโปรแกรมง่าย</li><li>ใช้ f แค่ 1 ครั้งต่อ step (เร็ว)</li><li>เป็นพื้นฐานของ Improved Euler, Midpoint, RK4</li></ul></div>
     <div class="card"><h3>⚠️ ข้อเสีย</h3><ul class="cons">
-      <li>แม่นยำต่ำ (first-order, O(h))</li><li>ต้องใช้ h เล็กมากถึงจะแม่น → คำนวณหลายรอบ</li><li>error สะสมไปเรื่อยๆ ทุก step</li></ul></div>
+      <li>แม่นยำต่ำ (first-order, O(h))</li><li>ต้องใช้ h เล็กมากถึงจะแม่น → คำนวณหลายรอบ</li><li>h เล็กเกินไป round-off error จะเพิ่ม</li></ul></div>
     <div class="card"><h3>🔎 ข้อควรระวัง</h3><ul>
       <li><b>Stability:</b> y' = −λy ต้องใช้ h &lt; 2/λ ไม่งั้นค่าแกว่ง/ระเบิด</li>
-      <li>ถ้า (x_end−x₀)/h ไม่ลงตัว จะไปไม่ถึง x_end พอดี</li>
+      <li>ถ้า (b − a)/h ไม่เป็นจำนวนเต็ม จะไปไม่ถึง b พอดี</li>
       <li>ใช้ค่าละเอียดในการคำนวณ ปัดเฉพาะตอนแสดงผล</li>
       <li>ระวังจุดที่ f ไม่นิยาม (หารศูนย์, √ ค่าลบ)</li></ul></div>
   </div>
@@ -365,39 +387,46 @@ footer{max-width:1280px;margin:0 auto;padding:10px 18px 40px;color:var(--muted);
   <div class="calc-layout">
     <div class="inputs card">
       <div class="card-title"><h2>ข้อมูลโจทย์</h2></div>
-      <label class="lbl" for="in-f">f(x, y) <span class="tip" tabindex="0" data-tip="ด้านขวาของ y' = f(x,y) เช่น x + y, -2*x*y, sin(x)-y ใช้ * แทนคูณ, ^ แทนยกกำลัง, exp(x), sqrt(x), log(x)=ln">?</span></label>
-      <input type="text" id="in-f" class="mono" value="x + y" autocomplete="off" spellcheck="false">
+      <label class="lbl" for="in-f">f(t, y) <span class="tip" tabindex="0" data-tip="ด้านขวาของ dy/dt = f(t,y) เช่น y - t^2 + 1, -2*t*y, sin(t)-y ใช้ * แทนคูณ, ^ แทนยกกำลัง, exp(t), sqrt(t), log(t)=ln (พิมพ์ x แทน t ก็ได้)">?</span></label>
+      <input type="text" id="in-f" class="mono" value="y - t^2 + 1" autocomplete="off" spellcheck="false">
       <div class="preview-tex" id="pv-f"></div>
       <div class="chips" id="examples"></div>
 
       <div class="field-row">
-        <div><label class="lbl" for="in-x0">x₀ <span class="tip" tabindex="0" data-tip="ค่า x เริ่มต้น (จุดที่รู้ค่า y แน่นอน)">?</span></label>
+        <div><label class="lbl" for="in-x0">a <span class="tip" tabindex="0" data-tip="จุดเริ่มต้นของช่วง a ≤ t ≤ b (t₀ = a) ที่รู้ค่า y แน่นอน">?</span></label>
           <input type="text" inputmode="decimal" id="in-x0" class="mono" value="0"></div>
-        <div><label class="lbl" for="in-y0">y₀ <span class="tip" tabindex="0" data-tip="ค่า y ที่ x₀ (initial condition: y(x₀) = y₀)">?</span></label>
-          <input type="text" inputmode="decimal" id="in-y0" class="mono" value="1"></div>
+        <div><label class="lbl" for="in-y0">α <span class="tip" tabindex="0" data-tip="initial condition: y(a) = α และ w₀ = α">?</span></label>
+          <input type="text" inputmode="decimal" id="in-y0" class="mono" value="0.5"></div>
       </div>
       <label class="lbl">กำหนดช่วงด้วย</label>
-      <div class="seg" id="range-mode"><button data-mode="xend" class="active">x_end</button><button data-mode="n">จำนวน step n</button></div>
+      <div class="seg" id="range-mode"><button data-mode="xend" class="active">b (ปลายช่วง)</button><button data-mode="n">จำนวน step N</button></div>
       <div class="field-row">
-        <div id="wrap-xend"><label class="lbl" for="in-xend">x_end <span class="tip" tabindex="0" data-tip="ค่า x ปลายทางที่ต้องการหา y">?</span></label>
-          <input type="text" inputmode="decimal" id="in-xend" class="mono" value="0.5"></div>
-        <div id="wrap-n" class="hidden"><label class="lbl" for="in-n">n <span class="tip" tabindex="0" data-tip="จำนวนก้าว (iteration) ที่จะเดิน">?</span></label>
-          <input type="text" inputmode="numeric" id="in-n" class="mono" value="5"></div>
-        <div><label class="lbl" for="in-h">h <span class="tip" tabindex="0" data-tip="step size: ระยะก้าวบนแกน x แต่ละครั้ง ต้องมากกว่า 0 ยิ่งเล็กยิ่งแม่น แต่ต้องคำนวณหลายรอบขึ้น">?</span></label>
-          <input type="text" inputmode="decimal" id="in-h" class="mono" value="0.1"></div>
+        <div id="wrap-xend"><label class="lbl" for="in-xend">b <span class="tip" tabindex="0" data-tip="ปลายช่วง a ≤ t ≤ b ต้องการหา y(b) ≈ w_N">?</span></label>
+          <input type="text" inputmode="decimal" id="in-xend" class="mono" value="2"></div>
+        <div id="wrap-n" class="hidden"><label class="lbl" for="in-n">N <span class="tip" tabindex="0" data-tip="จำนวน step (iteration) โดย h = (b − a)/N">?</span></label>
+          <input type="text" inputmode="numeric" id="in-n" class="mono" value="10"></div>
+        <div><label class="lbl" for="in-h">h <span class="tip" tabindex="0" data-tip="step size h = (b − a)/N = t_{i+1} − t_i ต้องมากกว่า 0 ยิ่งเล็กยิ่งแม่น แต่ต้องคำนวณหลายรอบขึ้น">?</span></label>
+          <input type="text" inputmode="decimal" id="in-h" class="mono" value="0.2"></div>
       </div>
-      <label class="lbl" for="in-exact">Exact solution y(x) <span class="badge gray">ไม่บังคับ</span> <span class="tip" tabindex="0" data-tip="คำตอบแม่นตรง (ถ้ารู้) ใช้เทียบ error เช่น 2*exp(x) - x - 1">?</span></label>
-      <input type="text" id="in-exact" class="mono" value="2*exp(x) - x - 1" autocomplete="off" spellcheck="false">
+      <label class="lbl" for="in-exact">Exact solution y(t) <span class="badge gray">ไม่บังคับ</span> <span class="tip" tabindex="0" data-tip="คำตอบแม่นตรง (ถ้ารู้) ใช้หา actual error เช่น (t+1)^2 - 0.5*exp(t)">?</span></label>
+      <input type="text" id="in-exact" class="mono" value="(t+1)^2 - 0.5*exp(t)" autocomplete="off" spellcheck="false">
       <div class="preview-tex" id="pv-exact"></div>
 
       <div class="field-row">
         <div><label class="lbl" for="in-dp">ทศนิยม</label>
-          <select id="in-dp"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div>
+          <select id="in-dp"><option>2</option><option>3</option><option>4</option><option selected>5</option><option>6</option><option>7</option><option>8</option></select></div>
         <div><label class="lbl">ตัวเลือกกราฟ</label>
           <label class="check"><input type="checkbox" id="opt-slope"> Slope field</label></div>
       </div>
-      <label class="check"><input type="checkbox" id="opt-heun"> เทียบ Improved Euler (Heun)</label>
+      <label class="check"><input type="checkbox" id="opt-heun"> เทียบ Improved Euler</label>
       <label class="check"><input type="checkbox" id="opt-rk4"> เทียบ RK4</label>
+      <label class="check"><input type="checkbox" id="opt-bound" checked> แสดง Error bound <span class="tip" tabindex="0" data-tip="|y(tᵢ) − wᵢ| ≤ (hM/2L)[e^{L(tᵢ−a)} − 1]  เว้น L, M ว่างไว้ ระบบจะประมาณให้">?</span></label>
+      <div class="field-row" id="wrap-bound">
+        <div><label class="lbl" for="in-L">L <span class="tip" tabindex="0" data-tip="Lipschitz constant: |∂f/∂y| ≤ L ทุก (t,y) ใน D · เว้นว่าง = ประมาณให้อัตโนมัติ">?</span></label>
+          <input type="text" inputmode="decimal" id="in-L" class="mono" placeholder="อัตโนมัติ"></div>
+        <div><label class="lbl" for="in-M">M <span class="tip" tabindex="0" data-tip="ค่าสูงสุดของ |y''(t)| บน [a, b] · พิมพ์สูตรได้ เช่น 0.5*e^2 - 2 · เว้นว่าง = ประมาณให้อัตโนมัติ">?</span></label>
+          <input type="text" inputmode="decimal" id="in-M" class="mono" placeholder="อัตโนมัติ"></div>
+      </div>
       <div id="calc-errors"></div>
       <div class="row" style="margin-top:12px">
         <button class="btn primary lg grow" id="btn-calc">คำนวณ</button>
@@ -419,7 +448,7 @@ footer{max-width:1280px;margin:0 auto;padding:10px 18px 40px;color:var(--muted);
 
       <div class="card" id="compare-card">
         <div class="card-title"><h2>เปรียบเทียบหลายค่า h</h2></div>
-        <p class="small muted">ใส่ h หลายค่าคั่นด้วยจุลภาค (ใช้ f, x₀, y₀, x_end จากด้านซ้าย) ดูว่า error ลดลงตาม h อย่างไร</p>
+        <p class="small muted">ใส่ h หลายค่าคั่นด้วยจุลภาค (ใช้ f, a, α, b จากด้านซ้าย) ดูว่า error ลดลงตาม h อย่างไร</p>
         <div class="row">
           <input type="text" id="in-hs" class="mono grow" value="0.5, 0.25, 0.1, 0.05">
           <button class="btn accent" id="btn-compare">เปรียบเทียบ</button>
@@ -610,10 +639,10 @@ function toReal(r) {
  */
 function compileExpr(str, kind = 'f') {
   let s = String(str ?? '').trim();
-  if (kind === 'f') s = s.replace(/^\s*(y'|y′|dy\/dx|f\(x,\s*y\))\s*=\s*/i, '');
-  if (kind === 'exact') s = s.replace(/^\s*y(\(x\))?\s*=\s*/i, '');
+  if (kind === 'f') s = s.replace(/^\s*(y'|y′|dy\/d[xt]|f\([xt],\s*y\))\s*=\s*/i, '');
+  if (kind === 'exact') s = s.replace(/^\s*y(\([xt]\))?\s*=\s*/i, '');
   s = s.replace(/\*\*/g, '^').replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-');
-  const label = kind === 'f' ? 'f(x,y)' : kind === 'exact' ? 'exact y(x)' : 'ค่าตัวเลข';
+  const label = kind === 'f' ? 'f(t,y)' : kind === 'exact' ? 'exact y(t)' : 'ค่าตัวเลข';
   if (!s) return { ok: false, error: `ยังไม่ได้กรอก ${label}` };
   if (typeof math === 'undefined') return { ok: false, error: 'โหลด math.js ไม่สำเร็จ (ตรวจอินเทอร์เน็ต)' };
   let node;
@@ -627,15 +656,17 @@ function compileExpr(str, kind = 'f') {
       const isFn = parent && parent.isFunctionNode && parent.fn === n;
       if (isFn) { if (typeof math[n.name] !== 'function' || ['import', 'createUnit', 'evaluate', 'parse', 'compile', 'simplify', 'derivative', 'reviver', 'chain'].includes(n.name)) bad = `${label}: ไม่รู้จักฟังก์ชัน "${n.name}"`; }
       else if (!allowed.includes(n.name) && !CONSTS.includes(n.name)) {
-        if (kind === 'exact' && n.name === 'y') bad = 'exact solution ต้องเป็นฟังก์ชันของ x เท่านั้น (ห้ามมี y)';
-        else bad = `${label}: ไม่รู้จักตัวแปร "${n.name}" (ใช้ได้เฉพาะ ${allowed.length ? allowed.join(', ') : 'ตัวเลข'}${allowed.length ? ', pi, e' : ''})`;
+        if (kind === 'exact' && n.name === 'y') bad = 'exact solution ต้องเป็นฟังก์ชันของ t เท่านั้น (ห้ามมี y)';
+        else bad = `${label}: ไม่รู้จักตัวแปร "${n.name}" (ใช้ได้เฉพาะ ${allowed.length ? allowed.filter(v => v !== 'x').join(', ') + ' (หรือ x แทน t)' : 'ตัวเลข'}${allowed.length ? ', pi, e' : ''})`;
       }
     }
   });
   if (bad) return { ok: false, error: bad };
+  // แปลงตัวแปร x → t ให้ตรงกับสัญลักษณ์ในเอกสาร (พิมพ์ x หรือ t ก็ได้)
+  if (kind !== 'num') node = node.transform((n, path, parent) => (n.isSymbolNode && n.name === 'x' && !(parent && parent.isFunctionNode && parent.fn === n)) ? new math.SymbolNode('t') : n);
   let code;
   try { code = node.compile(); } catch (e) { return { ok: false, error: `${label}: ${thaiParseErr(e.message)}` }; }
-  const fn = (x, y) => { try { return toReal(code.evaluate({ x, y, t: x })); } catch (e) { return NaN; } };
+  const fn = (x, y) => { try { return toReal(code.evaluate({ t: x, y })); } catch (e) { return NaN; } };
   return { ok: true, fn, node, src: s };
 }
 /* อ่านตัวเลข: รองรับ 0.5, 1e-3, pi/4, 1/3 */
@@ -762,7 +793,7 @@ function chartBaseOptions(range) {
     responsive: true, maintainAspectRatio: false, animation: { duration: 280 },
     interaction: { mode: 'nearest', intersect: false },
     scales: {
-      x: { type: 'linear', min: range?.xmin, max: range?.xmax, grid: { color: grid }, ticks: { color: tick, font: { family: 'JetBrains Mono' }, callback: v => fmtS(+v, 4) }, title: { display: true, text: 'x', color: tick } },
+      x: { type: 'linear', min: range?.xmin, max: range?.xmax, grid: { color: grid }, ticks: { color: tick, font: { family: 'JetBrains Mono' }, callback: v => fmtS(+v, 4) }, title: { display: true, text: 't', color: tick } },
       y: { type: 'linear', min: range?.ymin, max: range?.ymax, grid: { color: grid }, ticks: { color: tick, font: { family: 'JetBrains Mono' }, callback: v => fmtS(+v, 4) }, title: { display: true, text: 'y', color: tick } }
     },
     plugins: {
@@ -789,12 +820,55 @@ function sampleExact(ec, a, b, N = 240) {
 }
 
 /* =====================================================================
+   Error bound: |y(t_i) − w_i| ≤ (hM / 2L)·(e^{L(t_i − a)} − 1)
+   ===================================================================== */
+/* คำนวณ error bound ที่ t (ถ้า L → 0 ใช้ลิมิต hM(t−a)/2) */
+function errorBound(h, L, M, t, a) {
+  if (!(L >= 0) || !(M >= 0)) return NaN;
+  return L < 1e-12 ? h * M * (t - a) / 2 : h * M / (2 * L) * (Math.exp(L * (t - a)) - 1);
+}
+/**
+ * estimateLM: ประมาณ L = max|∂f/∂y| และ M = max|y''(t)| เชิงตัวเลข
+ * - L: สุ่มตรวจบนกริด t ∈ [a,b], y ในช่วงที่คำตอบผ่าน (+10%)
+ * - M: ถ้ามี exact ใช้ y'' จาก exact; ถ้าไม่มีใช้ y'' = f_t + f_y·f ตามคำตอบ RK4
+ */
+function estimateLM(prob) {
+  const f = prob.fc.fn, a = prob.x0, b = prob.xEnd;
+  let ref = null;
+  try { const m = Math.max(4, Math.ceil(400 / prob.n)); ref = rk4Solve(f, a, prob.y0, prob.h / m, prob.n * m); } catch (e) { ref = null; }
+  const ys = prob.pts.map(p => p.y).concat(ref ? ref.map(p => p.y) : []).concat(prob.ec ? prob.pts.map(p => p.ex) : []).filter(Number.isFinite);
+  let ymin = Math.min(...ys), ymax = Math.max(...ys); const pad = (ymax - ymin) * 0.1 + 1e-6; ymin -= pad; ymax += pad;
+  const fy = (t, y) => { const d = 1e-5 * Math.max(1, Math.abs(y)); return (f(t, y + d) - f(t, y - d)) / (2 * d); };
+  const ft = (t, y) => { const d = 1e-5 * Math.max(1, Math.abs(t)); return (f(t + d, y) - f(t - d, y)) / (2 * d); };
+  let L = 0;
+  for (let i = 0; i <= 40; i++) for (let j = 0; j <= 20; j++) {
+    const t = a + (b - a) * i / 40, y = ymin + (ymax - ymin) * j / 20, v = Math.abs(fy(t, y));
+    if (Number.isFinite(v)) L = Math.max(L, v);
+  }
+  let M = 0, Msrc;
+  if (prob.ec) {
+    // y'' จาก exact: ผลต่างกลางภายในช่วง, สูตรด้านเดียว (อันดับ 2) ที่ปลาย a และ b
+    const e = prob.ec.fn, d = 1e-3 * Math.max(1e-3, b - a);
+    const ypp = (t, i) => i === 0 ? (2 * e(t) - 5 * e(t + d) + 4 * e(t + 2 * d) - e(t + 3 * d)) / (d * d)
+      : i === 400 ? (2 * e(t) - 5 * e(t - d) + 4 * e(t - 2 * d) - e(t - 3 * d)) / (d * d)
+        : (e(t + d) - 2 * e(t) + e(t - d)) / (d * d);
+    for (let i = 0; i <= 400; i++) { const v = Math.abs(ypp(a + (b - a) * i / 400, i)); if (Number.isFinite(v)) M = Math.max(M, v); }
+    Msrc = 'จาก y″ ของ exact';
+  } else {
+    (ref || prob.pts).forEach(p => { const v = Math.abs(ft(p.x, p.y) + fy(p.x, p.y) * f(p.x, p.y)); if (Number.isFinite(v)) M = Math.max(M, v); });
+    Msrc = 'จาก y″ = f_t + f_y·f ตามคำตอบ RK4';
+  }
+  const clean = v => Math.abs(v - Math.round(v)) < 1e-6 ? Math.round(v) : +v.toPrecision(7);
+  return { L: clean(L), M: clean(M), Msrc };
+}
+
+/* =====================================================================
    ส่วนที่ 5: StepViewer — แสดงผลทีละ step (การ์ด + กราฟ + ตาราง + สรุป)
-   ใช้ทั้งในแท็บเครื่องช่วยคิดและในเฉลยของแท็บฝึกโจทย์
+   สัญลักษณ์ตามเอกสาร: t_i = a + ih, w_0 = α, w_{i+1} = w_i + h f(t_i, w_i)
    ===================================================================== */
 class StepViewer {
   constructor(container, prob, opts = {}) {
-    this.c = container; this.p = prob; this.o = Object.assign({ explain: false, heun: false, rk4: false, slope: false, maxCards: 300 }, opts);
+    this.c = container; this.p = prob; this.o = Object.assign({ explain: false, heun: false, rk4: false, slope: false, bound: null, maxCards: 300 }, opts);
     this.k = 0; this.timer = null; this.speed = 900;
     this.computeExtras(); this.build(); this.go(0);
   }
@@ -804,6 +878,8 @@ class StepViewer {
     try { if (this.o.heun) this.heun = heunSolve(p.fc.fn, p.x0, p.y0, p.h, p.n); } catch (e) { this.heun = null; }
     try { if (this.o.rk4) this.rk4 = rk4Solve(p.fc.fn, p.x0, p.y0, p.h, p.n); } catch (e) { this.rk4 = null; }
     this.exactPts = p.ec ? sampleExact(p.ec, p.x0, p.xEnd) : [];
+    const B = this.o.bound;
+    p.pts.forEach(pt => { pt.bound = B ? errorBound(p.h, B.L, B.M, pt.x, p.x0) : undefined; });
   }
   build() {
     const p = this.p;
@@ -815,7 +891,7 @@ class StepViewer {
     speed.addEventListener('input', () => { this.speed = 2150 - +speed.value; if (this.timer) { this.stop(); this.play(); } });
     this.c.append(
       el('div', { class: 'viewer-controls' },
-        btn('⏮', 'เริ่มใหม่ (step 0)', () => { this.stop(); this.go(0); }),
+        btn('⏮', 'เริ่มใหม่ (i = 0)', () => { this.stop(); this.go(0); }),
         btn('◀ ย้อนกลับ', 'ย้อนกลับ (←)', () => { this.stop(); this.prev(); }),
         this.progText,
         btn('ขั้นต่อไป ▶', 'ถัดไป (→)', () => { this.stop(); this.next(); }, 'primary'),
@@ -826,55 +902,65 @@ class StepViewer {
     );
     this.stepsBox = el('div', { class: 'steps-box', 'aria-live': 'polite' });
     this.canvas = el('canvas');
-    const legend = el('div', { class: 'legend-note' }, 'เส้นประสีชมพู = เส้นสัมผัส (tangent) ที่ใช้เดินใน step ปัจจุบัน' + (p.ec ? ' · เส้นประสีแดงแนวตั้ง = error ณ จุดล่าสุด' : ''));
+    const legend = el('div', { class: 'legend-note' }, 'จุดสีน้ำเงิน = wᵢ (Euler) · เส้นประสีชมพู = เส้นสัมผัส (tangent) ที่ใช้เดินใน step ปัจจุบัน' + (p.ec ? ' · เส้นประสีแดงแนวตั้ง = error |y(tᵢ) − wᵢ|' : ''));
     this.c.append(el('div', { class: 'viewer-body' }, this.stepsBox, el('div', {}, el('div', { class: 'chart-wrap' }, this.canvas), legend)));
     this.tableWrap = el('div', { class: 'table-wrap' });
+    this.boundNote = el('div');
     this.summaryBox = el('div');
-    this.c.append(this.tableWrap, this.summaryBox);
+    this.c.append(this.tableWrap, this.boundNote, this.summaryBox);
+    this.renderBoundNote();
     this.renderInitCard();
     this.cards = [];
     this.buildChart();
   }
-  /* การ์ดเริ่มต้น (step 0) */
+  renderBoundNote() {
+    const B = this.o.bound, p = this.p; this.boundNote.innerHTML = '';
+    if (!B) return;
+    this.boundNote.append(el('div', { class: 'alert info small', style: 'margin-top:10px' },
+      el('div', { html: `<b>Error bound:</b> ${tex(`|y(t_i)-w_i| \\le \\frac{hM}{2L}\\left[e^{L(t_i-a)}-1\\right]`)} &nbsp; ใช้ ${tex(`L = ${fmtS(B.L, 6)}`)} (${esc(B.Lsrc)}), ${tex(`M = ${fmtS(B.M, 6)}`)} (${esc(B.Msrc)})` }),
+      el('div', { class: 'muted', style: 'margin-top:4px' }, 'L = Lipschitz constant (|∂f/∂y| ≤ L), M = ค่าสูงสุดของ |y″(t)| บน [a, b] · bound เป็นขอบเขตบน จึงมักมากกว่า error จริง')));
+  }
+  /* การ์ดเริ่มต้น (i = 0) */
   renderInitCard() {
     const p = this.p, dp = p.dp;
     const card = el('div', { class: 'step-card' },
-      el('div', { class: 'step-head' }, el('span', { class: 'step-no' }, 'start'), 'Initial condition'),
-      el('div', { class: 'step-line' }, el('span', { class: 'lab' }, 'โจทย์'), el('div', { class: 'tex', html: tex(`y' = ${p.fc.node.toTex({ parenthesis: 'keep' })},\\quad y(${fmtS(p.x0, dp)}) = ${fmtS(p.y0, dp)}`) })),
-      el('div', { class: 'step-line' }, el('span', { class: 'lab' }, 'ค่าที่ใช้'), el('div', { class: 'tex', html: tex(`x_0=${fmtS(p.x0, dp)},\\; y_0=${fmtS(p.y0, dp)},\\; h=${fmtS(p.h, 8)},\\; n=${p.n}`) })),
-      el('div', { class: 'step-line' }, el('span', { class: 'lab' }, 'เป้าหมาย'), el('div', { class: 'tex', html: tex(`y(${fmtS(p.xEnd, 8)}) \\approx y_{${p.n}}`) })),
-      this.o.explain ? el('div', { class: 'step-why' }, '💡 เริ่มจากจุดที่รู้ค่าแน่นอน (x₀, y₀) แล้วจะเดินไปทีละ h จนครบ n step') : null
+      el('div', { class: 'step-head' }, el('span', { class: 'step-no' }, 'i = 0'), 'Initial condition'),
+      el('div', { class: 'step-line' }, el('span', { class: 'lab' }, 'โจทย์'), el('div', { class: 'tex', html: tex(`y' = ${p.fc.node.toTex({ parenthesis: 'keep' })},\\quad ${fmtS(p.x0, dp)} \\le t \\le ${fmtS(p.xEnd, 8)},\\quad y(${fmtS(p.x0, dp)}) = ${fmtS(p.y0, dp)}`) })),
+      el('div', { class: 'step-line' }, el('span', { class: 'lab' }, 'ค่าที่ใช้'), el('div', { class: 'tex', html: tex(`a=t_0=${fmtS(p.x0, dp)},\\; b=${fmtS(p.xEnd, 8)},\\; w_0=\\alpha=${fmtS(p.y0, dp)},\\; h=${fmtS(p.h, 8)},\\; N=${p.n}`) })),
+      el('div', { class: 'step-line' }, el('span', { class: 'lab' }, 'mesh points'), el('div', { class: 'tex', html: tex(`t_i = a + ih,\\quad i = 0,1,\\dots,${p.n}`) })),
+      el('div', { class: 'step-line' }, el('span', { class: 'lab' }, 'เป้าหมาย'), el('div', { class: 'tex', html: tex(`y(b) = y(${fmtS(p.xEnd, 8)}) \\approx w_{${p.n}}`) })),
+      this.o.explain ? el('div', { class: 'step-why' }, '💡 เริ่มจากจุดที่รู้ค่าแน่นอน (a, α) แล้วเดินไปทีละ h จนครบ N step') : null
     );
     this.initCard = card; this.stepsBox.append(card);
   }
-  /* การ์ดของ step k (คำนวณจาก k-1 → k) */
+  /* การ์ดของ step: คำนวณจาก i → i+1 */
   makeCard(k) {
     const p = this.p, dp = p.dp, a = p.pts[k - 1], b = p.pts[k], i = k - 1;
     const s = substitute(p.fc.node, a.x, a.y, dp);
     const fv = fmtS(a.f, dp), hv = fmtS(p.h, 8);
     const lines = [
-      ['① หาความชัน', `f(x_{${i}},y_{${i}}) = f(${fmtS(a.x, dp)},\\,${fmtS(a.y, dp)}) = ${s.tex} = ${fv}`],
+      ['① หาความชัน', `f(t_{${i}},w_{${i}}) = f(${fmtS(a.x, dp)},\\,${fmtS(a.y, dp)}) = ${s.tex} = ${fv}`],
       ['② คูณ h', `h\\cdot f = ${hv}\\times ${texNum(a.f, dp)} = ${fmtS(a.hf, dp)}`],
-      ['③ บวก y เดิม', `y_{${k}} = y_{${i}} + h\\,f = ${fmtS(a.y, dp)} ${a.hf < 0 ? '-' : '+'} ${fmtS(Math.abs(a.hf), dp)} = \\mathbf{${fmtS(b.y, dp)}}`],
-      ['x ถัดไป', `x_{${k}} = x_{${i}} + h = ${fmtS(a.x, dp)} + ${hv} = ${fmtS(b.x, 8)}`],
-      ['สรุปสูตร', `y_{${k}} = y_{${i}} + h\\cdot f(x_{${i}},y_{${i}}) = ${fmtS(a.y, dp)} + ${hv}\\cdot\\left(${s.tex}\\right) = ${fmtS(b.y, dp)}`]
+      ['③ บวก w เดิม', `w_{${k}} = w_{${i}} + h\\,f = ${fmtS(a.y, dp)} ${a.hf < 0 ? '-' : '+'} ${fmtS(Math.abs(a.hf), dp)} = \\mathbf{${fmtS(b.y, dp)}}`],
+      ['t ถัดไป', `t_{${k}} = t_{${i}} + h = ${fmtS(a.x, dp)} + ${hv} = ${fmtS(b.x, 8)}`],
+      ['สรุปสูตร', `w_{${k}} = w_{${i}} + h\\,f(t_{${i}},w_{${i}}) = ${fmtS(a.y, dp)} + ${hv}\\cdot\\left(${s.tex}\\right) = ${fmtS(b.y, dp)}`]
     ];
-    if (p.ec) lines.push(['เทียบ exact', `y(${fmtS(b.x, 8)}) = ${fmtS(b.ex, dp)},\\quad |error| = ${fmtS(b.err, dp + 2)}` + (Number.isFinite(b.rel) ? `\\;(${fmtS(b.rel, 4)}\\%)` : '')]);
+    if (p.ec) lines.push(['เทียบ exact', `y(t_{${k}}) = ${fmtS(b.ex, dp)},\\quad |y(t_{${k}})-w_{${k}}| = ${fmtS(b.err, dp + 2)}` + (Number.isFinite(b.rel) ? `\\;(${fmtS(b.rel, 4)}\\%)` : '')]);
+    if (Number.isFinite(b.bound)) lines.push(['Error bound', `|y(t_{${k}})-w_{${k}}| \\le \\tfrac{hM}{2L}\\left[e^{L(t_{${k}}-a)}-1\\right] = ${fmtS(b.bound, dp + 2)}`]);
     let why = null;
     if (this.o.explain) {
-      const msg = k === 1 ? 'ใช้ความชันที่จุดเริ่มต้นเป็นตัวแทนความชันทั้งช่วง [x₀, x₁] จึงเดินตามเส้นสัมผัสไป 1 ก้าว'
-        : k === p.n ? `step สุดท้าย: ได้ y${sub(k)} ซึ่งคือค่าประมาณของ y(${fmtS(b.x, 8)}) ที่โจทย์ถาม`
-          : `ใช้ y${sub(i)} ที่เพิ่งได้ (ซึ่งเป็นค่าประมาณ) เป็นจุดตั้งต้นใหม่ — error จาก step ก่อนจึงถูกส่งต่อมาด้วย`;
+      const msg = k === 1 ? 'ใช้ความชันที่จุดเริ่มต้น (a, α) เป็นตัวแทนความชันทั้งช่วง [t₀, t₁] จึงเดินตามเส้นสัมผัสไป 1 ก้าว'
+        : k === p.n ? `step สุดท้าย: ได้ w${sub(k)} ซึ่งคือค่าประมาณของ y(b) = y(${fmtS(b.x, 8)}) ที่โจทย์ถาม`
+          : `ใช้ w${sub(i)} ที่เพิ่งได้ (ซึ่งเป็นค่าประมาณของ y(t${sub(i)}) ไม่ใช่ค่าจริง) เป็นจุดตั้งต้นใหม่ — error จาก step ก่อนจึงถูกส่งต่อมาด้วย`;
       why = el('div', { class: 'step-why' }, '💡 ', msg);
     }
     return el('div', { class: 'step-card' },
-      el('div', { class: 'step-head' }, el('span', { class: 'step-no' }, `step ${k}`), `${fmtS(a.x, dp)} → ${fmtS(b.x, dp)}`),
+      el('div', { class: 'step-head' }, el('span', { class: 'step-no' }, `i = ${i} → ${k}`), `t: ${fmtS(a.x, dp)} → ${fmtS(b.x, dp)}`),
       lines.map(([lab, t]) => el('div', { class: 'step-line' }, el('span', { class: 'lab' }, lab), el('div', { class: 'tex', html: tex(t) }))),
       why);
   }
   go(k) {
     const p = this.p; k = Math.max(0, Math.min(p.n, k)); this.k = k;
-    // การ์ด: สร้างเพิ่ม/ลบให้ตรงกับ k
     const limit = Math.min(k, this.o.maxCards);
     while (this.cards.length > limit) this.cards.pop().remove();
     while (this.cards.length < limit) { const c = this.makeCard(this.cards.length + 1); this.cards.push(c); this.stepsBox.append(c); }
@@ -883,7 +969,7 @@ class StepViewer {
     const cur = this.cards[limit - 1] || this.initCard;
     $$('.step-card', this.stepsBox).forEach(c => c.classList.toggle('current', c === cur));
     this.stepsBox.scrollTop = cur.offsetTop - this.stepsBox.offsetTop - 8;
-    this.progText.textContent = `step ${k} / ${p.n}`;
+    this.progText.textContent = `i = ${k} / N = ${p.n}`;
     this.progBar.firstChild.style.width = (k / p.n * 100) + '%';
     this.updateChart(); this.renderTable(); this.renderSummary();
     if (this.o.onChange) this.o.onChange(k);
@@ -906,10 +992,10 @@ class StepViewer {
     const main = [p.pts]; if (this.heun) main.push(this.heun); if (this.rk4) main.push(this.rk4);
     const range = computeRange(main, [this.exactPts]);
     const ds = [];
-    if (p.ec) ds.push({ label: 'Exact', data: this.exactPts, showLine: true, pointRadius: 0, borderColor: cssVar('--c-exact'), borderWidth: 2.5, order: 5 });
-    if (this.heun) ds.push({ label: 'Heun', key: 'heun', data: [], showLine: true, pointRadius: dense ? 0 : 3, borderColor: cssVar('--c-heun'), backgroundColor: cssVar('--c-heun'), borderDash: [6, 4], borderWidth: 2, order: 4 });
+    if (p.ec) ds.push({ label: 'Exact y(t)', data: this.exactPts, showLine: true, pointRadius: 0, borderColor: cssVar('--c-exact'), borderWidth: 2.5, order: 5 });
+    if (this.heun) ds.push({ label: 'Improved Euler', key: 'heun', data: [], showLine: true, pointRadius: dense ? 0 : 3, borderColor: cssVar('--c-heun'), backgroundColor: cssVar('--c-heun'), borderDash: [6, 4], borderWidth: 2, order: 4 });
     if (this.rk4) ds.push({ label: 'RK4', key: 'rk4', data: [], showLine: true, pointRadius: dense ? 0 : 3, borderColor: cssVar('--c-rk4'), backgroundColor: cssVar('--c-rk4'), borderDash: [2, 3], borderWidth: 2, order: 4 });
-    ds.push({ label: 'Euler', key: 'euler', data: [], showLine: true, pointRadius: dense ? 1.5 : 4, borderColor: cssVar('--c-euler'), backgroundColor: cssVar('--c-euler'), borderWidth: 2.5, order: 3 });
+    ds.push({ label: 'Euler wᵢ', key: 'euler', data: [], showLine: true, pointRadius: dense ? 1.5 : 4, borderColor: cssVar('--c-euler'), backgroundColor: cssVar('--c-euler'), borderWidth: 2.5, order: 3 });
     ds.push({ label: 'เส้นสัมผัส', key: 'tan', data: [], showLine: true, pointRadius: 0, borderColor: cssVar('--c-tan'), borderDash: [6, 5], borderWidth: 2, order: 2 });
     if (p.ec) ds.push({ label: '_error', key: 'err', data: [], showLine: true, pointRadius: 0, borderColor: cssVar('--danger'), borderDash: [2, 3], borderWidth: 2, order: 1 });
     ds.push({ label: 'จุดล่าสุด', key: 'cur', data: [], pointRadius: 8, pointHoverRadius: 9, backgroundColor: cssVar('--c-euler'), borderColor: cssVar('--card'), borderWidth: 3, order: 0 });
@@ -933,9 +1019,10 @@ class StepViewer {
   }
   /* ---------- ตาราง ---------- */
   columns() {
-    const p = this.p, cols = [['n', r => r.k], ['x_n', r => fmtF(r.x, p.dp)], ['y_n (Euler)', r => fmtF(r.y, p.dp)], ['f(x_n, y_n)', r => fmtF(r.f, p.dp)]];
-    if (p.ec) cols.push(['y exact', r => fmtF(r.ex, p.dp)], ['|error|', r => fmtF(r.err, p.dp + 2)], ['rel. error %', r => Number.isFinite(r.rel) ? fmtF(r.rel, 4) : '—']);
-    if (this.heun) cols.push(['Heun', r => fmtF(this.heun[r.k].y, p.dp)]);
+    const p = this.p, cols = [['i', r => r.k], ['tᵢ', r => fmtF(r.x, p.dp)], ['wᵢ (Euler)', r => fmtF(r.y, p.dp)], ['f(tᵢ, wᵢ)', r => fmtF(r.f, p.dp)]];
+    if (p.ec) cols.push(['y(tᵢ) exact', r => fmtF(r.ex, p.dp)], ['Actual error |y(tᵢ) − wᵢ|', r => fmtF(r.err, p.dp + 2)], ['rel. error %', r => Number.isFinite(r.rel) ? fmtF(r.rel, 4) : '—']);
+    if (this.o.bound) cols.push(['Error bound', r => fmtF(r.bound, p.dp + 2)]);
+    if (this.heun) cols.push(['Improved Euler', r => fmtF(this.heun[r.k].y, p.dp)]);
     if (this.rk4) cols.push(['RK4', r => fmtF(this.rk4[r.k].y, p.dp)]);
     return cols;
   }
@@ -952,60 +1039,64 @@ class StepViewer {
     const p = this.p, dp = p.dp;
     this.summaryBox.innerHTML = '';
     if (this.k < p.n) return;
-    const last = p.pts[p.n], items = [['x_end', fmtS(p.xEnd, 8)], ['จำนวน step', p.n], ['h', fmtS(p.h, 8)]];
-    if (p.ec) items.push(['y exact', fmtS(last.ex, dp)], ['Absolute error', fmtS(last.err, dp + 2)], ['Relative error', Number.isFinite(last.rel) ? fmtS(last.rel, 4) + ' %' : '—']);
+    const last = p.pts[p.n], items = [['a', fmtS(p.x0, 8)], ['b', fmtS(p.xEnd, 8)], ['N', p.n], ['h = (b − a)/N', fmtS(p.h, 8)]];
+    if (p.ec) items.push(['y(b) exact', fmtS(last.ex, dp)], ['Actual error', fmtS(last.err, dp + 2)], ['Relative error', Number.isFinite(last.rel) ? fmtS(last.rel, 4) + ' %' : '—']);
+    if (Number.isFinite(last.bound)) items.push(['Error bound ที่ b', fmtS(last.bound, dp + 2)]);
     const ref = referenceValue(p);
-    if (this.heun) { const v = this.heun[p.n].y; items.push(['Heun', fmtS(v, dp) + (ref ? `  (err ${fmtS(Math.abs(ref.v - v), dp + 2)})` : '')]); }
+    if (this.heun) { const v = this.heun[p.n].y; items.push(['Improved Euler', fmtS(v, dp) + (ref ? `  (err ${fmtS(Math.abs(ref.v - v), dp + 2)})` : '')]); }
     if (this.rk4) { const v = this.rk4[p.n].y; items.push(['RK4', fmtS(v, dp) + (ref ? `  (err ${fmtS(Math.abs(ref.v - v), dp + 2)})` : '')]); }
     let note = '';
     if (ref && Number.isFinite(ref.v)) {
       try {
         const half = eulerSolve(p.fc.fn, p.x0, p.y0, p.h / 2, p.n * 2), e1 = Math.abs(ref.v - last.y), e2 = Math.abs(ref.v - half[p.n * 2].y);
-        if (e2 > 1e-14) note = `ทดลองลด h เหลือ ${fmtS(p.h / 2, 8)} → error = ${fmtS(e2, dp + 2)} (ลดลง ${fmtS(e1 / e2, 2)} เท่า, เทียบกับ ${ref.label}) ≈ 2 เท่า สอดคล้องกับ Global error = O(h)`;
+        if (e2 > 1e-14) note = `ทดลองลด h เหลือ ${fmtS(p.h / 2, 8)} (N = ${p.n * 2}) → error = ${fmtS(e2, dp + 2)} (ลดลง ${fmtS(e1 / e2, 2)} เท่า, เทียบกับ ${ref.label}) ≈ 2 เท่า สอดคล้องกับ Global error = O(h)`;
       } catch (e) { /* ข้าม */ }
     }
     this.summaryBox.append(el('div', { class: 'summary' },
       el('div', { class: 'small muted' }, 'ผลลัพธ์สุดท้าย'),
-      el('div', { class: 'big', html: `y(${esc(fmtS(p.xEnd, 8))}) ≈ ${esc(fmtS(last.y, dp))}` }),
+      el('div', { class: 'big', html: `y(${esc(fmtS(p.xEnd, 8))}) ≈ w<sub>${p.n}</sub> = ${esc(fmtS(last.y, dp))}` }),
       el('div', { class: 'kv' }, items.map(([k, v]) => el('div', {}, el('b', {}, k), el('span', {}, String(v))))),
       note ? el('p', { class: 'small', style: 'margin:10px 0 0' }, '📉 ' + note) : null));
   }
-  setOptions(o) { Object.assign(this.o, o); this.computeExtras(); this.buildChart(); this.go(this.k); }
+  setOptions(o) { Object.assign(this.o, o); this.computeExtras(); this.buildChart(); this.renderBoundNote(); this.go(this.k); }
   rebuildChart() { this.buildChart(); this.updateChart(); }
   /* ---------- Export ---------- */
   toCSV() {
     const p = this.p, cols = this.columns();
     const q = s => /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
-    const head = `# Euler Method: y' = ${p.fStr}, y(${p.x0}) = ${p.y0}, h = ${p.h}, n = ${p.n}` + (p.ec ? `, exact = ${p.exactStr}` : '');
+    const head = `# Euler's method: y' = ${p.fStr}, ${p.x0} <= t <= ${p.xEnd}, y(${p.x0}) = ${p.y0}, h = ${p.h}, N = ${p.n}` + (p.ec ? `, exact y(t) = ${p.exactStr}` : '') + (this.o.bound ? `, L = ${this.o.bound.L}, M = ${this.o.bound.M}` : '');
     return '﻿' + [q(head), cols.map(c => q(c[0])).join(','), ...p.pts.map(r => cols.map(c => q(String(c[1](r)))).join(','))].join('\r\n');
   }
   toText() {
-    const p = this.p, dp = p.dp, L = [`Euler Method: y' = ${p.fStr}, y(${fmtS(p.x0, dp)}) = ${fmtS(p.y0, dp)}, h = ${fmtS(p.h, 8)}, n = ${p.n}`, ''];
+    const p = this.p, dp = p.dp, L = [`Euler's method: y' = ${p.fStr}, ${fmtS(p.x0, dp)} ≤ t ≤ ${fmtS(p.xEnd, 8)}, y(${fmtS(p.x0, dp)}) = α = ${fmtS(p.y0, dp)}, h = ${fmtS(p.h, 8)}, N = ${p.n}`, `w₀ = α,  w_{i+1} = w_i + h·f(t_i, w_i)`, ''];
     for (let k = 1; k <= p.n; k++) {
       const a = p.pts[k - 1], b = p.pts[k], s = substitute(p.fc.node, a.x, a.y, dp).text;
-      L.push(`Step ${k}:`, `  f(x${sub(k - 1)}, y${sub(k - 1)}) = f(${fmtS(a.x, dp)}, ${fmtS(a.y, dp)}) = ${s} = ${fmtS(a.f, dp)}`,
+      L.push(`i = ${k - 1}:`, `  f(t${sub(k - 1)}, w${sub(k - 1)}) = f(${fmtS(a.x, dp)}, ${fmtS(a.y, dp)}) = ${s} = ${fmtS(a.f, dp)}`,
         `  h·f = ${fmtS(p.h, 8)} × ${fmtS(a.f, dp)} = ${fmtS(a.hf, dp)}`,
-        `  y${sub(k)} = ${fmtS(a.y, dp)} + ${fmtS(a.hf, dp)} = ${fmtS(b.y, dp)},  x${sub(k)} = ${fmtS(b.x, 8)}` + (p.ec ? `  (exact ${fmtS(b.ex, dp)}, error ${fmtS(b.err, dp + 2)})` : ''));
+        `  w${sub(k)} = ${fmtS(a.y, dp)} + ${fmtS(a.hf, dp)} = ${fmtS(b.y, dp)},  t${sub(k)} = ${fmtS(b.x, 8)}` + (p.ec ? `  (y(t${sub(k)}) = ${fmtS(b.ex, dp)}, error ${fmtS(b.err, dp + 2)})` : '') + (Number.isFinite(b.bound) ? `  [bound ${fmtS(b.bound, dp + 2)}]` : ''));
     }
-    L.push('', `คำตอบ: y(${fmtS(p.xEnd, 8)}) ≈ ${fmtS(p.pts[p.n].y, dp)}`);
+    L.push('', `คำตอบ: y(${fmtS(p.xEnd, 8)}) ≈ w${sub(p.n)} = ${fmtS(p.pts[p.n].y, dp)}`);
     return L.join('\n');
   }
 }
+
 </script>
 <script>
 'use strict';
 /* =====================================================================
    ส่วนที่ 6: แท็บเครื่องช่วยคิด (Calculator)
    ===================================================================== */
-const CALC_DEFAULT = { f: 'x + y', x0: '0', y0: '1', xend: '0.5', n: '5', h: '0.1', exact: '2*exp(x) - x - 1', dp: '4' };
+const CALC_DEFAULT = { f: 'y - t^2 + 1', x0: '0', y0: '0.5', xend: '2', n: '10', h: '0.2', exact: '(t+1)^2 - 0.5*exp(t)', dp: '5' };
 const EXAMPLES = [
-  { label: 'x + y', f: 'x + y', x0: 0, y0: 1, h: 0.1, xend: 0.5, exact: '2*exp(x) - x - 1' },
-  { label: 'y  (→ e)', f: 'y', x0: 0, y0: 1, h: 0.1, xend: 1, exact: 'exp(x)' },
-  { label: '-0.1*(y-25)  กาแฟ', f: '-0.1*(y-25)', x0: 0, y0: 90, h: 1, xend: 2, exact: '25 + 65*exp(-0.1*x)' },
-  { label: '-2*x*y', f: '-2*x*y', x0: 0, y0: 1, h: 0.1, xend: 1, exact: 'exp(-x^2)' },
-  { label: 'sin(x) - y', f: 'sin(x) - y', x0: 0, y0: 1, h: 0.2, xend: 2, exact: '0.5*sin(x) - 0.5*cos(x) + 1.5*exp(-x)' },
-  { label: 'x^2 + y^2', f: 'x^2 + y^2', x0: 0, y0: 0, h: 0.1, xend: 1, exact: '' },
-  { label: '-15*y  (ไม่เสถียร)', f: '-15*y', x0: 0, y0: 1, h: 0.2, xend: 2, exact: 'exp(-15*x)' },
+  { label: 'y - t^2 + 1  (Error bound)', f: 'y - t^2 + 1', x0: 0, y0: 0.5, h: 0.2, xend: 2, exact: '(t+1)^2 - 0.5*exp(t)' },
+  { label: 'y*t^2 + 1', f: 'y*t^2 + 1', x0: 0, y0: 0.5, h: 0.5, xend: 2, exact: '' },
+  { label: '1 + (t-y)^2', f: '1 + (t - y)^2', x0: 2, y0: 1, h: 0.5, xend: 3, exact: '' },
+  { label: "-2*y + t^3*exp(-2*t)", f: '-2*y + t^3*exp(-2*t)', x0: 0, y0: 1, h: 0.1, xend: 1, exact: 'exp(-2*t)/4*(t^4 + 4)' },
+  { label: 't + y', f: 't + y', x0: 0, y0: 1, h: 0.1, xend: 0.5, exact: '2*exp(t) - t - 1' },
+  { label: 'y  (→ e)', f: 'y', x0: 0, y0: 1, h: 0.1, xend: 1, exact: 'exp(t)' },
+  { label: '-0.1*(y-25)  กาแฟ', f: '-0.1*(y-25)', x0: 0, y0: 90, h: 1, xend: 2, exact: '25 + 65*exp(-0.1*t)' },
+  { label: 'sin(t) - y', f: 'sin(t) - y', x0: 0, y0: 1, h: 0.2, xend: 2, exact: '0.5*sin(t) - 0.5*cos(t) + 1.5*exp(-t)' },
+  { label: '-15*y  (ไม่เสถียร)', f: '-15*y', x0: 0, y0: 1, h: 0.2, xend: 2, exact: 'exp(-15*t)' },
 ];
 let rangeMode = 'xend';
 
@@ -1015,7 +1106,7 @@ function livePreview(inputId, pvId, kind) {
   const upd = () => {
     if (!inp.value.trim()) { pv.innerHTML = '<span class="muted small">—</span>'; inp.classList.remove('invalid'); return; }
     const c = compileExpr(inp.value, kind);
-    if (c.ok) { pv.innerHTML = tex((kind === 'f' ? "y' = " : 'y(x) = ') + c.node.toTex({ parenthesis: 'keep' })); inp.classList.remove('invalid'); }
+    if (c.ok) { pv.innerHTML = tex((kind === 'f' ? "y' = " : 'y(t) = ') + c.node.toTex({ parenthesis: 'keep' })); inp.classList.remove('invalid'); }
     else { pv.innerHTML = `<span class="small" style="color:var(--danger)">${esc(c.error)}</span>`; }
   };
   inp.addEventListener('input', upd); upd();
@@ -1038,25 +1129,25 @@ function readCalcInputs() {
   const errors = [], warnings = [], bad = [];
   const fc = compileExpr($('#in-f').value, 'f'); if (!fc.ok) { errors.push(fc.error); bad.push('#in-f'); }
   const x0 = parseNumber($('#in-x0').value), y0 = parseNumber($('#in-y0').value), h = parseNumber($('#in-h').value);
-  if (!Number.isFinite(x0)) { errors.push('x₀ ต้องเป็นตัวเลข'); bad.push('#in-x0'); }
-  if (!Number.isFinite(y0)) { errors.push('y₀ ต้องเป็นตัวเลข'); bad.push('#in-y0'); }
+  if (!Number.isFinite(x0)) { errors.push('a ต้องเป็นตัวเลข'); bad.push('#in-x0'); }
+  if (!Number.isFinite(y0)) { errors.push('α ต้องเป็นตัวเลข'); bad.push('#in-y0'); }
   if ($('#in-h').value.trim() === '') { errors.push('กรุณากรอก step size h'); bad.push('#in-h'); }
   else if (!Number.isFinite(h)) { errors.push('h ต้องเป็นตัวเลข'); bad.push('#in-h'); }
   else if (h <= 0) { errors.push('h ต้องมากกว่า 0 (h ≤ 0 จะเดินไปข้างหน้าไม่ได้)'); bad.push('#in-h'); }
   let n = NaN;
   if (rangeMode === 'xend') {
     const xe = parseNumber($('#in-xend').value);
-    if (!Number.isFinite(xe)) { errors.push('x_end ต้องเป็นตัวเลข'); bad.push('#in-xend'); }
-    else if (Number.isFinite(x0) && xe <= x0) { errors.push('x_end ต้องมากกว่า x₀'); bad.push('#in-xend'); }
+    if (!Number.isFinite(xe)) { errors.push('b ต้องเป็นตัวเลข'); bad.push('#in-xend'); }
+    else if (Number.isFinite(x0) && xe <= x0) { errors.push('b ต้องมากกว่า a'); bad.push('#in-xend'); }
     else if (h > 0 && Number.isFinite(x0)) {
       const raw = (xe - x0) / h; n = Math.round(raw);
-      if (n < 1) { errors.push(`h = ${fmtS(h, 8)} ใหญ่กว่าช่วง [x₀, x_end] — ลองลด h`); bad.push('#in-h'); }
+      if (n < 1) { errors.push(`h = ${fmtS(h, 8)} ใหญ่กว่าช่วง [a, b] — ลองลด h`); bad.push('#in-h'); }
       else if (Math.abs(raw - n) > 1e-9 * Math.max(1, Math.abs(raw)))
-        warnings.push(`(x_end − x₀)/h = ${fmtS(raw, 6)} ไม่เป็นจำนวนเต็ม → ปัดเป็น n = ${n} จึงจบที่ x = ${fmtS(x0 + n * h, 8)} แทน ${fmtS(xe, 8)}`);
+        warnings.push(`N = (b − a)/h = ${fmtS(raw, 6)} ไม่เป็นจำนวนเต็ม → ปัดเป็น N = ${n} จึงจบที่ t = ${fmtS(x0 + n * h, 8)} แทน b = ${fmtS(xe, 8)}`);
     }
   } else {
     n = parseNumber($('#in-n').value);
-    if (!Number.isInteger(n) || n < 1) { errors.push('จำนวน step n ต้องเป็นจำนวนเต็มบวก'); bad.push('#in-n'); }
+    if (!Number.isInteger(n) || n < 1) { errors.push('จำนวน step N ต้องเป็นจำนวนเต็มบวก'); bad.push('#in-n'); }
   }
   if (Number.isFinite(n) && n > 5000) { errors.push('จำนวน step มากเกินไป (สูงสุด 5000) — ลองเพิ่ม h'); bad.push('#in-h'); }
   const exStr = $('#in-exact').value.trim();
@@ -1067,8 +1158,17 @@ function readCalcInputs() {
   try {
     const prob = buildProblem({ f: $('#in-f').value, x0, y0, h, n, exact: exStr, dp: +$('#in-dp').value });
     if (prob.ec && Math.abs(prob.ec.fn(x0) - y0) > 1e-6 * Math.max(1, Math.abs(y0)))
-      warnings.push(`exact solution ที่ x₀ ได้ ${fmtS(prob.ec.fn(x0), 6)} ≠ y₀ = ${fmtS(y0, 6)} — ตรวจสูตร exact อีกครั้ง`);
-    return { ok: true, prob, errors, warnings };
+      warnings.push(`exact solution ที่ t = a ได้ ${fmtS(prob.ec.fn(x0), 6)} ≠ α = ${fmtS(y0, 6)} — ตรวจสูตร exact อีกครั้ง`);
+    let bound = null;
+    if ($('#opt-bound').checked) {
+      const Ls = $('#in-L').value.trim(), Ms = $('#in-M').value.trim(), est = (!Ls || !Ms) ? estimateLM(prob) : null;
+      const L = Ls ? parseNumber(Ls) : est.L, M = Ms ? parseNumber(Ms) : est.M;
+      if (!(L >= 0)) { errors.push('L ต้องเป็นตัวเลข ≥ 0'); $('#in-L').classList.add('invalid'); }
+      if (!(M >= 0)) { errors.push('M ต้องเป็นตัวเลข ≥ 0'); $('#in-M').classList.add('invalid'); }
+      if (errors.length) return { ok: false, errors, warnings };
+      bound = { L, M, Lsrc: Ls ? 'กรอกเอง' : 'ประมาณจาก max|∂f/∂y| บนช่วงที่คำตอบผ่าน', Msrc: Ms ? 'กรอกเอง' : est.Msrc };
+    }
+    return { ok: true, prob, bound, errors, warnings };
   } catch (e) { return { ok: false, errors: [e.message], warnings }; }
 }
 function showMsgs(box, list, cls) {
@@ -1084,14 +1184,14 @@ function runCalc() {
   showMsgs($('#calc-warn'), r.warnings, 'warn');
   if (!r.ok) { $('#calc-errors').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); return; }
   if (App.viewers[1]) App.viewers[1].destroy();
-  App.viewers[1] = new StepViewer($('#calc-viewer'), r.prob, calcOpts());
-  $('#calc-badge').textContent = `n = ${r.prob.n}, h = ${fmtS(r.prob.h, 8)}`;
+  App.viewers[1] = new StepViewer($('#calc-viewer'), r.prob, Object.assign(calcOpts(), { bound: r.bound }));
+  $('#calc-badge').textContent = `N = ${r.prob.n}, h = ${fmtS(r.prob.h, 8)}`;
   if (window.innerWidth < 980) $('#calc-output-card').scrollIntoView({ behavior: 'smooth' });
 }
 function resetCalc() {
   if (App.viewers[1]) { App.viewers[1].destroy(); App.viewers[1] = null; }
   fillCalc(CALC_DEFAULT); setRangeMode('xend');
-  ['#opt-heun', '#opt-rk4', '#opt-slope'].forEach(s => $(s).checked = false);
+  ['#opt-heun', '#opt-rk4', '#opt-slope'].forEach(s => $(s).checked = false); $('#opt-bound').checked = true; $('#in-L').value = ''; $('#in-M').value = ''; $('#wrap-bound').classList.remove('hidden');
   $('#calc-viewer').innerHTML = '<p class="muted">กด "คำนวณ" เพื่อเริ่ม</p>';
   ['#calc-errors', '#calc-warn', '#compare-out'].forEach(s => $(s).innerHTML = '');
   $('#calc-badge').textContent = '';
@@ -1107,13 +1207,13 @@ function runCompare() {
   if (!fc.ok) { showMsgs(out, [fc.error], 'err'); return; }
   const x0 = parseNumber($('#in-x0').value), y0 = parseNumber($('#in-y0').value);
   const xe = rangeMode === 'xend' ? parseNumber($('#in-xend').value) : (base.prob ? base.prob.xEnd : NaN);
-  if (![x0, y0, xe].every(Number.isFinite) || xe <= x0) { showMsgs(out, ['กรุณากรอก x₀, y₀ และ x_end ให้ถูกต้องก่อน (x_end > x₀)'], 'err'); return; }
+  if (![x0, y0, xe].every(Number.isFinite) || xe <= x0) { showMsgs(out, ['กรุณากรอก a, α และ b ให้ถูกต้องก่อน (b > a)'], 'err'); return; }
   const hs = $('#in-hs').value.split(/[,\s]+/).filter(Boolean).map(parseNumber);
   const errs = [], runs = [];
   hs.forEach(h => {
     if (!(h > 0)) { errs.push(`ข้าม h = ${h}: h ต้องมากกว่า 0`); return; }
     const raw = (xe - x0) / h, n = Math.round(raw);
-    if (n < 1 || Math.abs(raw - n) > 1e-9 * Math.max(1, raw)) { errs.push(`ข้าม h = ${fmtS(h, 8)}: (x_end − x₀)/h ไม่เป็นจำนวนเต็ม`); return; }
+    if (n < 1 || Math.abs(raw - n) > 1e-9 * Math.max(1, raw)) { errs.push(`ข้าม h = ${fmtS(h, 8)}: (b − a)/h ไม่เป็นจำนวนเต็ม`); return; }
     if (n > 20000) { errs.push(`ข้าม h = ${fmtS(h, 8)}: step มากเกินไป`); return; }
     try { runs.push({ h, n, pts: eulerSolve(fc.fn, x0, y0, h, n) }); } catch (e) { errs.push(`h = ${fmtS(h, 8)}: ${e.message}`); }
   });
@@ -1142,7 +1242,7 @@ function runCompare() {
     prevErr = err; return row;
   });
   out.append(el('div', { class: 'table-wrap' }, el('table', { class: 'data' },
-    el('thead', {}, el('tr', {}, ['h', 'n', `y(${fmtS(xe, 6)})`, '|error|', 'error / h', 'error ลดลง (เท่า)'].map(t => el('th', {}, t)))), el('tbody', {}, rows))));
+    el('thead', {}, el('tr', {}, ['h', 'N', `w_N ≈ y(${fmtS(xe, 6)})`, '|y(b) − w_N|', 'error / h', 'error ลดลง (เท่า)'].map(t => el('th', {}, t)))), el('tbody', {}, rows))));
   out.append(el('p', { class: 'small', style: 'margin-top:10px' }, `ค่าอ้างอิง (${refLabel}) = ${fmtS(ref, dp + 2)} · สังเกตคอลัมน์ error / h มีค่าเกือบคงที่ → error แปรผันตาม h (Global error = O(h)) — ลด h ครึ่งหนึ่ง error ลดลง ≈ 2 เท่า`));
 }
 
@@ -1160,7 +1260,7 @@ function drawGeo() {
   for (let y = 0; y <= 7; y++) s += `<line x1="${P.l}" x2="${W - P.r}" y1="${sy(y)}" y2="${sy(y)}" stroke="${border}"/><text x="${P.l - 8}" y="${sy(y) + 4}" fill="${muted}" font-size="11" text-anchor="end" font-family="JetBrains Mono">${y}</text>`;
   for (let x = 0; x <= 2.0001; x += 0.5) s += `<line y1="${P.t}" y2="${H - P.b}" x1="${sx(x)}" x2="${sx(x)}" stroke="${border}"/><text x="${sx(x)}" y="${H - P.b + 18}" fill="${muted}" font-size="11" text-anchor="middle" font-family="JetBrains Mono">${x}</text>`;
   let d = ''; for (let i = 0; i <= 120; i++) { const x = 2 * i / 120; d += (i ? 'L' : 'M') + sx(x).toFixed(1) + ',' + sy(Math.exp(x)).toFixed(1); }
-  s += `<path d="${d}" fill="none" stroke="${cssVar('--c-exact')}" stroke-width="3"/><text x="${sx(1.93)}" y="${sy(Math.exp(1.93)) - 8}" fill="${cssVar('--c-exact')}" font-size="13" text-anchor="end">exact y = eˣ</text>`;
+  s += `<path d="${d}" fill="none" stroke="${cssVar('--c-exact')}" stroke-width="3"/><text x="${sx(1.93)}" y="${sy(Math.exp(1.93)) - 8}" fill="${cssVar('--c-exact')}" font-size="13" text-anchor="end">exact y = eᵗ</text>`;
   const k = Geo.k, ce = cssVar('--c-euler'), ct = cssVar('--c-tan');
   if (k > 0) s += `<polyline points="${pts.slice(0, k + 1).map(p => sx(p.x) + ',' + sy(p.y)).join(' ')}" fill="none" stroke="${ce}" stroke-width="2.5"/>`;
   // เส้นสัมผัสที่จุดปัจจุบัน + สามเหลี่ยม h, h·f
@@ -1176,8 +1276,17 @@ function drawGeo() {
   s += `<text x="${sx(last.x) + 10}" y="${sy(last.y) + 4}" fill="${ce}" font-size="12" font-family="JetBrains Mono">(${fmtS(last.x, 2)}, ${fmtS(last.y, 3)})</text>`;
   svg.innerHTML = s;
   $('#geo-caption').textContent = k < N
-    ? `ก้าวที่ ${k + 1}/${N}: ที่จุด (${fmtS(last.x, 2)}, ${fmtS(last.y, 4)}) ความชัน f = y = ${fmtS(last.f, 4)} → เดินตามเส้นสัมผัส (เส้นประ) ไป h = ${h} จะได้ y ใหม่ = ${fmtS(last.y, 4)} + ${h}×${fmtS(last.f, 4)} = ${fmtS(pts[k + 1].y, 4)}`
-    : `ครบ ${N} ก้าว: Euler ได้ y(2) ≈ ${fmtS(last.y, 4)} แต่ค่าจริง e² = ${fmtS(Math.exp(2), 4)} (error = ${fmtS(Math.exp(2) - last.y, 4)}) — ลอง h เล็กลงแล้วดู error ลดลง`;
+    ? `i = ${k}: ที่จุด (t${sub(k)}, w${sub(k)}) = (${fmtS(last.x, 2)}, ${fmtS(last.y, 4)}) ความชัน f(t${sub(k)}, w${sub(k)}) = w${sub(k)} = ${fmtS(last.f, 4)} → เดินตามเส้นสัมผัส (เส้นประ) ไป h = ${h} ได้ w${sub(k + 1)} = ${fmtS(last.y, 4)} + ${h}×${fmtS(last.f, 4)} = ${fmtS(pts[k + 1].y, 4)}`
+    : `ครบ N = ${N} step: Euler ได้ w${sub(N)} = ${fmtS(last.y, 4)} ≈ y(2) แต่ค่าจริง e² = ${fmtS(Math.exp(2), 4)} (error = ${fmtS(Math.exp(2) - last.y, 4)}) — ลอง h เล็กลงแล้วดู error ลดลง`;
+}
+
+/* ตารางเทียบ Actual error กับ Error bound ในหน้าทฤษฎี (คำนวณสด) */
+function renderTheoryBoundTable() {
+  const fc = compileExpr('y - t^2 + 1', 'f'), ec = compileExpr('(t+1)^2 - 0.5*exp(t)', 'exact');
+  const h = 0.2, N = 10, pts = eulerSolve(fc.fn, 0, 0.5, h, N), L = 1, M = 0.5 * Math.exp(2) - 2;
+  const rows = pts.slice(1).map(p => el('tr', {}, el('td', {}, fmtF(p.x, 1)), el('td', {}, fmtF(p.y, 5)), el('td', {}, fmtF(ec.fn(p.x), 5)), el('td', {}, fmtF(Math.abs(ec.fn(p.x) - p.y), 5)), el('td', {}, fmtF(errorBound(h, L, M, p.x, 0), 5))));
+  const box = $('#eb-table'); box.innerHTML = '';
+  box.append(el('table', { class: 'data' }, el('thead', {}, el('tr', {}, ['tᵢ', 'wᵢ', 'y(tᵢ)', 'Actual error', 'Error bound'].map(t => el('th', {}, t)))), el('tbody', {}, rows)));
 }
 
 /* =====================================================================
@@ -1202,10 +1311,10 @@ function showHelp() {
     el('p', {}, 'สื่อการเรียนรู้ Euler Method สำหรับแก้ ', el('span', { 'data-tex': "y'=f(x,y),\\ y(x_0)=y_0" })),
     el('ol', { class: 'help-steps' },
       el('li', {}, el('div', {}, el('b', {}, 'ทฤษฎีย่อ'), ' — อ่านสูตร ที่มา และดูภาพการเดินตามเส้นสัมผัส')),
-      el('li', {}, el('div', {}, el('b', {}, 'เครื่องช่วยคิด'), ' — กรอก f(x,y), x₀, y₀, h แล้วกด "คำนวณ" จากนั้นกด "ขั้นต่อไป" ดูทีละ step พร้อมกราฟ')),
+      el('li', {}, el('div', {}, el('b', {}, 'เครื่องช่วยคิด'), ' — กรอก f(t,y), a, b, α, h แล้วกด "คำนวณ" จากนั้นกด "ขั้นต่อไป" ดูทีละ step พร้อมกราฟ')),
       el('li', {}, el('div', {}, el('b', {}, 'ฝึกโจทย์'), ' — สุ่มโจทย์ ตอบ ใช้ hint และดูเฉลยทีละ step / เพิ่มชุดโจทย์ของตัวเองได้')),
       el('li', {}, el('div', {}, 'ปุ่มลัด: ', el('kbd', {}, '←'), ' ย้อนกลับ ', el('kbd', {}, '→'), ' ขั้นต่อไป · ปุ่ม ', el('b', {}, '?'), ' ข้างตัวแปรมีคำอธิบาย'))),
-    el('p', { class: 'small muted' }, 'เขียนสมการ: ใช้ * คูณ, ^ ยกกำลัง, exp(x), sin(x), sqrt(x), log(x) = ln x'));
+    el('p', { class: 'small muted' }, 'สัญลักษณ์ตามเอกสาร: a ≤ t ≤ b, y(a) = α, h = (b − a)/N, wᵢ ≈ y(tᵢ) · เขียนสมการ: ใช้ * คูณ, ^ ยกกำลัง, exp(t), sin(t), sqrt(t), log(t) = ln t'));
   return openModal({ title: '👋 วิธีใช้ Euler Lab', body, narrow: true, buttons: [{ label: 'เริ่มใช้งาน', value: true, cls: 'primary' }] });
 }
 document.addEventListener('keydown', e => {
@@ -1230,135 +1339,135 @@ document.addEventListener('keydown', e => {
 const questionBank = [
 /* ---------------- ประเภท A · ง่าย ---------------- */
 { id: 'sys-ae01', type: 'A', level: 'easy', title: 'กาแฟเย็นลง', story: 'กาแฟร้อน 90°C วางในห้อง 25°C เย็นลงตามกฎการเย็นตัวของนิวตัน ด้วย k = 0.1 ต่อนาที จงประมาณอุณหภูมิหลัง 2 นาที ด้วย h = 1 นาที',
-  modelingSteps: ["กฎของนิวตัน: T' = −k(T − T_room)", "แทนค่า k = 0.1, T_room = 25 → T' = −0.1(T − 25)", 'ให้ x = เวลา (นาที), y = T, เริ่ม y(0) = 90'],
-  f: '-0.1*(y-25)', x0: 0, y0: 90, h: 1, n: 2, ask: 'T(2)', hints: ['อัตราการเย็นตัวแปรผันตามผลต่างอุณหภูมิกับห้อง', "สมการคือ T' = −0.1(T − 25) เริ่มที่ T(0) = 90"], exact: '25 + 65*exp(-0.1*x)' },
+  modelingSteps: ["กฎของนิวตัน: T' = −k(T − T_room)", "แทนค่า k = 0.1, T_room = 25 → T' = −0.1(T − 25)", 'ให้ t = เวลา (นาที), y = T, เริ่ม y(0) = 90'],
+  f: '-0.1*(y-25)', x0: 0, y0: 90, h: 1, n: 2, ask: 'T(2)', hints: ['อัตราการเย็นตัวแปรผันตามผลต่างอุณหภูมิกับห้อง', "สมการคือ T' = −0.1(T − 25) เริ่มที่ T(0) = 90"], exact: '25 + 65*exp(-0.1*t)' },
 { id: 'sys-ae02', type: 'A', level: 'easy', title: 'แบคทีเรียในจานเพาะเชื้อ', story: 'แบคทีเรีย 1000 เซลล์ เพิ่มจำนวนด้วยอัตราการเติบโต 20% ต่อชั่วโมงของจำนวนที่มีอยู่ จงประมาณจำนวนหลัง 2 ชั่วโมง ด้วย h = 1 ชั่วโมง',
   modelingSteps: ["อัตราเพิ่มแปรผันตามจำนวนที่มี: P' = rP", "r = 0.2 → P' = 0.2P, P(0) = 1000"],
-  f: '0.2*y', x0: 0, y0: 1000, h: 1, n: 2, ask: 'P(2)', hints: ["อัตราการเพิ่ม = 0.2 × จำนวนปัจจุบัน", "P' = 0.2P"], exact: '1000*exp(0.2*x)' },
+  f: '0.2*y', x0: 0, y0: 1000, h: 1, n: 2, ask: 'P(2)', hints: ["อัตราการเพิ่ม = 0.2 × จำนวนปัจจุบัน", "P' = 0.2P"], exact: '1000*exp(0.2*t)' },
 { id: 'sys-ae03', type: 'A', level: 'easy', title: 'ดอกเบี้ยทบต้นต่อเนื่อง', story: 'ฝากเงิน 10,000 บาท ได้ดอกเบี้ยทบต้นแบบต่อเนื่อง 5% ต่อปี จงประมาณยอดเงินเมื่อครบ 2 ปี ด้วย h = 1 ปี',
   modelingSteps: ["เงินเพิ่มด้วยอัตรา 5% ของยอดปัจจุบัน: A' = 0.05A", 'A(0) = 10000'],
-  f: '0.05*y', x0: 0, y0: 10000, h: 1, n: 2, ask: 'A(2)', hints: ['อัตราการเพิ่มของเงิน = 0.05 × ยอดเงินตอนนั้น', "A' = 0.05A"], exact: '10000*exp(0.05*x)' },
+  f: '0.05*y', x0: 0, y0: 10000, h: 1, n: 2, ask: 'A(2)', hints: ['อัตราการเพิ่มของเงิน = 0.05 × ยอดเงินตอนนั้น', "A' = 0.05A"], exact: '10000*exp(0.05*t)' },
 { id: 'sys-ae04', type: 'A', level: 'easy', title: 'ยาในกระแสเลือด', story: 'ความเข้มข้นยาในเลือดเริ่มต้น 50 mg/L ร่างกายกำจัดยาด้วยอัตรา 20% ต่อชั่วโมงของความเข้มข้นที่มี จงประมาณความเข้มข้นหลัง 2 ชั่วโมง (h = 1)',
   modelingSteps: ["การกำจัดยาแบบ first-order: C' = −kC", "k = 0.2 → C' = −0.2C, C(0) = 50"],
-  f: '-0.2*y', x0: 0, y0: 50, h: 1, n: 2, ask: 'C(2)', hints: ['ยาลดลง → อัตราเป็นลบ', "C' = −0.2C"], exact: '50*exp(-0.2*x)' },
+  f: '-0.2*y', x0: 0, y0: 50, h: 1, n: 2, ask: 'C(2)', hints: ['ยาลดลง → อัตราเป็นลบ', "C' = −0.2C"], exact: '50*exp(-0.2*t)' },
 { id: 'sys-ae05', type: 'A', level: 'easy', title: 'ชาร์จตัวเก็บประจุ (RC)', story: 'วงจร RC ต่อแบตเตอรี่ 10 V มี RC = 2 วินาที ตัวเก็บประจุเริ่มที่ 0 V จงประมาณแรงดันที่ t = 1 s ด้วย h = 0.5 s',
   modelingSteps: ["สมการวงจร: V' = (V_s − V)/(RC)", "แทน V_s = 10, RC = 2 → V' = 0.5(10 − V)", 'V(0) = 0'],
-  f: '0.5*(10-y)', x0: 0, y0: 0, h: 0.5, n: 2, ask: 'V(1)', hints: ['แรงดันเพิ่มเร็วเมื่อห่างจาก 10 V มาก', "V' = (10 − V)/2"], exact: '10*(1-exp(-0.5*x))' },
+  f: '0.5*(10-y)', x0: 0, y0: 0, h: 0.5, n: 2, ask: 'V(1)', hints: ['แรงดันเพิ่มเร็วเมื่อห่างจาก 10 V มาก', "V' = (10 − V)/2"], exact: '10*(1-exp(-0.5*t))' },
 { id: 'sys-ae06', type: 'A', level: 'easy', title: 'การกระจายข่าวในชุมชน', story: 'ชุมชน 1000 คน มีคนรู้ข่าว 100 คน อัตราที่คนรู้ข่าวเพิ่มขึ้นเท่ากับ 0.1 × จำนวนคนที่ยังไม่รู้ (ต่อวัน) จงประมาณจำนวนคนรู้ข่าวหลัง 2 วัน (h = 1)',
   modelingSteps: ['ให้ N = จำนวนคนที่รู้ข่าว, คนที่ยังไม่รู้ = 1000 − N', "N' = 0.1(1000 − N), N(0) = 100"],
-  f: '0.1*(1000-y)', x0: 0, y0: 100, h: 1, n: 2, ask: 'N(2)', hints: ['อัตราขึ้นกับจำนวนคนที่ "ยังไม่รู้"', "N' = 0.1(1000 − N)"], exact: '1000 - 900*exp(-0.1*x)' },
+  f: '0.1*(1000-y)', x0: 0, y0: 100, h: 1, n: 2, ask: 'N(2)', hints: ['อัตราขึ้นกับจำนวนคนที่ "ยังไม่รู้"', "N' = 0.1(1000 − N)"], exact: '1000 - 900*exp(-0.1*t)' },
 { id: 'sys-ae07', type: 'A', level: 'easy', title: 'เกลือในถังที่ถูกเจือจาง', story: 'ถังน้ำ 100 L มีเกลือละลายอยู่ 20 kg ปล่อยน้ำเปล่าเข้า 2 L/นาที และน้ำผสมไหลออก 2 L/นาที จงประมาณปริมาณเกลือหลัง 10 นาที ด้วย h = 5 นาที',
   modelingSteps: ['เกลือเข้า = 0 (น้ำเปล่า), เกลือออก = (Q/100)×2', "Q' = −0.02Q, Q(0) = 20"],
-  f: '-0.02*y', x0: 0, y0: 20, h: 5, n: 2, ask: 'Q(10)', hints: ['ความเข้มข้นในถัง = Q/100 kg/L', "Q' = −(Q/100)×2 = −0.02Q"], exact: '20*exp(-0.02*x)' },
+  f: '-0.02*y', x0: 0, y0: 20, h: 5, n: 2, ask: 'Q(10)', hints: ['ความเข้มข้นในถัง = Q/100 kg/L', "Q' = −(Q/100)×2 = −0.02Q"], exact: '20*exp(-0.02*t)' },
 { id: 'sys-ae08', type: 'A', level: 'easy', title: 'วัตถุตกที่มีแรงต้านอากาศ', story: 'วัตถุตกจากหยุดนิ่ง ความเร่ง g = 9.8 m/s² และแรงต้านทำให้ความเร่งลดลง 0.2v จงประมาณความเร็วที่ t = 2 s ด้วย h = 1 s',
   modelingSteps: ["กฎข้อ 2 ของนิวตัน (หารด้วยมวล): v' = g − (k/m)v", "v' = 9.8 − 0.2v, v(0) = 0"],
-  f: '9.8 - 0.2*y', x0: 0, y0: 0, h: 1, n: 2, ask: 'v(2)', hints: ['ความเร่งสุทธิ = แรงโน้มถ่วง − แรงต้าน', "v' = 9.8 − 0.2v"], exact: '49*(1-exp(-0.2*x))' },
+  f: '9.8 - 0.2*y', x0: 0, y0: 0, h: 1, n: 2, ask: 'v(2)', hints: ['ความเร่งสุทธิ = แรงโน้มถ่วง − แรงต้าน', "v' = 9.8 − 0.2v"], exact: '49*(1-exp(-0.2*t))' },
 { id: 'sys-ae09', type: 'A', level: 'easy', title: 'การสลายตัวของสารกัมมันตรังสี', story: 'สารกัมมันตรังสี 500 g สลายตัวด้วยอัตรา 10% ต่อปีของมวลที่เหลือ จงประมาณมวลที่เหลือหลัง 1 ปี ด้วย h = 1',
   modelingSteps: ["N' = −λN", "λ = 0.1 → N' = −0.1N, N(0) = 500"],
-  f: '-0.1*y', x0: 0, y0: 500, h: 1, n: 1, ask: 'N(1)', hints: ['มวลลดลงแปรผันตามมวลที่มี', "N' = −0.1N, เดิน 1 step"], exact: '500*exp(-0.1*x)' },
+  f: '-0.1*y', x0: 0, y0: 500, h: 1, n: 1, ask: 'N(1)', hints: ['มวลลดลงแปรผันตามมวลที่มี', "N' = −0.1N, เดิน 1 step"], exact: '500*exp(-0.1*t)' },
 { id: 'sys-ae10', type: 'A', level: 'easy', title: 'ต้นกล้าโตเร็วขึ้นตามเวลา', story: 'ต้นกล้าสูง 2 cm อัตราการโตเท่ากับ (1 + 0.2t) cm/สัปดาห์ เมื่อ t คือสัปดาห์ จงประมาณความสูงหลัง 2 สัปดาห์ (h = 1)',
-  modelingSteps: ["อัตราการโตขึ้นกับเวลาเท่านั้น: H' = 1 + 0.2t", 'ให้ x = t, H(0) = 2'],
-  f: '1 + 0.2*x', x0: 0, y0: 2, h: 1, n: 2, ask: 'H(2)', hints: ['f ขึ้นกับ x (เวลา) อย่างเดียว', "H' = 1 + 0.2x"], exact: '2 + x + 0.1*x^2' },
+  modelingSteps: ["อัตราการโตขึ้นกับเวลาเท่านั้น: H' = 1 + 0.2t", 'ให้ t = t, H(0) = 2'],
+  f: '1 + 0.2*t', x0: 0, y0: 2, h: 1, n: 2, ask: 'H(2)', hints: ['f ขึ้นกับ t (เวลา) อย่างเดียว', "H' = 1 + 0.2t"], exact: '2 + t + 0.1*t^2' },
 
 /* ---------------- ประเภท A · กลาง ---------------- */
 { id: 'sys-am01', type: 'A', level: 'medium', title: 'ประชากรปลาในบ่อ (Logistic)', story: 'บ่อเลี้ยงรองรับปลาได้สูงสุด 1000 ตัว เริ่มปล่อย 100 ตัว อัตราการเติบโต r = 0.5 ต่อเดือน (logistic) จงประมาณจำนวนปลาหลัง 2 เดือน ด้วย h = 0.5',
   modelingSteps: ["Logistic: P' = rP(1 − P/K)", "r = 0.5, K = 1000 → P' = 0.5P(1 − P/1000)", 'P(0) = 100'],
-  f: '0.5*y*(1 - y/1000)', x0: 0, y0: 100, h: 0.5, n: 4, ask: 'P(2)', hints: ['เติบโตช้าลงเมื่อใกล้ขีดจำกัด K', "P' = 0.5P(1 − P/1000) ต้องเดิน 4 step"], exact: '1000/(1 + 9*exp(-0.5*x))' },
+  f: '0.5*y*(1 - y/1000)', x0: 0, y0: 100, h: 0.5, n: 4, ask: 'P(2)', hints: ['เติบโตช้าลงเมื่อใกล้ขีดจำกัด K', "P' = 0.5P(1 − P/1000) ต้องเดิน 4 step"], exact: '1000/(1 + 9*exp(-0.5*t))' },
 { id: 'sys-am02', type: 'A', level: 'medium', title: 'น้ำอัดลมในตู้เย็น', story: 'น้ำอัดลม 30°C ใส่ตู้เย็น 4°C ค่าคงที่การเย็นตัว k = 0.3 ต่อชั่วโมง จงประมาณอุณหภูมิหลัง 2 ชั่วโมง ด้วย h = 0.5',
   modelingSteps: ["T' = −k(T − T_env)", "T' = −0.3(T − 4), T(0) = 30"],
-  f: '-0.3*(y-4)', x0: 0, y0: 30, h: 0.5, n: 4, ask: 'T(2)', hints: ['กฎการเย็นตัวของนิวตัน', "T' = −0.3(T − 4), n = 2/0.5 = 4"], exact: '4 + 26*exp(-0.3*x)' },
+  f: '-0.3*(y-4)', x0: 0, y0: 30, h: 0.5, n: 4, ask: 'T(2)', hints: ['กฎการเย็นตัวของนิวตัน', "T' = −0.3(T − 4), n = 2/0.5 = 4"], exact: '4 + 26*exp(-0.3*t)' },
 { id: 'sys-am03', type: 'A', level: 'medium', title: 'กระแสในวงจร RL', story: 'วงจร RL มีแหล่งจ่าย 12 V, R = 4 Ω, L = 2 H กระแสเริ่ม 0 A จงประมาณกระแสที่ t = 0.5 s ด้วย h = 0.1 s',
   modelingSteps: ["L·I' + R·I = E → I' = (E − RI)/L", "I' = (12 − 4I)/2 = 6 − 2I, I(0) = 0"],
-  f: '6 - 2*y', x0: 0, y0: 0, h: 0.1, n: 5, ask: 'I(0.5)', hints: ['ใช้กฎแรงดันของ Kirchhoff', "I' = (12 − 4I)/2"], exact: '3*(1-exp(-2*x))' },
+  f: '6 - 2*y', x0: 0, y0: 0, h: 0.1, n: 5, ask: 'I(0.5)', hints: ['ใช้กฎแรงดันของ Kirchhoff', "I' = (12 − 4I)/2"], exact: '3*(1-exp(-2*t))' },
 { id: 'sys-am04', type: 'A', level: 'medium', title: 'ให้ยาทางน้ำเกลือ', story: 'ให้ยาทางหลอดเลือดอัตราคงที่ทำให้ความเข้มข้นเพิ่ม 5 mg/L ต่อชั่วโมง และร่างกายกำจัดยา 40% ต่อชั่วโมง เริ่มจาก 0 จงประมาณความเข้มข้นที่ 2 ชั่วโมง (h = 0.5)',
   modelingSteps: ['อัตราเปลี่ยน = ยาเข้า − ยาออก', "C' = 5 − 0.4C, C(0) = 0"],
-  f: '5 - 0.4*y', x0: 0, y0: 0, h: 0.5, n: 4, ask: 'C(2)', hints: ['มีทั้งเข้า (+5) และออก (−0.4C)', "C' = 5 − 0.4C"], exact: '12.5*(1-exp(-0.4*x))' },
+  f: '5 - 0.4*y', x0: 0, y0: 0, h: 0.5, n: 4, ask: 'C(2)', hints: ['มีทั้งเข้า (+5) และออก (−0.4C)', "C' = 5 − 0.4C"], exact: '12.5*(1-exp(-0.4*t))' },
 { id: 'sys-am05', type: 'A', level: 'medium', title: 'ถังผสมน้ำเกลือ', story: 'ถัง 200 L มีเกลือ 10 kg เติมน้ำเกลือเข้มข้น 0.5 kg/L อัตรา 4 L/นาที และปล่อยออก 4 L/นาที จงประมาณเกลือหลัง 10 นาที ด้วย h = 2',
   modelingSteps: ['เกลือเข้า = 0.5 × 4 = 2 kg/นาที', 'เกลือออก = (Q/200) × 4 = 0.02Q', "Q' = 2 − 0.02Q, Q(0) = 10"],
-  f: '2 - 0.02*y', x0: 0, y0: 10, h: 2, n: 5, ask: 'Q(10)', hints: ['อัตราเปลี่ยน = อัตราเข้า − อัตราออก', "Q' = 2 − 0.02Q"], exact: '100 - 90*exp(-0.02*x)' },
+  f: '2 - 0.02*y', x0: 0, y0: 10, h: 2, n: 5, ask: 'Q(10)', hints: ['อัตราเปลี่ยน = อัตราเข้า − อัตราออก', "Q' = 2 − 0.02Q"], exact: '100 - 90*exp(-0.02*t)' },
 { id: 'sys-am06', type: 'A', level: 'medium', title: 'นักกระโดดร่ม (แรงต้านกำลังสอง)', story: 'นักกระโดดร่มเริ่มตกจากหยุดนิ่ง ความเร่ง 9.8 m/s² แรงต้านแปรผันตามกำลังสองของความเร็วด้วยสัมประสิทธิ์ 0.04 (ต่อมวล) จงประมาณความเร็วที่ t = 2 s ด้วย h = 0.5',
   modelingSteps: ["v' = g − (c/m)v²", "v' = 9.8 − 0.04v², v(0) = 0"],
-  f: '9.8 - 0.04*y^2', x0: 0, y0: 0, h: 0.5, n: 4, ask: 'v(2)', hints: ['แรงต้านขึ้นกับ v²', "v' = 9.8 − 0.04v²"], exact: 'sqrt(245)*tanh(9.8*x/sqrt(245))' },
+  f: '9.8 - 0.04*y^2', x0: 0, y0: 0, h: 0.5, n: 4, ask: 'v(2)', hints: ['แรงต้านขึ้นกับ v²', "v' = 9.8 − 0.04v²"], exact: 'sqrt(245)*tanh(9.8*t/sqrt(245))' },
 { id: 'sys-am07', type: 'A', level: 'medium', title: 'ประชากรแมลงตามฤดูกาล', story: 'ประชากรแมลง 100 ตัว มีอัตราการเติบโตเปลี่ยนตามฤดูกาลเป็น 0.3cos(t) ต่อเดือน จงประมาณจำนวนแมลงที่ t = 2 เดือน ด้วย h = 0.5',
   modelingSteps: ["P' = r(t)·P โดย r(t) = 0.3cos(t)", "P' = 0.3cos(t)·P, P(0) = 100"],
-  f: '0.3*cos(x)*y', x0: 0, y0: 100, h: 0.5, n: 4, ask: 'P(2)', hints: ['อัตราการเติบโตต่อตัวเปลี่ยนตามเวลา', "P' = 0.3cos(x)·P (x เป็นเรเดียน)"], exact: '100*exp(0.3*sin(x))' },
+  f: '0.3*cos(t)*y', x0: 0, y0: 100, h: 0.5, n: 4, ask: 'P(2)', hints: ['อัตราการเติบโตต่อตัวเปลี่ยนตามเวลา', "P' = 0.3cos(t)·P (t เป็นเรเดียน)"], exact: '100*exp(0.3*sin(t))' },
 { id: 'sys-am08', type: 'A', level: 'medium', title: 'เงินออมพร้อมฝากเพิ่ม', story: 'มีเงินต้น 5,000 บาท ได้ดอกเบี้ยต่อเนื่อง 4% ต่อปี และฝากเพิ่มอย่างต่อเนื่อง 1,000 บาทต่อปี จงประมาณยอดเงินหลัง 5 ปี ด้วย h = 1',
   modelingSteps: ['ดอกเบี้ย = 0.04A, เงินฝากเพิ่ม = 1000', "A' = 0.04A + 1000, A(0) = 5000"],
-  f: '0.04*y + 1000', x0: 0, y0: 5000, h: 1, n: 5, ask: 'A(5)', hints: ['รวมสองส่วน: ดอกเบี้ย + เงินฝากเพิ่ม', "A' = 0.04A + 1000"], exact: '30000*exp(0.04*x) - 25000' },
+  f: '0.04*y + 1000', x0: 0, y0: 5000, h: 1, n: 5, ask: 'A(5)', hints: ['รวมสองส่วน: ดอกเบี้ย + เงินฝากเพิ่ม', "A' = 0.04A + 1000"], exact: '30000*exp(0.04*t) - 25000' },
 { id: 'sys-am09', type: 'A', level: 'medium', title: 'ไวรัสคอมพิวเตอร์ในเครือข่าย', story: 'เครือข่ายมี 500 เครื่อง เริ่มติดไวรัส 10 เครื่อง แพร่แบบ logistic ด้วย r = 0.8 ต่อชั่วโมง จงประมาณจำนวนเครื่องที่ติดที่ t = 2 ชั่วโมง (h = 0.5)',
   modelingSteps: ["I' = rI(1 − I/N)", "I' = 0.8I(1 − I/500), I(0) = 10"],
-  f: '0.8*y*(1 - y/500)', x0: 0, y0: 10, h: 0.5, n: 4, ask: 'I(2)', hints: ['แพร่เร็วเมื่อมีทั้งเครื่องติดและเครื่องที่ยังไม่ติดจำนวนมาก', "I' = 0.8I(1 − I/500)"], exact: '500/(1 + 49*exp(-0.8*x))' },
+  f: '0.8*y*(1 - y/500)', x0: 0, y0: 10, h: 0.5, n: 4, ask: 'I(2)', hints: ['แพร่เร็วเมื่อมีทั้งเครื่องติดและเครื่องที่ยังไม่ติดจำนวนมาก', "I' = 0.8I(1 − I/500)"], exact: '500/(1 + 49*exp(-0.8*t))' },
 { id: 'sys-am10', type: 'A', level: 'medium', title: 'น้ำไหลออกจากถัง (Torricelli)', story: 'ถังทรงกระบอกมีน้ำสูง 4 m น้ำไหลออกทางรูก้นถัง ทำให้ระดับลดลงด้วยอัตรา 0.6√H m/นาที จงประมาณระดับน้ำที่ t = 2 นาที ด้วย h = 0.5',
   modelingSteps: ["กฎของ Torricelli: H' = −c√H", "H' = −0.6√H, H(0) = 4"],
-  f: '-0.6*sqrt(y)', x0: 0, y0: 4, h: 0.5, n: 4, ask: 'H(2)', hints: ['น้ำไหลเร็วเมื่อน้ำสูง (แรงดันมาก)', "H' = −0.6·sqrt(H)"], exact: '(2 - 0.3*x)^2' },
+  f: '-0.6*sqrt(y)', x0: 0, y0: 4, h: 0.5, n: 4, ask: 'H(2)', hints: ['น้ำไหลเร็วเมื่อน้ำสูง (แรงดันมาก)', "H' = −0.6·sqrt(H)"], exact: '(2 - 0.3*t)^2' },
 
 /* ---------------- ประเภท A · ยาก ---------------- */
 { id: 'sys-ah01', type: 'A', level: 'hard', title: 'การเพาะเลี้ยงสาหร่าย', story: 'บ่อเลี้ยงสาหร่ายรองรับได้ 200 kg เริ่มต้น 20 kg เติบโตแบบ logistic r = 0.8 ต่อสัปดาห์ จงประมาณมวลที่ 5 สัปดาห์ ด้วย h = 0.5 แล้วลองเทียบกับ h = 0.25',
   modelingSteps: ["P' = rP(1 − P/K)", "P' = 0.8P(1 − P/200), P(0) = 20", 'n = 5/0.5 = 10 step'],
-  f: '0.8*y*(1 - y/200)', x0: 0, y0: 20, h: 0.5, n: 10, ask: 'P(5)', hints: ['Logistic growth: K = 200', "P' = 0.8P(1 − P/200) ทำ 10 step"], exact: '200/(1 + 9*exp(-0.8*x))' },
+  f: '0.8*y*(1 - y/200)', x0: 0, y0: 20, h: 0.5, n: 10, ask: 'P(5)', hints: ['Logistic growth: K = 200', "P' = 0.8P(1 − P/200) ทำ 10 step"], exact: '200/(1 + 9*exp(-0.8*t))' },
 { id: 'sys-ah02', type: 'A', level: 'hard', title: 'ยาแบบรับประทาน (ดูดซึม + กำจัด)', story: 'ยาถูกดูดซึมเข้ากระแสเลือดด้วยอัตรา 3e^(−0.5t) mg/L ต่อชั่วโมง และถูกกำจัด 20% ต่อชั่วโมง เริ่มที่ 0 จงประมาณความเข้มข้นที่ t = 6 ชั่วโมง ด้วย h = 0.5',
   modelingSteps: ['อัตราเข้า = 3e^(−0.5t) (ลดลงตามเวลา)', 'อัตราออก = 0.2C', "C' = 3e^(−0.5t) − 0.2C, C(0) = 0"],
-  f: '3*exp(-0.5*x) - 0.2*y', x0: 0, y0: 0, h: 0.5, n: 12, ask: 'C(6)', hints: ['มีทั้งเทอมที่ขึ้นกับ t และเทอมที่ขึ้นกับ C', "C' = 3·exp(−0.5x) − 0.2C, n = 12"], exact: '10*(exp(-0.2*x) - exp(-0.5*x))' },
+  f: '3*exp(-0.5*t) - 0.2*y', x0: 0, y0: 0, h: 0.5, n: 12, ask: 'C(6)', hints: ['มีทั้งเทอมที่ขึ้นกับ t และเทอมที่ขึ้นกับ C', "C' = 3·exp(−0.5t) − 0.2C, n = 12"], exact: '10*(exp(-0.2*t) - exp(-0.5*t))' },
 { id: 'sys-ah03', type: 'A', level: 'hard', title: 'วงจร RC กับไฟกระแสสลับ', story: 'วงจร RC มี RC = 0.5 s ต่อกับแหล่งจ่าย sin(t) V ตัวเก็บประจุเริ่ม 0 V จงประมาณแรงดันที่ t = 2 s ด้วย h = 0.2',
   modelingSteps: ["V' = (V_s(t) − V)/(RC)", "V' = 2(sin t − V), V(0) = 0"],
-  f: '2*(sin(x) - y)', x0: 0, y0: 0, h: 0.2, n: 10, ask: 'V(2)', hints: ['1/(RC) = 2', "V' = 2(sin(x) − V)"], exact: '0.8*sin(x) - 0.4*cos(x) + 0.4*exp(-2*x)' },
+  f: '2*(sin(t) - y)', x0: 0, y0: 0, h: 0.2, n: 10, ask: 'V(2)', hints: ['1/(RC) = 2', "V' = 2(sin(t) − V)"], exact: '0.8*sin(t) - 0.4*cos(t) + 0.4*exp(-2*t)' },
 { id: 'sys-ah04', type: 'A', level: 'hard', title: 'ลูกเห็บตก (แรงต้านกำลังสอง)', story: 'ลูกเห็บตกจากหยุดนิ่ง มีความเร็วปลาย (terminal velocity) 10 m/s ด้วยแรงต้านแบบกำลังสอง (g = 9.8) จงประมาณความเร็วที่ t = 2 s ด้วย h = 0.25',
   modelingSteps: ["v' = g − cv² และที่ความเร็วปลาย v' = 0 → c = g/v_t² = 9.8/100 = 0.098", "v' = 9.8 − 0.098v², v(0) = 0"],
-  f: '9.8 - 0.098*y^2', x0: 0, y0: 0, h: 0.25, n: 8, ask: 'v(2)', hints: ['ที่ความเร็วปลาย ความเร่ง = 0 ใช้หา c', "c = 0.098 → v' = 9.8 − 0.098v²"], exact: '10*tanh(0.98*x)' },
+  f: '9.8 - 0.098*y^2', x0: 0, y0: 0, h: 0.25, n: 8, ask: 'v(2)', hints: ['ที่ความเร็วปลาย ความเร่ง = 0 ใช้หา c', "c = 0.098 → v' = 9.8 − 0.098v²"], exact: '10*tanh(0.98*t)' },
 { id: 'sys-ah05', type: 'A', level: 'hard', title: 'ข่าวลือในมหาวิทยาลัย', story: 'นักศึกษา 1000 คน เริ่มมี 10 คนรู้ข่าวลือ อัตราการแพร่ = 0.002 × (คนรู้) × (คนไม่รู้) ต่อวัน จงประมาณจำนวนคนรู้ข่าวที่ 3 วัน ด้วย h = 0.25',
   modelingSteps: ['คนรู้ = N, คนไม่รู้ = 1000 − N', "N' = 0.002N(1000 − N), N(0) = 10"],
-  f: '0.002*y*(1000 - y)', x0: 0, y0: 10, h: 0.25, n: 12, ask: 'N(3)', hints: ['อัตราแพร่แปรผันตามผลคูณของสองกลุ่ม', "N' = 0.002N(1000 − N)"], exact: '1000/(1 + 99*exp(-2*x))' },
+  f: '0.002*y*(1000 - y)', x0: 0, y0: 10, h: 0.25, n: 12, ask: 'N(3)', hints: ['อัตราแพร่แปรผันตามผลคูณของสองกลุ่ม', "N' = 0.002N(1000 − N)"], exact: '1000/(1 + 99*exp(-2*t))' },
 { id: 'sys-ah06', type: 'A', level: 'hard', title: 'ดอกเบี้ยอัตราลอยตัว', story: 'เงินฝาก 1,000 บาท อัตราดอกเบี้ยต่อเนื่องเพิ่มขึ้นตามเวลาเป็น (3 + t)% ต่อปี จงประมาณยอดเงินหลัง 10 ปี ด้วย h = 1',
   modelingSteps: ['อัตราดอกเบี้ย r(t) = 0.03 + 0.01t', "A' = (0.03 + 0.01t)A, A(0) = 1000"],
-  f: '(0.03 + 0.01*x)*y', x0: 0, y0: 1000, h: 1, n: 10, ask: 'A(10)', hints: ['แปลง % เป็นทศนิยม: (3 + t)% = 0.03 + 0.01t', "A' = (0.03 + 0.01x)A"], exact: '1000*exp(0.03*x + 0.005*x^2)' },
+  f: '(0.03 + 0.01*t)*y', x0: 0, y0: 1000, h: 1, n: 10, ask: 'A(10)', hints: ['แปลง % เป็นทศนิยม: (3 + t)% = 0.03 + 0.01t', "A' = (0.03 + 0.01t)A"], exact: '1000*exp(0.03*t + 0.005*t^2)' },
 { id: 'sys-ah07', type: 'A', level: 'hard', title: 'ถังผสมที่ปริมาตรเพิ่มขึ้น', story: 'ถังมีน้ำ 100 L และเกลือ 5 kg เติมน้ำเกลือ 0.2 kg/L อัตรา 3 L/นาที ปล่อยออก 2 L/นาที (ปริมาตรเพิ่ม 1 L/นาที) จงประมาณเกลือที่ t = 30 นาที ด้วย h = 5',
   modelingSteps: ['ปริมาตร V(t) = 100 + t', 'เกลือเข้า = 0.2 × 3 = 0.6, เกลือออก = 2Q/(100 + t)', "Q' = 0.6 − 2Q/(100 + t), Q(0) = 5"],
-  f: '0.6 - 2*y/(100 + x)', x0: 0, y0: 5, h: 5, n: 6, ask: 'Q(30)', hints: ['ปริมาตรไม่คงที่ ต้องใช้ 100 + t', "Q' = 0.6 − 2Q/(100 + x)"], exact: '0.2*(100 + x) - 150000/(100 + x)^2' },
+  f: '0.6 - 2*y/(100 + t)', x0: 0, y0: 5, h: 5, n: 6, ask: 'Q(30)', hints: ['ปริมาตรไม่คงที่ ต้องใช้ 100 + t', "Q' = 0.6 − 2Q/(100 + t)"], exact: '0.2*(100 + t) - 150000/(100 + t)^2' },
 { id: 'sys-ah08', type: 'A', level: 'hard', title: 'อาหารเย็นลงในห้องที่อุณหภูมิแกว่ง', story: 'อาหาร 80°C วางในห้องที่อุณหภูมิเปลี่ยนเป็น 20 + 5sin(t) °C (t เป็นชั่วโมง) k = 0.5 ต่อชั่วโมง จงประมาณอุณหภูมิอาหารที่ t = 5 ด้วย h = 0.5',
   modelingSteps: ["T' = −k(T − T_room(t))", "T' = −0.5(T − 20 − 5sin t), T(0) = 80"],
-  f: '-0.5*(y - 20 - 5*sin(x))', x0: 0, y0: 80, h: 0.5, n: 10, ask: 'T(5)', hints: ['อุณหภูมิห้องเป็นฟังก์ชันของเวลา', "T' = −0.5(T − (20 + 5sin(x)))"], exact: '20 + sin(x) - 2*cos(x) + 62*exp(-0.5*x)' },
+  f: '-0.5*(y - 20 - 5*sin(t))', x0: 0, y0: 80, h: 0.5, n: 10, ask: 'T(5)', hints: ['อุณหภูมิห้องเป็นฟังก์ชันของเวลา', "T' = −0.5(T − (20 + 5sin(t)))"], exact: '20 + sin(t) - 2*cos(t) + 62*exp(-0.5*t)' },
 { id: 'sys-ah09', type: 'A', level: 'hard', title: 'ปฏิกิริยาเคมีอันดับสอง', story: 'สารตั้งต้นความเข้มข้น 2 mol/L ทำปฏิกิริยาอันดับสองด้วย k = 0.5 L/(mol·s) จงประมาณความเข้มข้นที่ t = 1 s ด้วย h = 0.1',
   modelingSteps: ["อันดับสอง: C' = −kC²", "C' = −0.5C², C(0) = 2"],
-  f: '-0.5*y^2', x0: 0, y0: 2, h: 0.1, n: 10, ask: 'C(1)', hints: ['อัตราแปรผันตาม C ยกกำลังสอง', "C' = −0.5C²"], exact: '2/(1 + x)' },
+  f: '-0.5*y^2', x0: 0, y0: 2, h: 0.1, n: 10, ask: 'C(1)', hints: ['อัตราแปรผันตาม C ยกกำลังสอง', "C' = −0.5C²"], exact: '2/(1 + t)' },
 { id: 'sys-ah10', type: 'A', level: 'hard', title: 'การโตของเนื้องอก (Gompertz)', story: 'เนื้องอกขนาด 10 หน่วย โตตามแบบจำลอง Gompertz ด้วย r = 0.5 และขนาดสูงสุด 100 จงประมาณขนาดที่ t = 5 ด้วย h = 0.5',
   modelingSteps: ["Gompertz: y' = r·y·ln(K/y)", "y' = 0.5y·ln(100/y), y(0) = 10 (math.js: log = ln)"],
-  f: '0.5*y*log(100/y)', x0: 0, y0: 10, h: 0.5, n: 10, ask: 'y(5)', hints: ['ln ใน math.js เขียนเป็น log()', "y' = 0.5y·log(100/y)"], exact: '100*exp(log(0.1)*exp(-0.5*x))' },
+  f: '0.5*y*log(100/y)', x0: 0, y0: 10, h: 0.5, n: 10, ask: 'y(5)', hints: ['ln ใน math.js เขียนเป็น log()', "y' = 0.5y·log(100/y)"], exact: '100*exp(log(0.1)*exp(-0.5*t))' },
 
 /* ---------------- ประเภท B · ง่าย ---------------- */
-{ id: 'sys-be01', type: 'B', level: 'easy', title: "y' = x + y", story: "กำหนด y' = x + y, y(0) = 1, h = 0.1 จงหา y(0.2)", f: 'x + y', x0: 0, y0: 1, h: 0.1, n: 2, ask: 'y(0.2)', hints: ['f(0, 1) = 0 + 1 = 1', 'y₁ = 1 + 0.1(1) แล้วทำซ้ำอีก 1 step'], exact: '2*exp(x) - x - 1' },
-{ id: 'sys-be02', type: 'B', level: 'easy', title: "y' = 2y", story: "กำหนด y' = 2y, y(0) = 1, h = 0.5 จงหา y(1)", f: '2*y', x0: 0, y0: 1, h: 0.5, n: 2, ask: 'y(1)', hints: ['f ขึ้นกับ y อย่างเดียว', 'แต่ละ step: y ใหม่ = y(1 + 2h)'], exact: 'exp(2*x)' },
-{ id: 'sys-be03', type: 'B', level: 'easy', title: "y' = 2x", story: "กำหนด y' = 2x, y(0) = 0, h = 0.5 จงหา y(1)", f: '2*x', x0: 0, y0: 0, h: 0.5, n: 2, ask: 'y(1)', hints: ['f(0, 0) = 0 ดังนั้น y₁ = 0', 'step 2 ใช้ x₁ = 0.5'], exact: 'x^2' },
-{ id: 'sys-be04', type: 'B', level: 'easy', title: "y' = y − x", story: "กำหนด y' = y − x, y(0) = 2, h = 0.5 จงหา y(1)", f: 'y - x', x0: 0, y0: 2, h: 0.5, n: 2, ask: 'y(1)', hints: ['f(0, 2) = 2', 'y₁ = 2 + 0.5(2) = 3'], exact: 'x + 1 + exp(x)' },
-{ id: 'sys-be05', type: 'B', level: 'easy', title: "y' = −y", story: "กำหนด y' = −y, y(0) = 4, h = 0.5 จงหา y(1)", f: '-y', x0: 0, y0: 4, h: 0.5, n: 2, ask: 'y(1)', hints: ['f(0, 4) = −4', 'y₁ = 4 + 0.5(−4)'], exact: '4*exp(-x)' },
-{ id: 'sys-be06', type: 'B', level: 'easy', title: "y' = x − y", story: "กำหนด y' = x − y, y(0) = 0, h = 0.5 จงหา y(1)", f: 'x - y', x0: 0, y0: 0, h: 0.5, n: 2, ask: 'y(1)', hints: ['f(0, 0) = 0 → y₁ = 0', 'step 2: f(0.5, 0) = 0.5'], exact: 'x - 1 + exp(-x)' },
-{ id: 'sys-be07', type: 'B', level: 'easy', title: "y' = 1 + y", story: "กำหนด y' = 1 + y, y(0) = 0, h = 1 จงหา y(2)", f: '1 + y', x0: 0, y0: 0, h: 1, n: 2, ask: 'y(2)', hints: ['f(0, 0) = 1', 'y₁ = 0 + 1(1) = 1'], exact: 'exp(x) - 1' },
-{ id: 'sys-be08', type: 'B', level: 'easy', title: "y' = 2x + 1", story: "กำหนด y' = 2x + 1, y(1) = 2, h = 0.5 จงหา y(2)", f: '2*x + 1', x0: 1, y0: 2, h: 0.5, n: 2, ask: 'y(2)', hints: ['เริ่มที่ x₀ = 1 ไม่ใช่ 0', 'f(1, 2) = 3'], exact: 'x^2 + x' },
-{ id: 'sys-be09', type: 'B', level: 'easy', title: "y' = 4 − 2y", story: "กำหนด y' = 4 − 2y, y(0) = 0, h = 0.25 จงหา y(0.5)", f: '4 - 2*y', x0: 0, y0: 0, h: 0.25, n: 2, ask: 'y(0.5)', hints: ['f(0, 0) = 4', 'y₁ = 0 + 0.25(4) = 1'], exact: '2 - 2*exp(-2*x)' },
-{ id: 'sys-be10', type: 'B', level: 'easy', title: "y' = xy", story: "กำหนด y' = xy, y(0) = 2, h = 0.5 จงหา y(1)", f: 'x*y', x0: 0, y0: 2, h: 0.5, n: 2, ask: 'y(1)', hints: ['f(0, 2) = 0 → y₁ = 2', 'step 2: f(0.5, 2) = 1'], exact: '2*exp(x^2/2)' },
+{ id: 'sys-be01', type: 'B', level: 'easy', title: "y' = t + y", story: "กำหนด y' = t + y, y(0) = 1, h = 0.1 จงหา y(0.2)", f: 't + y', x0: 0, y0: 1, h: 0.1, n: 2, ask: 'y(0.2)', hints: ['f(0, 1) = 0 + 1 = 1', 'w₁ = 1 + 0.1(1) แล้วทำซ้ำอีก 1 step'], exact: '2*exp(t) - t - 1' },
+{ id: 'sys-be02', type: 'B', level: 'easy', title: "y' = 2y", story: "กำหนด y' = 2y, y(0) = 1, h = 0.5 จงหา y(1)", f: '2*y', x0: 0, y0: 1, h: 0.5, n: 2, ask: 'y(1)', hints: ['f ขึ้นกับ y อย่างเดียว', 'แต่ละ step: y ใหม่ = y(1 + 2h)'], exact: 'exp(2*t)' },
+{ id: 'sys-be03', type: 'B', level: 'easy', title: "y' = 2t", story: "กำหนด y' = 2t, y(0) = 0, h = 0.5 จงหา y(1)", f: '2*t', x0: 0, y0: 0, h: 0.5, n: 2, ask: 'y(1)', hints: ['f(0, 0) = 0 ดังนั้น w₁ = 0', 'step 2 ใช้ t₁ = 0.5'], exact: 't^2' },
+{ id: 'sys-be04', type: 'B', level: 'easy', title: "y' = y − t", story: "กำหนด y' = y − t, y(0) = 2, h = 0.5 จงหา y(1)", f: 'y - t', x0: 0, y0: 2, h: 0.5, n: 2, ask: 'y(1)', hints: ['f(0, 2) = 2', 'w₁ = 2 + 0.5(2) = 3'], exact: 't + 1 + exp(t)' },
+{ id: 'sys-be05', type: 'B', level: 'easy', title: "y' = −y", story: "กำหนด y' = −y, y(0) = 4, h = 0.5 จงหา y(1)", f: '-y', x0: 0, y0: 4, h: 0.5, n: 2, ask: 'y(1)', hints: ['f(0, 4) = −4', 'w₁ = 4 + 0.5(−4)'], exact: '4*exp(-t)' },
+{ id: 'sys-be06', type: 'B', level: 'easy', title: "y' = t − y", story: "กำหนด y' = t − y, y(0) = 0, h = 0.5 จงหา y(1)", f: 't - y', x0: 0, y0: 0, h: 0.5, n: 2, ask: 'y(1)', hints: ['f(0, 0) = 0 → w₁ = 0', 'step 2: f(0.5, 0) = 0.5'], exact: 't - 1 + exp(-t)' },
+{ id: 'sys-be07', type: 'B', level: 'easy', title: "y' = 1 + y", story: "กำหนด y' = 1 + y, y(0) = 0, h = 1 จงหา y(2)", f: '1 + y', x0: 0, y0: 0, h: 1, n: 2, ask: 'y(2)', hints: ['f(0, 0) = 1', 'w₁ = 0 + 1(1) = 1'], exact: 'exp(t) - 1' },
+{ id: 'sys-be08', type: 'B', level: 'easy', title: "y' = 2t + 1", story: "กำหนด y' = 2t + 1, y(1) = 2, h = 0.5 จงหา y(2)", f: '2*t + 1', x0: 1, y0: 2, h: 0.5, n: 2, ask: 'y(2)', hints: ['เริ่มที่ a = 1 ไม่ใช่ 0', 'f(1, 2) = 3'], exact: 't^2 + t' },
+{ id: 'sys-be09', type: 'B', level: 'easy', title: "y' = 4 − 2y", story: "กำหนด y' = 4 − 2y, y(0) = 0, h = 0.25 จงหา y(0.5)", f: '4 - 2*y', x0: 0, y0: 0, h: 0.25, n: 2, ask: 'y(0.5)', hints: ['f(0, 0) = 4', 'w₁ = 0 + 0.25(4) = 1'], exact: '2 - 2*exp(-2*t)' },
+{ id: 'sys-be10', type: 'B', level: 'easy', title: "y' = ty", story: "กำหนด y' = ty, y(0) = 2, h = 0.5 จงหา y(1)", f: 't*y', x0: 0, y0: 2, h: 0.5, n: 2, ask: 'y(1)', hints: ['f(0, 2) = 0 → w₁ = 2', 'step 2: f(0.5, 2) = 1'], exact: '2*exp(t^2/2)' },
 
 /* ---------------- ประเภท B · กลาง ---------------- */
-{ id: 'sys-bm01', type: 'B', level: 'medium', title: "y' = x + y (3 step)", story: "กำหนด y' = x + y, y(0) = 1, h = 0.1 จงหา y(0.3)", f: 'x + y', x0: 0, y0: 1, h: 0.1, n: 3, ask: 'y(0.3)', hints: ['n = 0.3/0.1 = 3', 'y₁ = 1.1, y₂ = 1.22'], exact: '2*exp(x) - x - 1' },
-{ id: 'sys-bm02', type: 'B', level: 'medium', title: "y' = −2xy", story: "กำหนด y' = −2xy, y(0) = 1, h = 0.1 จงหา y(0.4)", f: '-2*x*y', x0: 0, y0: 1, h: 0.1, n: 4, ask: 'y(0.4)', hints: ['step แรก f(0, 1) = 0', 'n = 4'], exact: 'exp(-x^2)' },
-{ id: 'sys-bm03', type: 'B', level: 'medium', title: "y' = sin x − y", story: "กำหนด y' = sin(x) − y, y(0) = 1, h = 0.2 จงหา y(1)", f: 'sin(x) - y', x0: 0, y0: 1, h: 0.2, n: 5, ask: 'y(1)', hints: ['ใช้ x เป็นเรเดียน', 'f(0, 1) = 0 − 1 = −1'], exact: '0.5*sin(x) - 0.5*cos(x) + 1.5*exp(-x)' },
-{ id: 'sys-bm04', type: 'B', level: 'medium', title: "y' = x² − y", story: "กำหนด y' = x² − y, y(0) = 1, h = 0.25 จงหา y(1)", f: 'x^2 - y', x0: 0, y0: 1, h: 0.25, n: 4, ask: 'y(1)', hints: ['f(0, 1) = −1', 'y₁ = 1 + 0.25(−1) = 0.75'], exact: 'x^2 - 2*x + 2 - exp(-x)' },
-{ id: 'sys-bm05', type: 'B', level: 'medium', title: "y' = y cos x", story: "กำหนด y' = y·cos(x), y(0) = 1, h = 0.25 จงหา y(1)", f: 'y*cos(x)', x0: 0, y0: 1, h: 0.25, n: 4, ask: 'y(1)', hints: ['cos(0) = 1 → f(0, 1) = 1', 'ใช้เรเดียนตลอด'], exact: 'exp(sin(x))' },
-{ id: 'sys-bm06', type: 'B', level: 'medium', title: "y' = 1 + y²", story: "กำหนด y' = 1 + y², y(0) = 0, h = 0.1 จงหา y(0.5)", f: '1 + y^2', x0: 0, y0: 0, h: 0.1, n: 5, ask: 'y(0.5)', hints: ['f(0, 0) = 1', 'y₁ = 0.1 แล้ว f(0.1, 0.1) = 1.01'], exact: 'tan(x)' },
-{ id: 'sys-bm07', type: 'B', level: 'medium', title: "y' = (x − y)/2", story: "กำหนด y' = (x − y)/2, y(0) = 1, h = 0.5 จงหา y(2)", f: '(x - y)/2', x0: 0, y0: 1, h: 0.5, n: 4, ask: 'y(2)', hints: ['n = 2/0.5 = 4', 'f(0, 1) = −0.5'], exact: 'x - 2 + 3*exp(-x/2)' },
-{ id: 'sys-bm08', type: 'B', level: 'medium', title: "y' = eˣ − y", story: "กำหนด y' = eˣ − y, y(0) = 0, h = 0.2 จงหา y(1)", f: 'exp(x) - y', x0: 0, y0: 0, h: 0.2, n: 5, ask: 'y(1)', hints: ['f(0, 0) = e⁰ − 0 = 1', 'y₁ = 0.2'], exact: 'sinh(x)' },
-{ id: 'sys-bm09', type: 'B', level: 'medium', title: "y' = 2y/(x+1)", story: "กำหนด y' = 2y/(x + 1), y(0) = 1, h = 0.25 จงหา y(1)", f: '2*y/(x + 1)', x0: 0, y0: 1, h: 0.25, n: 4, ask: 'y(1)', hints: ['f(0, 1) = 2', 'y₁ = 1 + 0.25(2) = 1.5'], exact: '(x + 1)^2' },
-{ id: 'sys-bm10', type: 'B', level: 'medium', title: "y' = x√y", story: "กำหนด y' = x·√y, y(0) = 1, h = 0.25 จงหา y(1)", f: 'x*sqrt(y)', x0: 0, y0: 1, h: 0.25, n: 4, ask: 'y(1)', hints: ['f(0, 1) = 0 → y₁ = 1', 'f(0.25, 1) = 0.25'], exact: '(x^2/4 + 1)^2' },
+{ id: 'sys-bm01', type: 'B', level: 'medium', title: "y' = t + y (3 step)", story: "กำหนด y' = t + y, y(0) = 1, h = 0.1 จงหา y(0.3)", f: 't + y', x0: 0, y0: 1, h: 0.1, n: 3, ask: 'y(0.3)', hints: ['n = 0.3/0.1 = 3', 'w₁ = 1.1, w₂ = 1.22'], exact: '2*exp(t) - t - 1' },
+{ id: 'sys-bm02', type: 'B', level: 'medium', title: "y' = −2ty", story: "กำหนด y' = −2ty, y(0) = 1, h = 0.1 จงหา y(0.4)", f: '-2*t*y', x0: 0, y0: 1, h: 0.1, n: 4, ask: 'y(0.4)', hints: ['step แรก f(0, 1) = 0', 'n = 4'], exact: 'exp(-t^2)' },
+{ id: 'sys-bm03', type: 'B', level: 'medium', title: "y' = sin t − y", story: "กำหนด y' = sin(t) − y, y(0) = 1, h = 0.2 จงหา y(1)", f: 'sin(t) - y', x0: 0, y0: 1, h: 0.2, n: 5, ask: 'y(1)', hints: ['ใช้ t เป็นเรเดียน', 'f(0, 1) = 0 − 1 = −1'], exact: '0.5*sin(t) - 0.5*cos(t) + 1.5*exp(-t)' },
+{ id: 'sys-bm04', type: 'B', level: 'medium', title: "y' = t² − y", story: "กำหนด y' = t² − y, y(0) = 1, h = 0.25 จงหา y(1)", f: 't^2 - y', x0: 0, y0: 1, h: 0.25, n: 4, ask: 'y(1)', hints: ['f(0, 1) = −1', 'w₁ = 1 + 0.25(−1) = 0.75'], exact: 't^2 - 2*t + 2 - exp(-t)' },
+{ id: 'sys-bm05', type: 'B', level: 'medium', title: "y' = y cos t", story: "กำหนด y' = y·cos(t), y(0) = 1, h = 0.25 จงหา y(1)", f: 'y*cos(t)', x0: 0, y0: 1, h: 0.25, n: 4, ask: 'y(1)', hints: ['cos(0) = 1 → f(0, 1) = 1', 'ใช้เรเดียนตลอด'], exact: 'exp(sin(t))' },
+{ id: 'sys-bm06', type: 'B', level: 'medium', title: "y' = 1 + y²", story: "กำหนด y' = 1 + y², y(0) = 0, h = 0.1 จงหา y(0.5)", f: '1 + y^2', x0: 0, y0: 0, h: 0.1, n: 5, ask: 'y(0.5)', hints: ['f(0, 0) = 1', 'w₁ = 0.1 แล้ว f(0.1, 0.1) = 1.01'], exact: 'tan(t)' },
+{ id: 'sys-bm07', type: 'B', level: 'medium', title: "y' = (t − y)/2", story: "กำหนด y' = (t − y)/2, y(0) = 1, h = 0.5 จงหา y(2)", f: '(t - y)/2', x0: 0, y0: 1, h: 0.5, n: 4, ask: 'y(2)', hints: ['n = 2/0.5 = 4', 'f(0, 1) = −0.5'], exact: 't - 2 + 3*exp(-t/2)' },
+{ id: 'sys-bm08', type: 'B', level: 'medium', title: "y' = eᵗ − y", story: "กำหนด y' = eᵗ − y, y(0) = 0, h = 0.2 จงหา y(1)", f: 'exp(t) - y', x0: 0, y0: 0, h: 0.2, n: 5, ask: 'y(1)', hints: ['f(0, 0) = e⁰ − 0 = 1', 'w₁ = 0.2'], exact: 'sinh(t)' },
+{ id: 'sys-bm09', type: 'B', level: 'medium', title: "y' = 2y/(t+1)", story: "กำหนด y' = 2y/(t + 1), y(0) = 1, h = 0.25 จงหา y(1)", f: '2*y/(t + 1)', x0: 0, y0: 1, h: 0.25, n: 4, ask: 'y(1)', hints: ['f(0, 1) = 2', 'w₁ = 1 + 0.25(2) = 1.5'], exact: '(t + 1)^2' },
+{ id: 'sys-bm10', type: 'B', level: 'medium', title: "y' = t√y", story: "กำหนด y' = t·√y, y(0) = 1, h = 0.25 จงหา y(1)", f: 't*sqrt(y)', x0: 0, y0: 1, h: 0.25, n: 4, ask: 'y(1)', hints: ['f(0, 1) = 0 → w₁ = 1', 'f(0.25, 1) = 0.25'], exact: '(t^2/4 + 1)^2' },
 
 /* ---------------- ประเภท B · ยาก ---------------- */
-{ id: 'sys-bh01', type: 'B', level: 'hard', title: "y' = y หา y(1) ≈ e", story: "กำหนด y' = y, y(0) = 1, h = 0.1 จงหา y(1) แล้วเทียบกับ e", f: 'y', x0: 0, y0: 1, h: 0.1, n: 10, ask: 'y(1)', hints: ['แต่ละ step คูณ (1 + h) = 1.1', 'y(1) ≈ 1.1¹⁰'], exact: 'exp(x)' },
-{ id: 'sys-bh02', type: 'B', level: 'hard', title: "y' = y² (โตเร็วมาก)", story: "กำหนด y' = y², y(0) = 0.5, h = 0.1 จงหา y(1) และสังเกต error", f: 'y^2', x0: 0, y0: 0.5, h: 0.1, n: 10, ask: 'y(1)', hints: ['f(0, 0.5) = 0.25', 'n = 10, exact = 1/(2 − x)'], exact: '1/(2 - x)' },
-{ id: 'sys-bh03', type: 'B', level: 'hard', title: "y' = eˣ·y", story: "กำหนด y' = eˣ·y, y(0) = 1, h = 0.1 จงหา y(1)", f: 'exp(x)*y', x0: 0, y0: 1, h: 0.1, n: 10, ask: 'y(1)', hints: ['f(0, 1) = 1', 'ความชันเพิ่มเร็วมาก error จะสะสม'], exact: 'exp(exp(x) - 1)' },
-{ id: 'sys-bh04', type: 'B', level: 'hard', title: "y' = −10(y − cos x)", story: "กำหนด y' = −10(y − cos x), y(0) = 0, h = 0.05 จงหา y(1) (สมการค่อนข้าง stiff)", f: '-10*(y - cos(x))', x0: 0, y0: 0, h: 0.05, n: 20, ask: 'y(1)', hints: ['f(0, 0) = 10', 'h·10 = 0.5 < 2 จึงยังเสถียร'], exact: '(100*cos(x) + 10*sin(x) - 100*exp(-10*x))/101' },
-{ id: 'sys-bh05', type: 'B', level: 'hard', title: "y' = xy²", story: "กำหนด y' = x·y², y(0) = 1, h = 0.1 จงหา y(0.8)", f: 'x*y^2', x0: 0, y0: 1, h: 0.1, n: 8, ask: 'y(0.8)', hints: ['f(0, 1) = 0 → y₁ = 1', 'n = 8, exact = 2/(2 − x²)'], exact: '2/(2 - x^2)' },
-{ id: 'sys-bh06', type: 'B', level: 'hard', title: "y' = x² + y² (Riccati)", story: "กำหนด y' = x² + y², y(0) = 0, h = 0.1 จงหา y(1) (ไม่มี exact แบบสูตรง่าย ระบบจะเทียบกับ RK4)", f: 'x^2 + y^2', x0: 0, y0: 0, h: 0.1, n: 10, ask: 'y(1)', hints: ['f(0, 0) = 0 → y₁ = 0', 'step 2: f(0.1, 0) = 0.01'] },
-{ id: 'sys-bh07', type: 'B', level: 'hard', title: "y' = −2y + e⁻ˣ", story: "กำหนด y' = −2y + e^(−x), y(0) = 2, h = 0.1 จงหา y(1.5)", f: '-2*y + exp(-x)', x0: 0, y0: 2, h: 0.1, n: 15, ask: 'y(1.5)', hints: ['f(0, 2) = −4 + 1 = −3', 'n = 15'], exact: 'exp(-x) + exp(-2*x)' },
-{ id: 'sys-bh08', type: 'B', level: 'hard', title: "y' = y(1 − y)", story: "กำหนด y' = y(1 − y), y(0) = 0.1, h = 0.5 จงหา y(6)", f: 'y*(1 - y)', x0: 0, y0: 0.1, h: 0.5, n: 12, ask: 'y(6)', hints: ['f(0, 0.1) = 0.09', 'n = 12, ค่าจะเข้าใกล้ 1'], exact: '1/(1 + 9*exp(-x))' },
-{ id: 'sys-bh09', type: 'B', level: 'hard', title: "y' = 1/(1 + x²)", story: "กำหนด y' = 1/(1 + x²), y(0) = 0, h = 0.2 จงหา y(2) (เทียบกับ arctan 2)", f: '1/(1 + x^2)', x0: 0, y0: 0, h: 0.2, n: 10, ask: 'y(2)', hints: ['f ไม่ขึ้นกับ y → เหมือนการอินทิเกรตแบบ Riemann ซ้าย', 'f(0, 0) = 1'], exact: 'atan(x)' },
-{ id: 'sys-bh10', type: 'B', level: 'hard', title: "y' = −x/y (วงกลม)", story: "กำหนด y' = −x/y, y(0) = 2, h = 0.1 จงหา y(1.5)", f: '-x/y', x0: 0, y0: 2, h: 0.1, n: 15, ask: 'y(1.5)', hints: ['f(0, 2) = 0 → y₁ = 2', 'exact = √(4 − x²) — error โตเมื่อใกล้ x = 2'], exact: 'sqrt(4 - x^2)' },
+{ id: 'sys-bh01', type: 'B', level: 'hard', title: "y' = y หา y(1) ≈ e", story: "กำหนด y' = y, y(0) = 1, h = 0.1 จงหา y(1) แล้วเทียบกับ e", f: 'y', x0: 0, y0: 1, h: 0.1, n: 10, ask: 'y(1)', hints: ['แต่ละ step คูณ (1 + h) = 1.1', 'y(1) ≈ 1.1¹⁰'], exact: 'exp(t)' },
+{ id: 'sys-bh02', type: 'B', level: 'hard', title: "y' = y² (โตเร็วมาก)", story: "กำหนด y' = y², y(0) = 0.5, h = 0.1 จงหา y(1) และสังเกต error", f: 'y^2', x0: 0, y0: 0.5, h: 0.1, n: 10, ask: 'y(1)', hints: ['f(0, 0.5) = 0.25', 'n = 10, exact = 1/(2 − t)'], exact: '1/(2 - t)' },
+{ id: 'sys-bh03', type: 'B', level: 'hard', title: "y' = eᵗ·y", story: "กำหนด y' = eᵗ·y, y(0) = 1, h = 0.1 จงหา y(1)", f: 'exp(t)*y', x0: 0, y0: 1, h: 0.1, n: 10, ask: 'y(1)', hints: ['f(0, 1) = 1', 'ความชันเพิ่มเร็วมาก error จะสะสม'], exact: 'exp(exp(t) - 1)' },
+{ id: 'sys-bh04', type: 'B', level: 'hard', title: "y' = −10(y − cos t)", story: "กำหนด y' = −10(y − cos t), y(0) = 0, h = 0.05 จงหา y(1) (สมการค่อนข้าง stiff)", f: '-10*(y - cos(t))', x0: 0, y0: 0, h: 0.05, n: 20, ask: 'y(1)', hints: ['f(0, 0) = 10', 'h·10 = 0.5 < 2 จึงยังเสถียร'], exact: '(100*cos(t) + 10*sin(t) - 100*exp(-10*t))/101' },
+{ id: 'sys-bh05', type: 'B', level: 'hard', title: "y' = ty²", story: "กำหนด y' = t·y², y(0) = 1, h = 0.1 จงหา y(0.8)", f: 't*y^2', x0: 0, y0: 1, h: 0.1, n: 8, ask: 'y(0.8)', hints: ['f(0, 1) = 0 → w₁ = 1', 'n = 8, exact = 2/(2 − t²)'], exact: '2/(2 - t^2)' },
+{ id: 'sys-bh06', type: 'B', level: 'hard', title: "y' = t² + y² (Riccati)", story: "กำหนด y' = t² + y², y(0) = 0, h = 0.1 จงหา y(1) (ไม่มี exact แบบสูตรง่าย ระบบจะเทียบกับ RK4)", f: 't^2 + y^2', x0: 0, y0: 0, h: 0.1, n: 10, ask: 'y(1)', hints: ['f(0, 0) = 0 → w₁ = 0', 'step 2: f(0.1, 0) = 0.01'] },
+{ id: 'sys-bh07', type: 'B', level: 'hard', title: "y' = −2y + e⁻ᵗ", story: "กำหนด y' = −2y + e^(−t), y(0) = 2, h = 0.1 จงหา y(1.5)", f: '-2*y + exp(-t)', x0: 0, y0: 2, h: 0.1, n: 15, ask: 'y(1.5)', hints: ['f(0, 2) = −4 + 1 = −3', 'n = 15'], exact: 'exp(-t) + exp(-2*t)' },
+{ id: 'sys-bh08', type: 'B', level: 'hard', title: "y' = y(1 − y)", story: "กำหนด y' = y(1 − y), y(0) = 0.1, h = 0.5 จงหา y(6)", f: 'y*(1 - y)', x0: 0, y0: 0.1, h: 0.5, n: 12, ask: 'y(6)', hints: ['f(0, 0.1) = 0.09', 'n = 12, ค่าจะเข้าใกล้ 1'], exact: '1/(1 + 9*exp(-t))' },
+{ id: 'sys-bh09', type: 'B', level: 'hard', title: "y' = 1/(1 + t²)", story: "กำหนด y' = 1/(1 + t²), y(0) = 0, h = 0.2 จงหา y(2) (เทียบกับ arctan 2)", f: '1/(1 + t^2)', x0: 0, y0: 0, h: 0.2, n: 10, ask: 'y(2)', hints: ['f ไม่ขึ้นกับ y → เหมือนการอินทิเกรตแบบ Riemann ซ้าย', 'f(0, 0) = 1'], exact: 'atan(t)' },
+{ id: 'sys-bh10', type: 'B', level: 'hard', title: "y' = −t/y (วงกลม)", story: "กำหนด y' = −t/y, y(0) = 2, h = 0.1 จงหา y(1.5)", f: '-t/y', x0: 0, y0: 2, h: 0.1, n: 15, ask: 'y(1.5)', hints: ['f(0, 2) = 0 → w₁ = 2', 'exact = √(4 − t²) — error โตเมื่อใกล้ t = 2'], exact: 'sqrt(4 - t^2)' },
 ];
 </script>
 <script>
@@ -1428,33 +1537,33 @@ function generateQuestion(level) {
   if (L === 'easy') {
     const a = pick([1, 2, 3, -1, -2]), b = pick([1, 2, 3, 4]), y0 = pick([1, 2, 4]);
     T = pick([
-      { f: `${a}*y`, exact: `${y0}*exp(${a}*x)` },
-      { f: `${b}*x + ${Math.abs(a)}`, exact: `${y0} + ${b / 2}*x^2 + ${Math.abs(a)}*x` },
-      { f: `${b * 2} - ${Math.abs(a)}*y`, exact: `${(b * 2) / Math.abs(a)} + (${y0} - ${(b * 2) / Math.abs(a)})*exp(-${Math.abs(a)}*x)` },
-      { f: 'x + y', exact: `${y0 + 1}*exp(x) - x - 1` }]);
+      { f: `${a}*y`, exact: `${y0}*exp(${a}*t)` },
+      { f: `${b}*t + ${Math.abs(a)}`, exact: `${y0} + ${b / 2}*t^2 + ${Math.abs(a)}*t` },
+      { f: `${b * 2} - ${Math.abs(a)}*y`, exact: `${(b * 2) / Math.abs(a)} + (${y0} - ${(b * 2) / Math.abs(a)})*exp(-${Math.abs(a)}*t)` },
+      { f: 't + y', exact: `${y0 + 1}*exp(t) - t - 1` }]);
     Object.assign(T, { y0, h: pick([0.5, 0.25, 1, 0.1]), n: rint(1, 2) });
   } else if (L === 'medium') {
     const a = pick([0.5, 1, 2]), y0 = pick([1, 2, 0.5, 3]);
     T = pick([
-      { f: `-${a}*x*y`, exact: `${y0}*exp(-${a}*x^2/2)` },
-      { f: `x - ${a}*y`, exact: `x/${a} - 1/${a * a} + (${y0} + 1/${a * a})*exp(-${a}*x)` },
-      { f: 'sin(x) - y', exact: `0.5*sin(x) - 0.5*cos(x) + ${y0 + 0.5}*exp(-x)` },
-      { f: 'y*cos(x)', exact: `${y0}*exp(sin(x))` }]);
+      { f: `-${a}*t*y`, exact: `${y0}*exp(-${a}*t^2/2)` },
+      { f: `t - ${a}*y`, exact: `t/${a} - 1/${a * a} + (${y0} + 1/${a * a})*exp(-${a}*t)` },
+      { f: 'sin(t) - y', exact: `0.5*sin(t) - 0.5*cos(t) + ${y0 + 0.5}*exp(-t)` },
+      { f: 'y*cos(t)', exact: `${y0}*exp(sin(t))` }]);
     Object.assign(T, { y0, h: pick([0.1, 0.2, 0.25]), n: rint(3, 5) });
   } else {
     const n = rint(8, 12), h = pick([0.1, 0.05]), y0 = pick([0.2, 0.25, 0.5]);
     const a = +(0.6 / (y0 * n * h)).toFixed(2);
     T = pick([
-      { f: `${a}*y^2`, exact: `${y0}/(1 - ${a * y0}*x)` },
-      { f: 'exp(x) - y', exact: `exp(x)/2 + (${y0} - 0.5)*exp(-x)` },
-      { f: 'x^2 + y^2', exact: '' },
-      { f: 'y*(1 - y)', exact: `1/(1 + ${(1 - y0) / y0}*exp(-x))` }]);
+      { f: `${a}*y^2`, exact: `${y0}/(1 - ${a * y0}*t)` },
+      { f: 'exp(t) - y', exact: `exp(t)/2 + (${y0} - 0.5)*exp(-t)` },
+      { f: 't^2 + y^2', exact: '' },
+      { f: 'y*(1 - y)', exact: `1/(1 + ${(1 - y0) / y0}*exp(-t))` }]);
     Object.assign(T, { y0, h, n });
   }
   const xEnd = +(T.n * T.h).toFixed(10);
   return { id: 'gen-' + Date.now().toString(36) + rint(100, 999), type: 'B', level: L, title: `โจทย์สุ่ม y' = ${T.f}`,
     story: `กำหนด y' = ${T.f}, y(0) = ${T.y0}, h = ${T.h} จงหา y(${xEnd})`, f: T.f, x0: 0, y0: T.y0, h: T.h, n: T.n, ask: `y(${xEnd})`,
-    hints: ['เริ่มจากหา f(x₀, y₀) โดยแทน x = 0 และ y = ' + T.y0, `ต้องเดินทั้งหมด n = ${T.n} step`], exact: T.exact || undefined, _src: 'gen' };
+    hints: ['เริ่มจากหา f(t₀, w₀) โดยแทน t = 0 และ y = α = ' + T.y0, `ต้องเดินทั้งหมด N = ${T.n} step`], exact: T.exact || undefined, _src: 'gen' };
 }
 
 /* ---------- สุ่มโจทย์ (ไม่ซ้ำกับข้อล่าสุด) ---------- */
@@ -1476,9 +1585,9 @@ function newQuestion() {
 function buildHints(q, prob) {
   const hs = (Array.isArray(q.hints) ? q.hints : []).filter(Boolean).slice(0, 2);
   if (!hs.length && q.modelingSteps && q.modelingSteps.length) hs.push(q.modelingSteps[0]);
-  if (!hs.length) hs.push('เริ่มจากแทน x₀ และ y₀ ลงใน f เพื่อหาความชันแรก');
+  if (!hs.length) hs.push('เริ่มจากแทน t₀ = a และ w₀ = α ลงใน f เพื่อหาความชันแรก');
   const a = prob.pts[0], b = prob.pts[1];
-  hs.push(`step แรก: f(${fmtS(a.x)}, ${fmtS(a.y)}) = ${fmtS(a.f)} → y₁ = ${fmtS(a.y)} + ${fmtS(prob.h, 8)}×${texSafe(a.f)} = ${fmtS(b.y)} (ทำแบบนี้ต่ออีก ${prob.n - 1} step)`);
+  hs.push(`step แรก (i = 0): f(t₀, w₀) = f(${fmtS(a.x)}, ${fmtS(a.y)}) = ${fmtS(a.f)} → w₁ = ${fmtS(a.y)} + ${fmtS(prob.h, 8)}×${texSafe(a.f)} = ${fmtS(b.y)} (ทำแบบนี้ต่ออีก ${prob.n - 1} step)`);
   return hs;
 }
 function texSafe(v) { return v < 0 ? `(${fmtS(v)})` : fmtS(v); }
@@ -1493,8 +1602,8 @@ function renderQuestion(q) {
   const askLabel = q.ask || `y(${fmtS(prob.xEnd, 8)})`;
   const srcBadge = q._src === 'custom' ? el('span', { class: 'badge amber' }, '📚 ' + (q._set || 'ของฉัน')) : q._src === 'gen' ? el('span', { class: 'badge gray' }, '🎲 สุ่มสร้าง') : el('span', { class: 'badge gray' }, 'ในระบบ');
   const given = q.type === 'B'
-    ? el('div', { class: 'given' }, el('span', { html: tex(`y' = ${prob.fc.node.toTex({ parenthesis: 'keep' })}`) }), el('span', {}, `y(${fmtS(prob.x0, 8)}) = ${fmtS(prob.y0, 8)}`), el('span', {}, `h = ${fmtS(prob.h, 8)}`), el('span', {}, `n = ${prob.n} step`))
-    : el('div', { class: 'given' }, el('span', {}, `h = ${fmtS(prob.h, 8)}`), el('span', {}, `n = ${prob.n} step`), el('span', {}, `เริ่ม: ${fmtS(prob.y0, 8)} ที่ x = ${fmtS(prob.x0, 8)}`));
+    ? el('div', { class: 'given' }, el('span', { html: tex(`y' = ${prob.fc.node.toTex({ parenthesis: 'keep' })}`) }), el('span', {}, `${fmtS(prob.x0, 8)} ≤ t ≤ ${fmtS(prob.xEnd, 8)}`), el('span', {}, `y(${fmtS(prob.x0, 8)}) = α = ${fmtS(prob.y0, 8)}`), el('span', {}, `h = ${fmtS(prob.h, 8)}`), el('span', {}, `N = ${prob.n}`))
+    : el('div', { class: 'given' }, el('span', {}, `h = ${fmtS(prob.h, 8)}`), el('span', {}, `N = ${prob.n}`), el('span', {}, `a = ${fmtS(prob.x0, 8)}, b = ${fmtS(prob.xEnd, 8)}`), el('span', {}, `α = ${fmtS(prob.y0, 8)}`));
   const input = el('input', { type: 'text', inputmode: 'decimal', placeholder: `ค่าของ ${askLabel}`, 'aria-label': 'คำตอบ' });
   const fb = el('div', { class: 'feedback', 'aria-live': 'polite' });
   const hintBox = el('div');
@@ -1517,8 +1626,8 @@ function renderQuestion(q) {
       if (Practice.state.tries === 1) recordResult(false);
       let tip = 'ยังไม่ถูก ลองตรวจการคำนวณอีกครั้งนะ — กด "ใบ้" ได้';
       const near = prob.pts.findIndex((p, i) => i < prob.n && Math.abs(p.y - v) <= Math.max(Math.abs(p.y) * 0.002, 0.0015));
-      if (near >= 0) tip = `ค่านี้ตรงกับ y${sub(near)} — ต้องเดินให้ครบ ${prob.n} step นะ`;
-      else if (prob.ec && Math.abs(prob.ec.fn(prob.xEnd) - v) <= tol) tip = 'ค่านี้ใกล้กับคำตอบ exact แต่โจทย์ให้ประมาณด้วย Euler Method';
+      if (near >= 0) tip = `ค่านี้ตรงกับ w${sub(near)} — ต้องเดินให้ครบ N = ${prob.n} step นะ`;
+      else if (prob.ec && Math.abs(prob.ec.fn(prob.xEnd) - v) <= tol) tip = 'ค่านี้ใกล้กับคำตอบ exact y(b) แต่โจทย์ให้ประมาณด้วย Euler\'s method (w_N)';
       fb.append(el('div', { class: 'alert err' }, '❌ ' + tip));
       input.classList.remove('shake'); void input.offsetWidth; input.classList.add('shake');
     }
@@ -1528,8 +1637,8 @@ function renderQuestion(q) {
     el('div', { class: 'card-title' }, el('h2', {}, q.title), el('span', { class: 'spacer' }),
       el('span', { class: 'badge' }, TYPE_TH[q.type]), el('span', { class: 'badge ' + (q.level === 'easy' ? 'green' : q.level === 'hard' ? 'red' : 'amber') }, LEVEL_TH[q.level]), srcBadge),
     el('div', { class: 'q-story' }, q.story), given,
-    q.type === 'A' ? el('p', { class: 'small muted' }, '📝 ประเภท A: ตั้งสมการ y\' = f(x, y) จากสถานการณ์เอง แล้วใช้ Euler Method') : null,
-    el('p', {}, 'หาค่า ', el('b', {}, askLabel), ` (= y${sub(prob.n)}) ตอบทศนิยมอย่างน้อย 3 ตำแหน่ง`),
+    q.type === 'A' ? el('p', { class: 'small muted' }, '📝 ประเภท A: ตั้งสมการ dy/dt = f(t, y) จากสถานการณ์เอง แล้วใช้ Euler\'s method') : null,
+    el('p', {}, 'หาค่า ', el('b', {}, askLabel), ` ≈ w${sub(prob.n)} ตอบทศนิยมอย่างน้อย 3 ตำแหน่ง`),
     el('div', { class: 'answer-row' }, input, el('button', { class: 'btn primary', onclick: check }, 'ตรวจคำตอบ')),
     fb,
     el('div', { class: 'row', style: 'margin-top:12px' }, btnHint,
@@ -1555,7 +1664,7 @@ function buildTryH(prob) {
     try {
       const pts = eulerSolve(prob.fc.fn, prob.x0, prob.y0, h, n), y = pts[n].y, ref = referenceValue(prob), e0 = ref ? Math.abs(ref.v - prob.pts[prob.n].y) : NaN, e1 = ref ? Math.abs(ref.v - y) : NaN;
       out.append(el('div', { class: 'kv' },
-        el('div', {}, el('b', {}, `Euler h = ${fmtS(h, 8)} (n = ${n})`), el('span', {}, fmtS(y, 6))),
+        el('div', {}, el('b', {}, `Euler h = ${fmtS(h, 8)} (N = ${n})`), el('span', {}, fmtS(y, 6))),
         ref ? el('div', {}, el('b', {}, `ค่าอ้างอิง (${ref.label})`), el('span', {}, fmtS(ref.v, 6))) : null,
         ref ? el('div', {}, el('b', {}, '|error|'), el('span', {}, fmtS(e1, 6))) : null,
         ref ? el('div', {}, el('b', {}, `error ลดลงเทียบ h = ${fmtS(prob.h, 8)}`), el('span', {}, fmtS(e0 / e1, 3) + ' เท่า')) : null));
@@ -1576,7 +1685,7 @@ function showSolution(box) {
   if (q.type === 'A' && Array.isArray(q.modelingSteps) && q.modelingSteps.length) {
     card.append(el('div', { class: 'model-steps' }, el('b', {}, 'ขั้นที่ 0: ตั้งสมการจากสถานการณ์'),
       el('ol', {}, q.modelingSteps.map(s => el('li', {}, s))),
-      el('div', { html: tex(`\\Rightarrow\\; y' = ${prob.fc.node.toTex({ parenthesis: 'keep' })},\\quad y(${fmtS(prob.x0, 8)}) = ${fmtS(prob.y0, 8)}`, true) })));
+      el('div', { html: tex(`\\Rightarrow\\; \\frac{dy}{dt} = ${prob.fc.node.toTex({ parenthesis: 'keep' })},\\quad ${fmtS(prob.x0, 8)}\\le t\\le ${fmtS(prob.xEnd, 8)},\\quad y(${fmtS(prob.x0, 8)}) = ${fmtS(prob.y0, 8)}`, true) })));
   }
   const vbox = el('div'); card.append(vbox);
   const errBox = el('div'); card.append(errBox);
@@ -1589,16 +1698,17 @@ function showSolution(box) {
     const e1 = prob.ec ? prob.pts[1].err : NaN;
     const under = ref.v > yE;
     const notes = [
-      `ค่าอ้างอิง (${ref.label}) = ${fmtS(ref.v, 6)} · Euler = ${fmtS(yE, 6)} · |error| = ${fmtS(eN, 6)}` + (ref.v !== 0 ? ` (${fmtS(Math.abs(eN / ref.v) * 100, 3)}%)` : ''),
-      Number.isFinite(e1) ? `error หลัง step 1 (local error) = ${fmtS(e1, 6)} แต่หลัง ${prob.n} step สะสมเป็น ${fmtS(eN, 6)}` : null,
-      'error สะสมมาจาก: (1) แต่ละ step ใช้ความชันที่ "ต้นช่วง" แทนความชันเฉลี่ยทั้งช่วง (local error O(h²)) และ (2) step ถัดไปเริ่มจาก y ที่คลาดเคลื่อนอยู่แล้ว จึงส่งต่อ error ไปเรื่อยๆ (global error O(h))',
+      `ค่าอ้างอิง y(b) (${ref.label}) = ${fmtS(ref.v, 6)} · Euler w${sub(prob.n)} = ${fmtS(yE, 6)} · |y(b) − w${sub(prob.n)}| = ${fmtS(eN, 6)}` + (ref.v !== 0 ? ` (${fmtS(Math.abs(eN / ref.v) * 100, 3)}%)` : ''),
+      Number.isFinite(e1) ? `error หลัง step 1 (local error) = ${fmtS(e1, 6)} แต่หลัง N = ${prob.n} step สะสมเป็น ${fmtS(eN, 6)}` : null,
+      (() => { try { const B = estimateLM(prob), bd = errorBound(prob.h, B.L, B.M, prob.xEnd, prob.x0); return Number.isFinite(bd) ? `Error bound ที่ b: (hM/2L)[e^{L(b−a)} − 1] = ${fmtS(bd, 6)} (ประมาณ L ≈ ${fmtS(B.L, 4)}, M ≈ ${fmtS(B.M, 4)}) ซึ่ง ≥ error จริง ${fmtS(eN, 6)}` : null; } catch (e) { return null; } })(),
+      'error สะสมมาจาก: (1) แต่ละ step ใช้ความชันที่ "ต้นช่วง" f(tᵢ, wᵢ) แทนความชันเฉลี่ยทั้งช่วง (local error O(h²)) และ (2) step ถัดไปเริ่มจาก wᵢ ที่คลาดเคลื่อนจาก y(tᵢ) อยู่แล้ว จึงส่งต่อ error ไปเรื่อยๆ (global error O(h))',
       eN > 1e-12 ? (under ? 'Euler ได้ค่าต่ำกว่าค่าจริง — กราฟคำตอบโค้งขึ้น (y″ > 0) เส้นสัมผัสจึงอยู่ใต้กราฟ' : 'Euler ได้ค่าสูงกว่าค่าจริง — กราฟคำตอบโค้งลง (y″ < 0) เส้นสัมผัสจึงอยู่เหนือกราฟ') : null
     ].filter(Boolean);
     errBox.append(el('div', { class: 'alert info', style: 'margin-top:14px' }, el('b', {}, '📊 วิเคราะห์ error'), el('ul', {}, notes.map(n => el('li', {}, n)))));
     if (q.level === 'hard') {
       const rows = [prob.h, prob.h / 2, prob.h / 4].map(h => { const n = Math.round(prob.n * prob.h / h); const y = eulerSolve(prob.fc.fn, prob.x0, prob.y0, h, n)[n].y; return { h, n, y, e: Math.abs(ref.v - y) }; });
       errBox.append(el('div', { class: 'table-wrap' }, el('table', { class: 'data' },
-        el('thead', {}, el('tr', {}, ['h', 'n', 'Euler', '|error|', 'error / h'].map(t => el('th', {}, t)))),
+        el('thead', {}, el('tr', {}, ['h', 'N', 'w_N', '|y(b) − w_N|', 'error / h'].map(t => el('th', {}, t)))),
         el('tbody', {}, rows.map(r => el('tr', {}, el('td', {}, fmtS(r.h, 8)), el('td', {}, r.n), el('td', {}, fmtF(r.y, 6)), el('td', {}, fmtF(r.e, 6)), el('td', {}, fmtF(r.e / r.h, 4))))))),
         el('p', { class: 'small muted' }, 'เทียบ h สองค่า (และสามค่า): error / h เกือบคงที่ → error แปรผันตาม h ตามทฤษฎี'));
     }
@@ -1634,7 +1744,7 @@ function validateQuestion(raw) {
   if (raw.h != null && raw.h !== '') { if (!Number.isFinite(h)) errors.push(`h ต้องเป็นตัวเลข (พบ "${raw.h}")`); else if (h <= 0) errors.push(`h ต้องมากกว่า 0 (พบ h = ${raw.h})`); }
   if (raw.n != null && raw.n !== '') { if (!Number.isInteger(n) || n <= 0) errors.push(`n (จำนวน step) ต้องเป็นจำนวนเต็มมากกว่า 0 (พบ "${raw.n}")`); else if (n > 1000) errors.push('n มากเกินไป (สูงสุด 1000 step)'); }
   let fOk = false;
-  if (raw.f != null && String(raw.f).trim() !== '') { const c = compileExpr(raw.f, 'f'); if (!c.ok) errors.push(`สมการ f ผิด: ${c.error.replace(/^f\(x,y\)\s*(เขียนไม่ถูกต้อง)?\s*:?\s*/, '')}`); else fOk = true; }
+  if (raw.f != null && String(raw.f).trim() !== '') { const c = compileExpr(raw.f, 'f'); if (!c.ok) errors.push(`สมการ f ผิด: ${c.error.replace(/^f\(t,y\)\s*(เขียนไม่ถูกต้อง)?\s*:?\s*/, '')}`); else fOk = true; }
   const exact = raw.exact != null && String(raw.exact).trim() !== '' ? String(raw.exact).trim() : '';
   if (exact) { const c = compileExpr(exact, 'exact'); if (!c.ok) errors.push(`exact ผิด: ${c.error}`); }
   if (!errors.length && fOk) {
@@ -1765,9 +1875,10 @@ function buildAIPrompt(level, type, count) {
 กติกา:
 - type: "A" = โจทย์สถานการณ์จริงที่ผู้เรียนต้องตั้งสมการเอง (ต้องมี modelingSteps) · "B" = โจทย์ตัวเลขที่ให้ y', x0, y0, h มาตรงๆ
 - level: "easy" = 1–2 step, f เชิงเส้นง่าย ตัวเลขสวย · "medium" = 3–5 step, f มี x และ y ผสม หรือฟังก์ชันพื้นฐาน · "hard" = หลาย step (8–20), f ซับซ้อน เช่น exp, sin, y^2
-- f คือด้านขวาของ y' = f(x,y) เขียนแบบ math.js: ตัวแปรอิสระคือ x, ตัวแปรตามคือ y, ใช้ * คูณ, ^ ยกกำลัง, exp(), sin(), cos(), sqrt(), log() = ln
-- exact (ไม่บังคับ) ต้องเป็นฟังก์ชันของ x เท่านั้น และต้องได้ exact(x0) = y0
-- h > 0, n เป็นจำนวนเต็มบวก, ask = "y(ค่า x0 + n*h)"
+- f คือด้านขวาของ dy/dt = f(t,y) เขียนแบบ math.js: ตัวแปรอิสระคือ t (ใช้ x แทนได้), ตัวแปรตามคือ y, ใช้ * คูณ, ^ ยกกำลัง, exp(), sin(), cos(), sqrt(), log() = ln
+- ความหมายฟิลด์ตามสัญลักษณ์ในชั้นเรียน: x0 = a (จุดเริ่ม t₀), y0 = α (y(a) = α), n = N (จำนวน step), h = (b − a)/N
+- exact (ไม่บังคับ) ต้องเป็นฟังก์ชันของ t เท่านั้น และต้องได้ exact(a) = α
+- h > 0, n เป็นจำนวนเต็มบวก, ask = "y(b)" โดย b = x0 + n*h
 - ห้ามใส่คำตอบหรือช่อง answer/solution (ระบบคำนวณเฉลยเอง)
 - id ห้ามซ้ำ เช่น "ai-001", "ai-002"
 - hints 2–3 ข้อ เป็นภาษาไทยสั้นๆ, ประเภท A ใช้บริบทหลากหลาย (การเย็นตัว, ประชากร, วงจร RC, ยาในเลือด, ดอกเบี้ย ฯลฯ)
@@ -1860,10 +1971,10 @@ function viewForm(c) {
     el('div', { class: 'field-row' }, el('div', {}, el('label', { class: 'lbl' }, 'ประเภท'), F.type), el('div', {}, el('label', { class: 'lbl' }, 'ระดับ'), F.level)),
     fld('story', 'เนื้อโจทย์', { tag: 'textarea', rows: '3' }),
     fld('modelingSteps', 'ขั้นตอนตั้งสมการ (สำหรับ A, คั่นด้วย |)', { placeholder: "T' = -k(T - 25) | T' = -0.1(T - 25)" }),
-    el('div', { class: 'field-row' }, fld('f', "f(x, y)", { class: 'mono', placeholder: 'x + y' }, "ด้านขวาของ y' = f(x,y)"), fld('exact', 'exact y(x) (ไม่บังคับ)', { class: 'mono' })),
-    el('div', { class: 'grid-3' }, fld('x0', 'x₀', { class: 'mono', value: '0' }, 'ค่า x เริ่มต้น'), fld('y0', 'y₀', { class: 'mono', value: '1' }, 'ค่า y ที่ x₀'), fld('h', 'h', { class: 'mono', value: '0.1' }, 'step size > 0')),
-    el('div', { class: 'field-row' }, fld('n', 'จำนวน step n', { class: 'mono', value: '3' }), fld('ask', 'ค่าที่ต้องหา (ไม่บังคับ)', { placeholder: 'y(0.3)' })),
-    fld('hints', 'Hint (คั่นแต่ละระดับด้วย |)', { placeholder: 'หา f(x0,y0) ก่อน | คูณ h แล้วบวก y0' }),
+    el('div', { class: 'field-row' }, fld('f', "f(t, y)", { class: 'mono', placeholder: 'y - t^2 + 1' }, "ด้านขวาของ dy/dt = f(t,y) (พิมพ์ x แทน t ก็ได้)"), fld('exact', 'exact y(t) (ไม่บังคับ)', { class: 'mono' })),
+    el('div', { class: 'grid-3' }, fld('x0', 'a (ฟิลด์ x0)', { class: 'mono', value: '0' }, 'จุดเริ่ม t₀ = a'), fld('y0', 'α (ฟิลด์ y0)', { class: 'mono', value: '1' }, 'y(a) = α'), fld('h', 'h', { class: 'mono', value: '0.1' }, 'step size > 0')),
+    el('div', { class: 'field-row' }, fld('n', 'จำนวน step N (ฟิลด์ n)', { class: 'mono', value: '3' }), fld('ask', 'ค่าที่ต้องหา (ไม่บังคับ)', { placeholder: 'y(0.3)' })),
+    fld('hints', 'Hint (คั่นแต่ละระดับด้วย |)', { placeholder: 'หา f(t0, w0) ก่อน | คูณ h แล้วบวก w0' }),
     el('div', {}, el('label', { class: 'lbl' }, 'บันทึกลงชุด'), setSel),
     el('div', { class: 'row', style: 'margin-top:12px' },
       el('button', { class: 'btn', onclick: () => preview(false) }, '🔍 ดูตัวอย่างและทดสอบคำนวณ'),
@@ -1876,10 +1987,10 @@ function viewForm(c) {
     if (r.warnings.length) out.append(el('div', { class: 'alert warn' }, r.warnings.join(' · ')));
     const p = buildProblem({ ...r.clean, dp: 4 }), q = r.clean;
     out.append(el('div', { class: 'card', style: 'margin-top:10px' }, el('b', {}, q.title), el('p', {}, q.story),
-      el('div', { html: tex(`y' = ${p.fc.node.toTex()},\\; y(${fmtS(p.x0, 8)}) = ${fmtS(p.y0, 8)},\\; h = ${fmtS(p.h, 8)},\\; n = ${p.n}`) }),
-      el('div', { class: 'table-wrap' }, el('table', { class: 'data' }, el('thead', {}, el('tr', {}, ['n', 'x', 'y (Euler)', 'f(x,y)'].concat(p.ec ? ['exact'] : []).map(t => el('th', {}, t)))),
+      el('div', { html: tex(`y' = ${p.fc.node.toTex()},\\; y(${fmtS(p.x0, 8)}) = ${fmtS(p.y0, 8)},\\; h = ${fmtS(p.h, 8)},\\; N = ${p.n}`) }),
+      el('div', { class: 'table-wrap' }, el('table', { class: 'data' }, el('thead', {}, el('tr', {}, ['i', 'tᵢ', 'wᵢ (Euler)', 'f(tᵢ, wᵢ)'].concat(p.ec ? ['y(tᵢ)'] : []).map(t => el('th', {}, t)))),
         el('tbody', {}, p.pts.slice(0, 30).map(pt => el('tr', {}, el('td', {}, pt.k), el('td', {}, fmtF(pt.x, 4)), el('td', {}, fmtF(pt.y, 6)), el('td', {}, fmtF(pt.f, 6)), p.ec ? el('td', {}, fmtF(pt.ex, 6)) : null))))),
-      el('p', { class: 'small' }, `เฉลยที่ระบบคำนวณ: y(${fmtS(p.xEnd, 8)}) ≈ ${fmtS(p.pts[p.n].y, 6)}`)));
+      el('p', { class: 'small' }, `เฉลยที่ระบบคำนวณ: y(${fmtS(p.xEnd, 8)}) ≈ w${sub(p.n)} = ${fmtS(p.pts[p.n].y, 6)}`)));
     if (!save) return;
     const all = loadSets();
     const dupSet = all.find(s => (s.questions || []).some(x => x.id === q.id));
@@ -1942,6 +2053,15 @@ async function runSelfTests() {
     const errs = hs.map(h => Math.abs(ex - eulerSolve(f, 0, 1, h, Math.round(1 / h))[Math.round(1 / h)].y));
     const ratios = errs.slice(1).map((e, i) => errs[i] / e);
     add('เช็ก 4: h ลดครึ่ง → error ลด ≈ ครึ่ง (O(h))', ratios.every(r => r > 1.8 && r < 2.2), `errors=${errs.map(e => e.toExponential(3)).join(', ')} · อัตราส่วน=${ratios.map(r => r.toFixed(3)).join(', ')}`); }
+  // 4b) ตัวอย่างจากเอกสาร Chapter 7: Error bound (y' = y − t² + 1, h = 0.2) และ Euler vs Improved Euler
+  { const f = F('y - t^2 + 1'), ex = E('(t+1)^2 - 0.5*exp(t)'), pts = eulerSolve(f, 0, 0.5, 0.2, 10), M = 0.5 * Math.exp(2) - 2;
+    const act = pts.map(q => Math.abs(ex(q.x) - q.y)), bnd = pts.map(q => errorBound(0.2, 1, M, q.x, 0));
+    const est = estimateLM(buildProblem({ f: 'y - t^2 + 1', x0: 0, y0: 0.5, h: 0.2, n: 10, exact: '(t+1)^2 - 0.5*exp(t)' }));
+    add('Error bound ตามเอกสาร (y\' = y − t² + 1, h = 0.2)', r4(act[1], 5) === 0.0293 && r4(act[10], 5) === 0.43969 && r4(bnd[1], 5) === 0.03752 && r4(bnd[2], 5) === 0.08334 && r4(bnd[10], 5) === 1.08264 && act.every((v, i) => v <= bnd[i] + 1e-12) && est.L === 1 && Math.abs(est.M - M) < 1e-4,
+      `actual(0.2)=${act[1].toFixed(5)}, bound(0.2)=${bnd[1].toFixed(5)}, bound(0.4)=${bnd[2].toFixed(5)}, actual(2)=${act[10].toFixed(5)}, bound(2)=${bnd[10].toFixed(5)} · ประมาณอัตโนมัติ L=${est.L}, M=${fmtS(est.M, 5)}`);
+    const g = F('-2*y + t^3*exp(-2*t)'), e1 = eulerSolve(g, 0, 1, 0.1, 10)[10].y, e2 = eulerSolve(g, 0, 1, 0.05, 20)[20].y, h1 = heunSolve(g, 0, 1, 0.1, 10)[10].y, h2 = heunSolve(g, 0, 1, 0.05, 20)[20].y;
+    add('ตาราง Euler vs Improved Euler ตามเอกสาร (t = 1.0)', e1.toFixed(9) === '0.139778910' && e2.toFixed(9) === '0.154715925' && h1.toFixed(9) === '0.171388070' && h2.toFixed(9) === '0.169680673',
+      `Euler h=0.1: ${e1.toFixed(9)}, h=0.05: ${e2.toFixed(9)} · Improved h=0.1: ${h1.toFixed(9)}, h=0.05: ${h2.toFixed(9)}`); }
   // 5) คลังโจทย์
   { const cnt = {}; let bad = [];
     questionBank.forEach(q => {
@@ -2011,6 +2131,9 @@ function init() {
   $('#btn-reset').addEventListener('click', resetCalc);
   $$('.inputs input[type=text]').forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') runCalc(); }));
   ['#opt-heun', '#opt-rk4', '#opt-slope'].forEach(s => $(s).addEventListener('change', () => { if (App.viewers[1]) App.viewers[1].setOptions(calcOpts()); }));
+  $('#opt-bound').addEventListener('change', () => { $('#wrap-bound').classList.toggle('hidden', !$('#opt-bound').checked); if (App.viewers[1]) runCalc(); });
+  ['#in-L', '#in-M'].forEach(s => $(s).addEventListener('change', () => { if (App.viewers[1]) runCalc(); }));
+  renderTheoryBoundTable();
   $('#in-dp').addEventListener('change', () => { if (App.viewers[1]) runCalc(); });
   $('#btn-compare').addEventListener('click', runCompare);
   $('#btn-csv').addEventListener('click', () => { const v = App.viewers[1]; if (!v) return toast('กด "คำนวณ" ก่อน'); downloadFile('euler_table.csv', v.toCSV(), 'text/csv;charset=utf-8'); });
