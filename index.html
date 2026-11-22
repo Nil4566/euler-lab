@@ -91,6 +91,7 @@ main{max-width:1280px;margin:0 auto;padding:22px 18px 60px}
 .badge.red{background:var(--danger-soft);color:var(--danger)} .badge.gray{background:var(--bg2);color:var(--muted)}
 .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid-auto{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
 .calc-layout{display:grid;grid-template-columns:minmax(300px,380px) minmax(0,1fr);gap:20px;align-items:start}
 .calc-layout .inputs{position:sticky;top:86px}
 .calc-layout > *,.viewer-body > *,.grid-2 > *,.grid-3 > *{min-width:0}
@@ -131,6 +132,13 @@ textarea{min-height:120px;resize:vertical}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .chip{border:1px solid var(--border);background:var(--card2);color:var(--text);font-family:var(--mono);font-size:.82rem;padding:6px 10px;border-radius:999px;cursor:pointer;transition:all .15s}
 .chip:hover{border-color:var(--primary);color:var(--primary)}
+.chips{flex-direction:column;align-items:stretch;gap:5px}
+.ex-group{font-size:.78rem;font-weight:700;color:var(--muted);margin:6px 0 0}
+.ex-chip{display:flex;justify-content:space-between;align-items:center;gap:8px;border-radius:10px;text-align:left;font-family:var(--sans);padding:6px 10px}
+.ex-chip .katex{font-size:.98em}
+.ex-chip .ex-note{font-size:.74rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ex-chip.active{border-color:var(--primary);background:var(--primary-soft)}
+.pos-badge{font-family:var(--mono);background:var(--primary);color:#fff;border-radius:8px;padding:2px 10px;font-size:.85rem;margin-right:8px}
 
 /* ================= Tooltip ================= */
 .tip{position:relative;display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--primary-soft);color:var(--primary);
@@ -160,8 +168,8 @@ textarea{min-height:120px;resize:vertical}
 .steps-box{max-height:560px;overflow:auto;padding-right:4px;scroll-behavior:smooth}
 .step-card{border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px;background:var(--card2);animation:pop .3s ease;transition:border-color .3s,box-shadow .3s}
 .step-card.current{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
-.step-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-weight:700}
-.step-no{font-family:var(--mono);background:var(--primary);color:#fff;border-radius:8px;padding:1px 9px;font-size:.85rem}
+.step-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-weight:700;flex-wrap:wrap}
+.step-no{font-family:var(--mono);background:var(--primary);color:#fff;border-radius:8px;padding:1px 9px;font-size:.85rem;white-space:nowrap}
 .step-line{display:grid;grid-template-columns:110px minmax(0,1fr);gap:8px;align-items:center;padding:4px 0;border-top:1px dashed var(--border)}
 .step-line:first-of-type{border-top:0}
 .step-line .lab{font-size:.8rem;color:var(--muted);font-weight:600}
@@ -369,6 +377,34 @@ footer{max-width:1280px;margin:0 auto;padding:10px 18px 40px;color:var(--muted);
     </div>
   </div>
 
+  <div class="card" id="improved-theory">
+    <div class="card-title"><h3>⑦ Improved Euler's Method</h3><span class="spacer"></span><span class="badge amber">หัวข้อ 7.3</span></div>
+    <div class="grid-2">
+      <div>
+        <p>แทนที่จะใช้ความชันที่ "ต้นช่วง" อย่างเดียว ให้ใช้ <b>trapezoidal rule</b> กับ <span data-tex="y' = f(t,y)"></span>:</p>
+        <div data-tex="\int_{t_i}^{t_{i+1}} f(t,y(t))\,dt \approx \frac{h}{2}\big[f(t_i,y_i)+f(t_{i+1},y_{i+1})\big]" data-display="1"></div>
+        <p>แต่ยังไม่รู้ <span data-tex="y_{i+1}"></span> จึง<b>ทำนายด้วย Euler ก่อน</b> <span data-tex="w_i + hf(t_i,w_i)"></span> ได้สูตร</p>
+        <div data-tex="\begin{aligned} k_1 &= f(t_i,w_i)\\ k_2 &= f(t_i+h,\; w_i+hk_1)\\ w_{i+1} &= w_i + \tfrac{h}{2}(k_1+k_2) \end{aligned}" data-display="1"></div>
+        <p class="small muted">= Modified Euler ในหัวข้อ 7.4 (Runge–Kutta อันดับสอง ที่ <span data-tex="a_1=a_2=\tfrac12,\ \alpha_2=\delta_2=h"></span>)</p>
+      </div>
+      <div>
+        <div class="table-wrap" style="margin-top:0"><table class="data">
+          <thead><tr><th style="text-align:left">หัวข้อ</th><th>Euler</th><th>Improved Euler</th></tr></thead>
+          <tbody>
+            <tr><td style="text-align:left;font-family:var(--sans)">ความชันที่ใช้เดิน</td><td>k₁ (ต้นช่วง)</td><td>(k₁ + k₂)/2 (เฉลี่ย)</td></tr>
+            <tr><td style="text-align:left;font-family:var(--sans)">คำนวณ f ต่อ step</td><td>1 ครั้ง</td><td>2 ครั้ง</td></tr>
+            <tr><td style="text-align:left;font-family:var(--sans)">Local truncation error</td><td>O(h²)</td><td>O(h³)</td></tr>
+            <tr><td style="text-align:left;font-family:var(--sans)">Global error</td><td>O(h)</td><td>O(h²)</td></tr>
+            <tr><td style="text-align:left;font-family:var(--sans)">ลด h ครึ่งหนึ่ง error ลด</td><td>≈ 2 เท่า</td><td>≈ 4 เท่า</td></tr>
+          </tbody></table></div>
+        <p class="small" style="margin-top:8px">💡 แม้ใช้ f มากขึ้น 2 เท่า แต่แม่นกว่ามาก — เอกสารสรุปว่า <b>Improved Euler ที่ h = 0.1 ดีกว่า Euler ที่ h = 0.05</b></p>
+      </div>
+    </div>
+    <h4 style="margin-top:12px">ตัวอย่างหน้า 232: <span data-tex="y' + 2y = t^3e^{-2t},\ y(0)=1"></span> (exact <span data-tex="y=\tfrac{e^{-2t}}{4}(t^4+4)"></span>)</h4>
+    <div class="table-wrap" id="ie-table" style="margin-top:6px"></div>
+    <p class="small muted" style="margin-top:6px">ตารางนี้คำนวณสดด้วยโค้ด · ลองในเครื่องช่วยคิดได้ด้วยปุ่มตัวอย่าง "-2*y + t^3*exp(-2*t)" แล้วเลือก "เทียบ 2 วิธี"</p>
+  </div>
+
   <div class="grid-3">
     <div class="card"><h3>✅ ข้อดี</h3><ul class="pros">
       <li>เข้าใจง่าย เขียนโปรแกรมง่าย</li><li>ใช้ f แค่ 1 ครั้งต่อ step (เร็ว)</li><li>เป็นพื้นฐานของ Improved Euler, Midpoint, RK4</li></ul></div>
@@ -418,7 +454,8 @@ footer{max-width:1280px;margin:0 auto;padding:10px 18px 40px;color:var(--muted);
         <div><label class="lbl">ตัวเลือกกราฟ</label>
           <label class="check"><input type="checkbox" id="opt-slope"> Slope field</label></div>
       </div>
-      <label class="check"><input type="checkbox" id="opt-heun"> เทียบ Improved Euler</label>
+      <label class="lbl">วิธี (method) <span class="tip" tabindex="0" data-tip="Euler: w_{i+1} = w_i + h f(t_i,w_i) · Improved Euler: เฉลี่ยความชันต้นช่วง k₁ กับปลายช่วง k₂ · เทียบ 2 วิธี: แสดงคู่กันทีละ step">?</span></label>
+      <div class="seg" id="method-seg"><button data-m="euler">Euler</button><button data-m="improved">Improved Euler</button><button data-m="compare" class="active">เทียบ 2 วิธี</button></div>
       <label class="check"><input type="checkbox" id="opt-rk4"> เทียบ RK4</label>
       <label class="check"><input type="checkbox" id="opt-bound" checked> แสดง Error bound <span class="tip" tabindex="0" data-tip="|y(tᵢ) − wᵢ| ≤ (hM/2L)[e^{L(tᵢ−a)} − 1]  เว้น L, M ว่างไว้ ระบบจะประมาณให้">?</span></label>
       <div class="field-row" id="wrap-bound">
@@ -447,7 +484,7 @@ footer{max-width:1280px;margin:0 auto;padding:10px 18px 40px;color:var(--muted);
       </div>
 
       <div class="card" id="compare-card">
-        <div class="card-title"><h2>เปรียบเทียบหลายค่า h</h2></div>
+        <div class="card-title"><h2>เปรียบเทียบหลายค่า h: Euler vs Improved Euler</h2></div>
         <p class="small muted">ใส่ h หลายค่าคั่นด้วยจุลภาค (ใช้ f, a, α, b จากด้านซ้าย) ดูว่า error ลดลงตาม h อย่างไร</p>
         <div class="row">
           <input type="text" id="in-hs" class="mono grow" value="0.5, 0.25, 0.1, 0.05">
@@ -478,18 +515,23 @@ footer{max-width:1280px;margin:0 auto;padding:10px 18px 40px;color:var(--muted);
       <h2 style="margin:0">เลือกโจทย์</h2>
       <button class="btn" id="btn-mysets">📚 ชุดโจทย์ของฉัน / เพิ่มโจทย์</button>
     </div>
-    <div class="grid-3" style="margin-top:6px">
+    <div class="grid-auto" style="margin-top:6px">
       <div><label class="lbl" for="pf-source">แหล่งโจทย์</label>
         <select id="pf-source"><option value="all">ทั้งหมด</option><option value="builtin">ในระบบ</option><option value="custom">ของฉัน</option><option value="gen">สุ่มตัวเลขใหม่ (สร้างอัตโนมัติ)</option></select></div>
       <div><label class="lbl" for="pf-type">ประเภท</label>
         <select id="pf-type"><option value="all">ทั้งหมด</option><option value="A">A: สถานการณ์จริง (ตั้งสมการเอง)</option><option value="B">B: โจทย์ตัวเลขตรงๆ</option></select></div>
       <div><label class="lbl" for="pf-level">ระดับ</label>
         <select id="pf-level"><option value="all">ทั้งหมด</option><option value="easy">ง่าย</option><option value="medium">กลาง</option><option value="hard">ยาก</option></select></div>
+      <div><label class="lbl" for="pf-order">ลำดับโจทย์</label>
+        <select id="pf-order"><option value="seq">เรียงตามลำดับ</option><option value="random">สุ่ม</option></select></div>
+      <div><label class="lbl" for="pf-method">วิธีที่ใช้ตอบ <span class="tip" tabindex="0" data-tip="โจทย์ทุกข้อทำได้ทั้ง 2 วิธี ระบบคำนวณเฉลยตามวิธีที่เลือก (ยกเว้นโจทย์ที่กำหนด method ไว้ในไฟล์)">?</span></label>
+        <select id="pf-method"><option value="euler">Euler</option><option value="improved">Improved Euler</option></select></div>
     </div>
     <div class="row" style="margin-top:12px">
-      <button class="btn primary lg" id="btn-newq">🎲 สุ่มโจทย์ใหม่</button>
-      <span class="small muted" id="pool-info"></span>
+      <button class="btn primary lg" id="btn-newq">▶ เริ่มทำข้อแรก</button>
+      <div class="grow" style="min-width:220px"><select id="pf-jump" aria-label="เลือกข้อ"></select></div>
     </div>
+    <div class="small muted" id="pool-info" style="margin-top:6px"></div>
   </div>
 
   <div id="practice-area"><div class="card"><p class="muted">กด "สุ่มโจทย์ใหม่" เพื่อเริ่มฝึก</p></div></div>
@@ -717,16 +759,35 @@ function eulerSolve(f, x0, y0, h, n) {
   const last = pts[n]; last.f = f(last.x, last.y); last.hf = h * last.f;
   return pts;
 }
-/* Improved Euler (Heun): predictor + corrector */
-function heunSolve(f, x0, y0, h, n) {
-  const pts = [{ x: x0, y: y0 }]; let y = y0;
+/**
+ * improvedSolve: Improved Euler's method (เอกสารหัวข้อ 7.3)
+ * k1 = f(t_i, w_i),  k2 = f(t_i + h, w_i + h·k1),  w_{i+1} = w_i + (h/2)(k1 + k2)
+ * คืน array ของ {k, x, y, k1, pred, k2, inc} เพื่อแสดงทีละ step
+ */
+function improvedSolve(f, x0, y0, h, n) {
+  const pts = [{ k: 0, x: x0, y: y0 }];
+  let y = y0;
   for (let k = 0; k < n; k++) {
-    const x = x0 + k * h;
-    const k1 = f(x, y), yp = y + h * k1, k2 = f(x + h, yp);
-    y = y + h / 2 * (k1 + k2); checkVal(y, k + 1, x + h, 'Heun');
-    pts.push({ x: x0 + (k + 1) * h, y });
+    const x = pts[k].x, xn = x0 + (k + 1) * h;
+    const k1 = f(x, y); checkVal(k1, k, x, `k₁ = f(t${sub(k)}, w${sub(k)})`);
+    const pred = y + h * k1; checkVal(pred, k, x, 'ค่าทำนาย wᵢ + h·k₁');
+    const k2 = f(xn, pred); checkVal(k2, k, xn, `k₂ = f(t${sub(k + 1)}, wᵢ + h·k₁)`);
+    Object.assign(pts[k], { k1, pred, k2, f: k1, inc: h / 2 * (k1 + k2) });
+    y = y + h / 2 * (k1 + k2); checkVal(y, k + 1, xn, `w${sub(k + 1)}`);
+    pts.push({ k: k + 1, x: xn, y });
   }
   return pts;
+}
+/* ชื่อเดิม (ใช้ในส่วนอื่น) */
+function heunSolve(f, x0, y0, h, n) { return improvedSolve(f, x0, y0, h, n).map(p => ({ x: p.x, y: p.y })); }
+/* ชื่อวิธี → รหัสภายใน */
+const METHOD_NAME = { euler: "Euler's method", improved: "Improved Euler's method", compare: 'เทียบ Euler กับ Improved Euler' };
+function normMethod(m) {
+  const s = String(m ?? '').trim().toLowerCase();
+  if (!s) return '';
+  if (/^(euler|e|euler's|euler's method|ออยเลอร์)$/.test(s)) return 'euler';
+  if (/improved|modified|heun|^ie$|ปรับปรุง/.test(s)) return 'improved';
+  return null;
 }
 /* Runge–Kutta อันดับ 4 */
 function rk4Solve(f, x0, y0, h, n) {
@@ -744,7 +805,7 @@ function sub(k) { return String(k).split('').map(d => SUBS[+d] ?? d).join(''); }
 
 /**
  * buildProblem: ตรวจ + คำนวณทุกอย่างของโจทย์ 1 ข้อ
- * input {f, x0, y0, h, n, exact, dp} → problem object (throw Error ภาษาไทยถ้าผิด)
+ * input {f, x0, y0, h, n, exact, dp, method} → problem object (คำนวณทั้ง Euler และ Improved Euler) (throw Error ภาษาไทยถ้าผิด)
  */
 function buildProblem(p) {
   const fc = compileExpr(p.f, 'f'); if (!fc.ok) throw new SolveError(fc.error);
@@ -754,9 +815,12 @@ function buildProblem(p) {
   if (!Number.isInteger(n) || n < 1) throw new SolveError('จำนวน step (n) ต้องเป็นจำนวนเต็มบวก');
   let ec = null;
   if (p.exact && String(p.exact).trim()) { ec = compileExpr(p.exact, 'exact'); if (!ec.ok) throw new SolveError(ec.error); }
+  const method = normMethod(p.method) || 'euler';
   const pts = eulerSolve(fc.fn, x0, y0, h, n);
-  const prob = { fStr: fc.src, fc, ec, exactStr: ec ? ec.src : '', x0, y0, h, n, dp: p.dp ?? 4, pts, xEnd: x0 + n * h };
-  if (ec) pts.forEach(pt => { pt.ex = ec.fn(pt.x); pt.err = Math.abs(pt.ex - pt.y); pt.rel = pt.ex !== 0 ? Math.abs((pt.ex - pt.y) / pt.ex) * 100 : NaN; });
+  const ipts = improvedSolve(fc.fn, x0, y0, h, n);
+  // prob.sol = คำตอบของวิธีที่โจทย์ใช้ (ใช้ตรวจคำตอบ)
+  const prob = { fStr: fc.src, fc, ec, exactStr: ec ? ec.src : '', x0, y0, h, n, dp: p.dp ?? 4, pts, ipts, method, sol: method === 'improved' ? ipts : pts, xEnd: x0 + n * h };
+  if (ec) [pts, ipts].forEach(arr => arr.forEach(pt => { pt.ex = ec.fn(pt.x); pt.err = Math.abs(pt.ex - pt.y); pt.rel = pt.ex !== 0 ? Math.abs((pt.ex - pt.y) / pt.ex) * 100 : NaN; }));
   return prob;
 }
 /* ค่าอ้างอิง: ใช้ exact ถ้ามี ไม่งั้นใช้ RK4 ด้วย step เล็กมาก */
@@ -791,10 +855,11 @@ function chartBaseOptions(range) {
   const grid = cssVar('--border'), tick = cssVar('--muted');
   return {
     responsive: true, maintainAspectRatio: false, animation: { duration: 280 },
+    datasets: { scatter: { clip: 10 } },   // ให้จุดที่อยู่ขอบแกนพอดีไม่ถูกตัด
     interaction: { mode: 'nearest', intersect: false },
     scales: {
-      x: { type: 'linear', min: range?.xmin, max: range?.xmax, grid: { color: grid }, ticks: { color: tick, font: { family: 'JetBrains Mono' }, callback: v => fmtS(+v, 4) }, title: { display: true, text: 't', color: tick } },
-      y: { type: 'linear', min: range?.ymin, max: range?.ymax, grid: { color: grid }, ticks: { color: tick, font: { family: 'JetBrains Mono' }, callback: v => fmtS(+v, 4) }, title: { display: true, text: 'y', color: tick } }
+      x: { type: 'linear', min: range?.xmin, max: range?.xmax, grid: { color: grid }, ticks: { color: tick, stepSize: range?.xstep, font: { family: 'JetBrains Mono' }, callback: v => fmtS(+v, 4) }, title: { display: true, text: 't', color: tick } },
+      y: { type: 'linear', min: range?.ymin, max: range?.ymax, grid: { color: grid }, ticks: { color: tick, stepSize: range?.ystep, font: { family: 'JetBrains Mono' }, callback: v => fmtS(+v, 4) }, title: { display: true, text: 'y', color: tick } }
     },
     plugins: {
       legend: { labels: { color: cssVar('--text'), usePointStyle: true, boxWidth: 8, font: { family: 'IBM Plex Sans Thai' }, filter: it => !it.text.startsWith('_') } },
@@ -803,6 +868,12 @@ function chartBaseOptions(range) {
   };
 }
 /* หาช่วงแกนจากชุดข้อมูล (ตัดค่าที่ระเบิดของ exact) */
+/* ระยะห่างของ tick แบบเลขกลม: 1, 2, 5 × 10^k */
+function niceStep(span, target = 6) {
+  const raw = Math.max(span, 1e-12) / target, p = 10 ** Math.floor(Math.log10(raw)), m = raw / p;
+  return (m < 1.5 ? 1 : m < 3 ? 2 : m < 7 ? 5 : 10) * p;
+}
+/* หาช่วงแกนจากชุดข้อมูล (ตัดค่าที่ระเบิดของ exact) แล้วปัดขอบเป็นเลขกลม */
 function computeRange(mainSets, extraSets = []) {
   let xs = [], ys = [];
   mainSets.flat().forEach(p => { if (Number.isFinite(p.y)) { xs.push(p.x); ys.push(p.y); } });
@@ -811,8 +882,13 @@ function computeRange(mainSets, extraSets = []) {
   extraSets.flat().forEach(p => { if (Number.isFinite(p.y)) { xs.push(p.x); if (p.y > ymin - 3 * span0 && p.y < ymax + 3 * span0) { ymin = Math.min(ymin, p.y); ymax = Math.max(ymax, p.y); } } });
   let xmin = Math.min(...xs), xmax = Math.max(...xs);
   if (ymax - ymin < 1e-9) { ymin -= 1; ymax += 1; }
-  const px = (xmax - xmin) * 0.04 || 0.5, py = (ymax - ymin) * 0.1;
-  return { xmin: xmin - px, xmax: xmax + px, ymin: ymin - py, ymax: ymax + py };
+  if (xmax - xmin < 1e-12) { xmin -= 1; xmax += 1; }
+  const xs_ = niceStep(xmax - xmin, 8), ys_ = niceStep((ymax - ymin) * 1.1, 6);
+  const fl = (v, st) => +(Math.floor(v / st + 1e-9) * st).toPrecision(12), ce = (v, st) => +(Math.ceil(v / st - 1e-9) * st).toPrecision(12);
+  let y0 = fl(ymin, ys_), y1 = ce(ymax, ys_);
+  if (y1 - ymax < ys_ * 0.15) y1 = +(y1 + ys_).toPrecision(12);   // เผื่อที่ให้จุดบนสุด
+  if (ymin - y0 < ys_ * 0.15 && !(ymin >= 0 && y0 === 0)) y0 = +(y0 - ys_).toPrecision(12);
+  return { xmin: fl(xmin, xs_), xmax: ce(xmax, xs_), ymin: y0, ymax: y1, xstep: xs_, ystep: ys_ };
 }
 function sampleExact(ec, a, b, N = 240) {
   const out = []; for (let i = 0; i <= N; i++) { const x = a + (b - a) * i / N; const y = ec.fn(x); if (Number.isFinite(y)) out.push({ x, y }); }
@@ -864,23 +940,30 @@ function estimateLM(prob) {
 
 /* =====================================================================
    ส่วนที่ 5: StepViewer — แสดงผลทีละ step (การ์ด + กราฟ + ตาราง + สรุป)
-   สัญลักษณ์ตามเอกสาร: t_i = a + ih, w_0 = α, w_{i+1} = w_i + h f(t_i, w_i)
+   mode: 'euler' | 'improved' | 'compare'
+   สัญลักษณ์ตามเอกสาร: t_i = a + ih, w_0 = α
    ===================================================================== */
 class StepViewer {
   constructor(container, prob, opts = {}) {
-    this.c = container; this.p = prob; this.o = Object.assign({ explain: false, heun: false, rk4: false, slope: false, bound: null, maxCards: 300 }, opts);
+    this.c = container; this.p = prob;
+    this.o = Object.assign({ mode: prob.method || 'euler', explain: false, rk4: false, slope: false, bound: null, maxCards: 300 }, opts);
     this.k = 0; this.timer = null; this.speed = 900;
     this.computeExtras(); this.build(); this.go(0);
   }
+  get mode() { return this.o.mode; }
+  get useE() { return this.o.mode !== 'improved'; }
+  get useI() { return this.o.mode !== 'euler'; }
+  /* ชุดคำตอบหลักของโหมดนี้ (compare ใช้ Improved เป็นคำตอบหลัก) */
+  get main() { return this.o.mode === 'euler' ? this.p.pts : this.p.ipts; }
   computeExtras() {
     const p = this.p;
-    this.heun = null; this.rk4 = null;
-    try { if (this.o.heun) this.heun = heunSolve(p.fc.fn, p.x0, p.y0, p.h, p.n); } catch (e) { this.heun = null; }
+    this.rk4 = null;
     try { if (this.o.rk4) this.rk4 = rk4Solve(p.fc.fn, p.x0, p.y0, p.h, p.n); } catch (e) { this.rk4 = null; }
     this.exactPts = p.ec ? sampleExact(p.ec, p.x0, p.xEnd) : [];
     const B = this.o.bound;
     p.pts.forEach(pt => { pt.bound = B ? errorBound(p.h, B.L, B.M, pt.x, p.x0) : undefined; });
   }
+  get showBound() { return !!this.o.bound && this.useE; }
   build() {
     const p = this.p;
     this.c.innerHTML = '';
@@ -902,8 +985,12 @@ class StepViewer {
     );
     this.stepsBox = el('div', { class: 'steps-box', 'aria-live': 'polite' });
     this.canvas = el('canvas');
-    const legend = el('div', { class: 'legend-note' }, 'จุดสีน้ำเงิน = wᵢ (Euler) · เส้นประสีชมพู = เส้นสัมผัส (tangent) ที่ใช้เดินใน step ปัจจุบัน' + (p.ec ? ' · เส้นประสีแดงแนวตั้ง = error |y(tᵢ) − wᵢ|' : ''));
-    this.c.append(el('div', { class: 'viewer-body' }, this.stepsBox, el('div', {}, el('div', { class: 'chart-wrap' }, this.canvas), legend)));
+    const legendText = {
+      euler: 'จุดสีน้ำเงิน = wᵢ (Euler) · เส้นประสีชมพู = เส้นสัมผัสที่ใช้เดินใน step ปัจจุบัน',
+      improved: 'จุดสีส้ม = wᵢ (Improved Euler) · เส้นประชมพู = ความชัน k₁ (ต้นช่วง) · เส้นประส้ม = ความชันเฉลี่ย (k₁ + k₂)/2 ที่ใช้เดินจริง',
+      compare: 'น้ำเงิน = Euler · ส้ม = Improved Euler · เส้นประชมพู = ความชันของ Euler · เส้นประส้ม = ความชันเฉลี่ยของ Improved Euler'
+    }[this.mode] + (p.ec && this.mode !== 'compare' ? ' · เส้นประแดงแนวตั้ง = error |y(tᵢ) − wᵢ|' : '');
+    this.c.append(el('div', { class: 'viewer-body' }, this.stepsBox, el('div', {}, el('div', { class: 'chart-wrap' }, this.canvas), el('div', { class: 'legend-note' }, legendText))));
     this.tableWrap = el('div', { class: 'table-wrap' });
     this.boundNote = el('div');
     this.summaryBox = el('div');
@@ -914,50 +1001,93 @@ class StepViewer {
     this.buildChart();
   }
   renderBoundNote() {
-    const B = this.o.bound, p = this.p; this.boundNote.innerHTML = '';
+    const B = this.o.bound; this.boundNote.innerHTML = '';
     if (!B) return;
+    if (!this.useE) { this.boundNote.append(el('div', { class: 'alert info small', style: 'margin-top:10px' }, 'Error bound ในเอกสาร (หัวข้อ 7.2) เป็นของ Euler\'s method — เลือกโหมด "Euler" หรือ "เทียบ 2 วิธี" เพื่อดูคอลัมน์ Error bound')); return; }
     this.boundNote.append(el('div', { class: 'alert info small', style: 'margin-top:10px' },
-      el('div', { html: `<b>Error bound:</b> ${tex(`|y(t_i)-w_i| \\le \\frac{hM}{2L}\\left[e^{L(t_i-a)}-1\\right]`)} &nbsp; ใช้ ${tex(`L = ${fmtS(B.L, 6)}`)} (${esc(B.Lsrc)}), ${tex(`M = ${fmtS(B.M, 6)}`)} (${esc(B.Msrc)})` }),
+      el('div', { html: `<b>Error bound (Euler):</b> ${tex(`|y(t_i)-w_i| \\le \\frac{hM}{2L}\\left[e^{L(t_i-a)}-1\\right]`)} &nbsp; ใช้ ${tex(`L = ${fmtS(B.L, 6)}`)} (${esc(B.Lsrc)}), ${tex(`M = ${fmtS(B.M, 6)}`)} (${esc(B.Msrc)})` }),
       el('div', { class: 'muted', style: 'margin-top:4px' }, 'L = Lipschitz constant (|∂f/∂y| ≤ L), M = ค่าสูงสุดของ |y″(t)| บน [a, b] · bound เป็นขอบเขตบน จึงมักมากกว่า error จริง')));
   }
   /* การ์ดเริ่มต้น (i = 0) */
   renderInitCard() {
     const p = this.p, dp = p.dp;
+    const fE = `w_{i+1} = w_i + h\\,f(t_i,w_i)`;
+    const fI = `k_1 = f(t_i,w_i),\\;\\; k_2 = f(t_i+h,\\,w_i+hk_1),\\;\\; w_{i+1} = w_i + \\tfrac{h}{2}(k_1+k_2)`;
+    const line = (lab, t) => el('div', { class: 'step-line' }, el('span', { class: 'lab' }, lab), el('div', { class: 'tex', html: tex(t) }));
     const card = el('div', { class: 'step-card' },
-      el('div', { class: 'step-head' }, el('span', { class: 'step-no' }, 'i = 0'), 'Initial condition'),
-      el('div', { class: 'step-line' }, el('span', { class: 'lab' }, 'โจทย์'), el('div', { class: 'tex', html: tex(`y' = ${p.fc.node.toTex({ parenthesis: 'keep' })},\\quad ${fmtS(p.x0, dp)} \\le t \\le ${fmtS(p.xEnd, 8)},\\quad y(${fmtS(p.x0, dp)}) = ${fmtS(p.y0, dp)}`) })),
-      el('div', { class: 'step-line' }, el('span', { class: 'lab' }, 'ค่าที่ใช้'), el('div', { class: 'tex', html: tex(`a=t_0=${fmtS(p.x0, dp)},\\; b=${fmtS(p.xEnd, 8)},\\; w_0=\\alpha=${fmtS(p.y0, dp)},\\; h=${fmtS(p.h, 8)},\\; N=${p.n}`) })),
-      el('div', { class: 'step-line' }, el('span', { class: 'lab' }, 'mesh points'), el('div', { class: 'tex', html: tex(`t_i = a + ih,\\quad i = 0,1,\\dots,${p.n}`) })),
-      el('div', { class: 'step-line' }, el('span', { class: 'lab' }, 'เป้าหมาย'), el('div', { class: 'tex', html: tex(`y(b) = y(${fmtS(p.xEnd, 8)}) \\approx w_{${p.n}}`) })),
+      el('div', { class: 'step-head' }, el('span', { class: 'step-no' }, 'i = 0'), 'Initial condition', el('span', { class: 'badge ' + (this.mode === 'euler' ? '' : 'amber'), style: 'margin-left:auto' }, METHOD_NAME[this.mode])),
+      line('โจทย์', `y' = ${p.fc.node.toTex({ parenthesis: 'keep' })},\\quad ${fmtS(p.x0, dp)} \\le t \\le ${fmtS(p.xEnd, 8)},\\quad y(${fmtS(p.x0, dp)}) = ${fmtS(p.y0, dp)}`),
+      line('ค่าที่ใช้', `a=t_0=${fmtS(p.x0, dp)},\\; b=${fmtS(p.xEnd, 8)},\\; w_0=\\alpha=${fmtS(p.y0, dp)},\\; h=${fmtS(p.h, 8)},\\; N=${p.n}`),
+      this.useE ? line(this.mode === 'compare' ? 'สูตร Euler' : 'สูตร', fE) : null,
+      this.useI ? line(this.mode === 'compare' ? 'สูตร Improved' : 'สูตร', fI) : null,
+      line('เป้าหมาย', `y(b) = y(${fmtS(p.xEnd, 8)}) \\approx w_{${p.n}}`),
       this.o.explain ? el('div', { class: 'step-why' }, '💡 เริ่มจากจุดที่รู้ค่าแน่นอน (a, α) แล้วเดินไปทีละ h จนครบ N step') : null
     );
     this.initCard = card; this.stepsBox.append(card);
   }
-  /* การ์ดของ step: คำนวณจาก i → i+1 */
-  makeCard(k) {
-    const p = this.p, dp = p.dp, a = p.pts[k - 1], b = p.pts[k], i = k - 1;
+  /* บรรทัดของ Euler ใน step i → i+1 (compact = แบบย่อสำหรับโหมดเทียบ) */
+  eulerLines(k, compact) {
+    const p = this.p, dp = p.dp, a = p.pts[k - 1], b = p.pts[k], i = k - 1, hv = fmtS(p.h, 8);
     const s = substitute(p.fc.node, a.x, a.y, dp);
-    const fv = fmtS(a.f, dp), hv = fmtS(p.h, 8);
-    const lines = [
-      ['① หาความชัน', `f(t_{${i}},w_{${i}}) = f(${fmtS(a.x, dp)},\\,${fmtS(a.y, dp)}) = ${s.tex} = ${fv}`],
+    if (compact) {
+      const L = [['Euler', `w_{${k}} = w_{${i}} + h\\,f(t_{${i}},w_{${i}}) = ${fmtS(a.y, dp)} + ${hv}\\cdot\\left(${s.tex}\\right) = \\mathbf{${fmtS(b.y, dp)}}`]];
+      if (p.ec) L.push(['error Euler', `|y(t_{${k}})-w_{${k}}| = ${fmtS(b.err, dp + 2)}`]);
+      if (this.showBound && Number.isFinite(b.bound)) L.push(['Error bound', `\\le ${fmtS(b.bound, dp + 2)}`]);
+      return L;
+    }
+    const L = [
+      ['① หาความชัน', `f(t_{${i}},w_{${i}}) = f(${fmtS(a.x, dp)},\\,${fmtS(a.y, dp)}) = ${s.tex} = ${fmtS(a.f, dp)}`],
       ['② คูณ h', `h\\cdot f = ${hv}\\times ${texNum(a.f, dp)} = ${fmtS(a.hf, dp)}`],
       ['③ บวก w เดิม', `w_{${k}} = w_{${i}} + h\\,f = ${fmtS(a.y, dp)} ${a.hf < 0 ? '-' : '+'} ${fmtS(Math.abs(a.hf), dp)} = \\mathbf{${fmtS(b.y, dp)}}`],
       ['t ถัดไป', `t_{${k}} = t_{${i}} + h = ${fmtS(a.x, dp)} + ${hv} = ${fmtS(b.x, 8)}`],
       ['สรุปสูตร', `w_{${k}} = w_{${i}} + h\\,f(t_{${i}},w_{${i}}) = ${fmtS(a.y, dp)} + ${hv}\\cdot\\left(${s.tex}\\right) = ${fmtS(b.y, dp)}`]
     ];
-    if (p.ec) lines.push(['เทียบ exact', `y(t_{${k}}) = ${fmtS(b.ex, dp)},\\quad |y(t_{${k}})-w_{${k}}| = ${fmtS(b.err, dp + 2)}` + (Number.isFinite(b.rel) ? `\\;(${fmtS(b.rel, 4)}\\%)` : '')]);
-    if (Number.isFinite(b.bound)) lines.push(['Error bound', `|y(t_{${k}})-w_{${k}}| \\le \\tfrac{hM}{2L}\\left[e^{L(t_{${k}}-a)}-1\\right] = ${fmtS(b.bound, dp + 2)}`]);
+    if (p.ec) L.push(['เทียบ exact', `y(t_{${k}}) = ${fmtS(b.ex, dp)},\\quad |y(t_{${k}})-w_{${k}}| = ${fmtS(b.err, dp + 2)}` + (Number.isFinite(b.rel) ? `\\;(${fmtS(b.rel, 4)}\\%)` : '')]);
+    if (this.showBound && Number.isFinite(b.bound)) L.push(['Error bound', `|y(t_{${k}})-w_{${k}}| \\le \\tfrac{hM}{2L}\\left[e^{L(t_{${k}}-a)}-1\\right] = ${fmtS(b.bound, dp + 2)}`]);
+    return L;
+  }
+  /* บรรทัดของ Improved Euler ใน step i → i+1 */
+  improvedLines(k, showT) {
+    const p = this.p, dp = p.dp, a = p.ipts[k - 1], b = p.ipts[k], i = k - 1, hv = fmtS(p.h, 8);
+    const s1 = substitute(p.fc.node, a.x, a.y, dp), s2 = substitute(p.fc.node, b.x, a.pred, dp);
+    const L = [
+      ['① k₁ (ต้นช่วง)', `k_1 = f(t_{${i}},w_{${i}}) = f(${fmtS(a.x, dp)},\\,${fmtS(a.y, dp)}) = ${s1.tex} = ${fmtS(a.k1, dp)}`],
+      ['② ทำนายด้วย Euler', `w_{${i}} + h k_1 = ${fmtS(a.y, dp)} + ${hv}\\times ${texNum(a.k1, dp)} = ${fmtS(a.pred, dp)}`],
+      ['③ k₂ (ปลายช่วง)', `k_2 = f(t_{${i}}+h,\\; w_{${i}}+hk_1) = f(${fmtS(b.x, dp)},\\,${fmtS(a.pred, dp)}) = ${s2.tex} = ${fmtS(a.k2, dp)}`],
+      ['④ ใช้ความชันเฉลี่ย', `w_{${k}} = w_{${i}} + \\tfrac{h}{2}(k_1+k_2) = ${fmtS(a.y, dp)} + \\tfrac{${hv}}{2}\\left(${fmtS(a.k1, dp)} ${a.k2 < 0 ? '-' : '+'} ${fmtS(Math.abs(a.k2), dp)}\\right) = \\mathbf{${fmtS(b.y, dp)}}`]
+    ];
+    if (showT) L.push(['t ถัดไป', `t_{${k}} = t_{${i}} + h = ${fmtS(a.x, dp)} + ${hv} = ${fmtS(b.x, 8)}`]);
+    if (p.ec) L.push([this.mode === 'compare' ? 'error Improved' : 'เทียบ exact', (this.mode === 'compare' ? '' : `y(t_{${k}}) = ${fmtS(b.ex, dp)},\\quad `) + `|y(t_{${k}})-w_{${k}}| = ${fmtS(b.err, dp + 2)}` + (Number.isFinite(b.rel) && this.mode !== 'compare' ? `\\;(${fmtS(b.rel, 4)}\\%)` : '')]);
+    return L;
+  }
+  /* การ์ดของ step: คำนวณจาก i → i+1 */
+  makeCard(k) {
+    const p = this.p, dp = p.dp, i = k - 1, A = this.main[i], B = this.main[k];
+    const rows = list => list.map(([lab, t]) => el('div', { class: 'step-line' }, el('span', { class: 'lab' }, lab), el('div', { class: 'tex', html: tex(t) })));
+    const sec = (title, cls) => el('div', { class: 'small', style: `font-weight:700;margin:8px 0 2px;color:var(${cls})` }, title);
+    let body;
+    if (this.mode === 'euler') body = rows(this.eulerLines(k, false));
+    else if (this.mode === 'improved') body = rows(this.improvedLines(k, true));
+    else {
+      const e = p.pts[k], im = p.ipts[k];
+      body = [sec('Improved Euler', '--c-heun'), ...rows(this.improvedLines(k, false)), sec("Euler's method", '--c-euler'), ...rows(this.eulerLines(k, true)),
+        ...rows([['t ถัดไป', `t_{${k}} = t_{${i}} + h = ${fmtS(p.ipts[i].x, dp)} + ${fmtS(p.h, 8)} = ${fmtS(im.x, 8)}`]])];
+      if (p.ec && e.err > 0 && im.err > 0) body.push(el('div', { class: 'step-why' }, `📊 ที่ t${sub(k)}: Improved Euler คลาดเคลื่อน ${fmtS(im.err, dp + 2)} เทียบกับ Euler ${fmtS(e.err, dp + 2)} (แม่นกว่า ≈ ${fmtS(e.err / im.err, 1)} เท่า)`));
+    }
     let why = null;
     if (this.o.explain) {
-      const msg = k === 1 ? 'ใช้ความชันที่จุดเริ่มต้น (a, α) เป็นตัวแทนความชันทั้งช่วง [t₀, t₁] จึงเดินตามเส้นสัมผัสไป 1 ก้าว'
-        : k === p.n ? `step สุดท้าย: ได้ w${sub(k)} ซึ่งคือค่าประมาณของ y(b) = y(${fmtS(b.x, 8)}) ที่โจทย์ถาม`
+      let msg;
+      if (this.mode === 'euler') msg = k === 1 ? 'ใช้ความชันที่จุดเริ่มต้น (a, α) เป็นตัวแทนความชันทั้งช่วง [t₀, t₁] จึงเดินตามเส้นสัมผัสไป 1 ก้าว'
+        : k === p.n ? `step สุดท้าย: ได้ w${sub(k)} ซึ่งคือค่าประมาณของ y(b) = y(${fmtS(B.x, 8)}) ที่โจทย์ถาม`
           : `ใช้ w${sub(i)} ที่เพิ่งได้ (ซึ่งเป็นค่าประมาณของ y(t${sub(i)}) ไม่ใช่ค่าจริง) เป็นจุดตั้งต้นใหม่ — error จาก step ก่อนจึงถูกส่งต่อมาด้วย`;
+      else msg = k === 1 ? 'Improved Euler ไม่ใช้ความชันต้นช่วงอย่างเดียว: หา k₁ ที่ต้นช่วง → ใช้ Euler ทำนายค่าที่ปลายช่วง → หา k₂ ที่ปลายช่วง → เดินด้วยความชันเฉลี่ย (k₁ + k₂)/2 (เหมือน trapezoidal rule)'
+        : k === p.n ? `step สุดท้าย: ได้ w${sub(k)} ≈ y(${fmtS(B.x, 8)}) — ใช้ f ทั้งหมด ${2 * p.n} ครั้ง (step ละ 2 ครั้ง) แต่ error เป็น O(h²)`
+          : `ทำซ้ำแบบเดิมจาก w${sub(i)}: k₁ → ทำนาย → k₂ → เฉลี่ย ความชันเฉลี่ยใกล้ความชันจริงของช่วงมากกว่า จึงสะสม error น้อยกว่า Euler`;
       why = el('div', { class: 'step-why' }, '💡 ', msg);
     }
     return el('div', { class: 'step-card' },
-      el('div', { class: 'step-head' }, el('span', { class: 'step-no' }, `i = ${i} → ${k}`), `t: ${fmtS(a.x, dp)} → ${fmtS(b.x, dp)}`),
-      lines.map(([lab, t]) => el('div', { class: 'step-line' }, el('span', { class: 'lab' }, lab), el('div', { class: 'tex', html: tex(t) }))),
-      why);
+      el('div', { class: 'step-head' }, el('span', { class: 'step-no' }, `i = ${i} → ${k}`), `t: ${fmtS(A.x, dp)} → ${fmtS(B.x, dp)}`),
+      body, why);
   }
   go(k) {
     const p = this.p; k = Math.max(0, Math.min(p.n, k)); this.k = k;
@@ -989,45 +1119,60 @@ class StepViewer {
     if (typeof Chart === 'undefined') return;
     if (this.chart) this.chart.destroy();
     const p = this.p, dense = p.n > 60;
-    const main = [p.pts]; if (this.heun) main.push(this.heun); if (this.rk4) main.push(this.rk4);
+    const main = []; if (this.useE) main.push(p.pts); if (this.useI) main.push(p.ipts); if (this.rk4) main.push(this.rk4);
     const range = computeRange(main, [this.exactPts]);
     const ds = [];
-    if (p.ec) ds.push({ label: 'Exact y(t)', data: this.exactPts, showLine: true, pointRadius: 0, borderColor: cssVar('--c-exact'), borderWidth: 2.5, order: 5 });
-    if (this.heun) ds.push({ label: 'Improved Euler', key: 'heun', data: [], showLine: true, pointRadius: dense ? 0 : 3, borderColor: cssVar('--c-heun'), backgroundColor: cssVar('--c-heun'), borderDash: [6, 4], borderWidth: 2, order: 4 });
-    if (this.rk4) ds.push({ label: 'RK4', key: 'rk4', data: [], showLine: true, pointRadius: dense ? 0 : 3, borderColor: cssVar('--c-rk4'), backgroundColor: cssVar('--c-rk4'), borderDash: [2, 3], borderWidth: 2, order: 4 });
-    ds.push({ label: 'Euler wᵢ', key: 'euler', data: [], showLine: true, pointRadius: dense ? 1.5 : 4, borderColor: cssVar('--c-euler'), backgroundColor: cssVar('--c-euler'), borderWidth: 2.5, order: 3 });
-    ds.push({ label: 'เส้นสัมผัส', key: 'tan', data: [], showLine: true, pointRadius: 0, borderColor: cssVar('--c-tan'), borderDash: [6, 5], borderWidth: 2, order: 2 });
-    if (p.ec) ds.push({ label: '_error', key: 'err', data: [], showLine: true, pointRadius: 0, borderColor: cssVar('--danger'), borderDash: [2, 3], borderWidth: 2, order: 1 });
-    ds.push({ label: 'จุดล่าสุด', key: 'cur', data: [], pointRadius: 8, pointHoverRadius: 9, backgroundColor: cssVar('--c-euler'), borderColor: cssVar('--card'), borderWidth: 3, order: 0 });
+    if (p.ec) ds.push({ label: 'Exact y(t)', data: this.exactPts, showLine: true, pointRadius: 0, borderColor: cssVar('--c-exact'), borderWidth: 2.5, order: 6 });
+    if (this.rk4) ds.push({ label: 'RK4', key: 'rk4', data: [], showLine: true, pointRadius: dense ? 0 : 3, borderColor: cssVar('--c-rk4'), backgroundColor: cssVar('--c-rk4'), borderDash: [2, 3], borderWidth: 2, order: 5 });
+    if (this.useE) ds.push({ label: 'Euler wᵢ', key: 'euler', data: [], showLine: true, pointRadius: dense ? 1.5 : 4, borderColor: cssVar('--c-euler'), backgroundColor: cssVar('--c-euler'), borderWidth: 2.5, order: 3 });
+    if (this.useI) ds.push({ label: 'Improved Euler wᵢ', key: 'imp', data: [], showLine: true, pointRadius: dense ? 1.5 : 4, pointStyle: 'rectRot', borderColor: cssVar('--c-heun'), backgroundColor: cssVar('--c-heun'), borderWidth: 2.5, order: 3 });
+    ds.push({ label: this.mode === 'improved' ? 'ความชัน k₁' : 'เส้นสัมผัส', key: 'tan', data: [], showLine: true, pointRadius: 0, borderColor: cssVar('--c-tan'), borderDash: [6, 5], borderWidth: 2, order: 2 });
+    if (this.useI) ds.push({ label: 'ความชันเฉลี่ย', key: 'avg', data: [], showLine: true, pointRadius: 0, borderColor: cssVar('--c-heun'), borderDash: [4, 4], borderWidth: 2, order: 2 });
+    if (p.ec && this.mode !== 'compare') ds.push({ label: '_error', key: 'err', data: [], showLine: true, pointRadius: 0, borderColor: cssVar('--danger'), borderDash: [2, 3], borderWidth: 2, order: 1 });
+    ds.push({ label: '_cur', key: 'cur', data: [], pointRadius: 8, pointHoverRadius: 9, backgroundColor: cssVar(this.mode === 'euler' ? '--c-euler' : '--c-heun'), borderColor: cssVar('--card'), borderWidth: 3, order: 0 });
+    if (this.mode === 'compare') ds.push({ label: '_curE', key: 'curE', data: [], pointRadius: 7, backgroundColor: cssVar('--c-euler'), borderColor: cssVar('--card'), borderWidth: 3, order: 0 });
     this.chart = new Chart(this.canvas, { type: 'scatter', data: { datasets: ds }, options: chartBaseOptions(range), plugins: [slopePlugin] });
     this.chart.$slope = { on: this.o.slope, f: p.fc.fn, color: cssVar('--muted') };
   }
   updateChart() {
     if (!this.chart) return;
-    const p = this.p, k = this.k, i = Math.max(0, k - 1), a = p.pts[i];
+    const p = this.p, k = this.k, i = Math.max(0, k - 1);
     const find = key => this.chart.data.datasets.find(d => d.key === key);
-    find('euler').data = p.pts.slice(0, k + 1).map(q => ({ x: q.x, y: q.y }));
-    if (find('heun')) find('heun').data = this.heun.slice(0, k + 1);
+    const xy = arr => arr.slice(0, k + 1).map(q => ({ x: q.x, y: q.y }));
+    if (find('euler')) find('euler').data = xy(p.pts);
+    if (find('imp')) find('imp').data = xy(p.ipts);
     if (find('rk4')) find('rk4').data = this.rk4.slice(0, k + 1);
-    const ext = 1.35 * p.h;
-    find('tan').data = Number.isFinite(a.f) ? [{ x: a.x - 0.2 * p.h, y: a.y - 0.2 * p.h * a.f }, { x: a.x + ext, y: a.y + ext * a.f }] : [];
-    const last = p.pts[k];
+    const seg = (pt, slope, ext = 1.35) => Number.isFinite(slope) ? [{ x: pt.x - 0.2 * p.h, y: pt.y - 0.2 * p.h * slope }, { x: pt.x + ext * p.h, y: pt.y + ext * p.h * slope }] : [];
+    if (this.mode === 'improved') find('tan').data = seg(p.ipts[i], p.ipts[i].k1);
+    else find('tan').data = seg(p.pts[i], p.pts[i].f);
+    if (find('avg')) { const a = p.ipts[i]; find('avg').data = seg(a, (a.k1 + a.k2) / 2, 1.15); }
+    const last = this.main[k];
     find('cur').data = [{ x: last.x, y: last.y }];
+    if (find('curE')) find('curE').data = [{ x: p.pts[k].x, y: p.pts[k].y }];
     if (find('err')) find('err').data = Number.isFinite(last.ex) ? [{ x: last.x, y: last.y }, { x: last.x, y: last.ex }] : [];
     this.chart.$slope.on = this.o.slope;
     this.chart.update();
   }
   /* ---------- ตาราง ---------- */
   columns() {
-    const p = this.p, cols = [['i', r => r.k], ['tᵢ', r => fmtF(r.x, p.dp)], ['wᵢ (Euler)', r => fmtF(r.y, p.dp)], ['f(tᵢ, wᵢ)', r => fmtF(r.f, p.dp)]];
-    if (p.ec) cols.push(['y(tᵢ) exact', r => fmtF(r.ex, p.dp)], ['Actual error |y(tᵢ) − wᵢ|', r => fmtF(r.err, p.dp + 2)], ['rel. error %', r => Number.isFinite(r.rel) ? fmtF(r.rel, 4) : '—']);
-    if (this.o.bound) cols.push(['Error bound', r => fmtF(r.bound, p.dp + 2)]);
-    if (this.heun) cols.push(['Improved Euler', r => fmtF(this.heun[r.k].y, p.dp)]);
-    if (this.rk4) cols.push(['RK4', r => fmtF(this.rk4[r.k].y, p.dp)]);
+    const p = this.p, dp = p.dp, E = r => p.pts[r.k], I = r => p.ipts[r.k];
+    const cols = [['i', r => r.k], ['tᵢ', r => fmtF(r.x, dp)]];
+    if (this.mode === 'euler') {
+      cols.push(['wᵢ (Euler)', r => fmtF(E(r).y, dp)], ['f(tᵢ, wᵢ)', r => fmtF(E(r).f, dp)]);
+      if (p.ec) cols.push(['y(tᵢ) exact', r => fmtF(r.ex, dp)], ['Actual error |y(tᵢ) − wᵢ|', r => fmtF(E(r).err, dp + 2)], ['rel. error %', r => Number.isFinite(E(r).rel) ? fmtF(E(r).rel, 4) : '—']);
+    } else if (this.mode === 'improved') {
+      cols.push(['wᵢ (Improved)', r => fmtF(I(r).y, dp)], ['k₁', r => r.k < p.n ? fmtF(I(r).k1, dp) : '—'], ['k₂', r => r.k < p.n ? fmtF(I(r).k2, dp) : '—']);
+      if (p.ec) cols.push(['y(tᵢ) exact', r => fmtF(r.ex, dp)], ['Actual error |y(tᵢ) − wᵢ|', r => fmtF(I(r).err, dp + 2)], ['rel. error %', r => Number.isFinite(I(r).rel) ? fmtF(I(r).rel, 4) : '—']);
+    } else {
+      cols.push(['Euler wᵢ', r => fmtF(E(r).y, dp)], ['Improved wᵢ', r => fmtF(I(r).y, dp)]);
+      if (p.ec) cols.push(['y(tᵢ) exact', r => fmtF(r.ex, dp)], ['|error| Euler', r => fmtF(E(r).err, dp + 2)], ['|error| Improved', r => fmtF(I(r).err, dp + 2)], ['Improved แม่นกว่า (เท่า)', r => I(r).err > 1e-15 ? fmtF(E(r).err / I(r).err, 2) : '—']);
+    }
+    if (this.showBound) cols.push(['Error bound (Euler)', r => fmtF(E(r).bound, dp + 2)]);
+    if (this.rk4) cols.push(['RK4', r => fmtF(this.rk4[r.k].y, dp)]);
     return cols;
   }
   renderTable() {
-    const cols = this.columns(), rows = this.p.pts.slice(0, this.k + 1);
+    const cols = this.columns(), rows = this.main.slice(0, this.k + 1);
     const shown = rows.length > 400 ? rows.slice(0, 200).concat(rows.slice(-200)) : rows;
     const tb = el('tbody', {}, shown.map(r => el('tr', { class: r.k === this.k ? 'cur' : '' }, cols.map(c => el('td', {}, String(c[1](r)))))));
     this.tableWrap.innerHTML = '';
@@ -1036,46 +1181,72 @@ class StepViewer {
   }
   /* ---------- กล่องสรุปผลสุดท้าย ---------- */
   renderSummary() {
-    const p = this.p, dp = p.dp;
+    const p = this.p, dp = p.dp, N = p.n;
     this.summaryBox.innerHTML = '';
-    if (this.k < p.n) return;
-    const last = p.pts[p.n], items = [['a', fmtS(p.x0, 8)], ['b', fmtS(p.xEnd, 8)], ['N', p.n], ['h = (b − a)/N', fmtS(p.h, 8)]];
-    if (p.ec) items.push(['y(b) exact', fmtS(last.ex, dp)], ['Actual error', fmtS(last.err, dp + 2)], ['Relative error', Number.isFinite(last.rel) ? fmtS(last.rel, 4) + ' %' : '—']);
-    if (Number.isFinite(last.bound)) items.push(['Error bound ที่ b', fmtS(last.bound, dp + 2)]);
-    const ref = referenceValue(p);
-    if (this.heun) { const v = this.heun[p.n].y; items.push(['Improved Euler', fmtS(v, dp) + (ref ? `  (err ${fmtS(Math.abs(ref.v - v), dp + 2)})` : '')]); }
-    if (this.rk4) { const v = this.rk4[p.n].y; items.push(['RK4', fmtS(v, dp) + (ref ? `  (err ${fmtS(Math.abs(ref.v - v), dp + 2)})` : '')]); }
-    let note = '';
+    if (this.k < N) return;
+    const e = p.pts[N], im = p.ipts[N], ref = referenceValue(p);
+    const items = [['a', fmtS(p.x0, 8)], ['b', fmtS(p.xEnd, 8)], ['N', N], ['h = (b − a)/N', fmtS(p.h, 8)]];
+    if (p.ec) items.push(['y(b) exact', fmtS(e.ex, dp)]);
+    if (this.useE) items.push(['Euler w_N', fmtS(e.y, dp)]);
+    if (this.useI) items.push(['Improved w_N', fmtS(im.y, dp)]);
+    if (p.ec && this.useE) items.push(['Actual error Euler', fmtS(e.err, dp + 2)]);
+    if (p.ec && this.useI) items.push(['Actual error Improved', fmtS(im.err, dp + 2)]);
+    if (p.ec && this.mode !== 'compare') { const r = this.main[N].rel; items.push(['Relative error', Number.isFinite(r) ? fmtS(r, 4) + ' %' : '—']); }
+    if (this.showBound && Number.isFinite(e.bound)) items.push(['Error bound (Euler) ที่ b', fmtS(e.bound, dp + 2)]);
+    if (this.useE) items.push(['จำนวนครั้งที่คำนวณ f (Euler)', N]);
+    if (this.useI) items.push(['จำนวนครั้งที่คำนวณ f (Improved)', 2 * N]);
+    if (this.rk4) { const v = this.rk4[N].y; items.push(['RK4', fmtS(v, dp) + (ref ? `  (err ${fmtS(Math.abs(ref.v - v), dp + 2)})` : '')]); }
+    const notes = [];
     if (ref && Number.isFinite(ref.v)) {
       try {
-        const half = eulerSolve(p.fc.fn, p.x0, p.y0, p.h / 2, p.n * 2), e1 = Math.abs(ref.v - last.y), e2 = Math.abs(ref.v - half[p.n * 2].y);
-        if (e2 > 1e-14) note = `ทดลองลด h เหลือ ${fmtS(p.h / 2, 8)} (N = ${p.n * 2}) → error = ${fmtS(e2, dp + 2)} (ลดลง ${fmtS(e1 / e2, 2)} เท่า, เทียบกับ ${ref.label}) ≈ 2 เท่า สอดคล้องกับ Global error = O(h)`;
-      } catch (e) { /* ข้าม */ }
+        const eH = Math.abs(ref.v - eulerSolve(p.fc.fn, p.x0, p.y0, p.h / 2, N * 2)[N * 2].y), iH = Math.abs(ref.v - improvedSolve(p.fc.fn, p.x0, p.y0, p.h / 2, N * 2)[N * 2].y);
+        const e1 = Math.abs(ref.v - e.y), i1 = Math.abs(ref.v - im.y);
+        if (this.mode === 'compare' && i1 > 1e-15) notes.push(`ที่ b: Improved Euler แม่นกว่า Euler ≈ ${fmtS(e1 / i1, 1)} เท่า ด้วยการคำนวณ f มากขึ้นแค่ 2 เท่า (เทียบกับ ${ref.label})`);
+        if (this.useE && eH > 1e-14) notes.push(`Euler: ลด h เหลือ ${fmtS(p.h / 2, 8)} → error ${fmtS(e1, dp + 2)} → ${fmtS(eH, dp + 2)} (ลดลง ${fmtS(e1 / eH, 2)} เท่า ≈ 2 เท่า → O(h))`);
+        if (this.useI && iH > 1e-14) notes.push(`Improved Euler: ลด h เหลือ ${fmtS(p.h / 2, 8)} → error ${fmtS(i1, dp + 2)} → ${fmtS(iH, dp + 2)} (ลดลง ${fmtS(i1 / iH, 2)} เท่า ≈ 4 เท่า → O(h²))`);
+      } catch (err) { /* ข้าม */ }
     }
+    const big = this.mode === 'compare'
+      ? `y(${esc(fmtS(p.xEnd, 8))}) ≈ ${esc(fmtS(im.y, dp))} <span class="small muted">(Improved)</span> · ${esc(fmtS(e.y, dp))} <span class="small muted">(Euler)</span>`
+      : `y(${esc(fmtS(p.xEnd, 8))}) ≈ w<sub>${N}</sub> = ${esc(fmtS(this.main[N].y, dp))}`;
     this.summaryBox.append(el('div', { class: 'summary' },
-      el('div', { class: 'small muted' }, 'ผลลัพธ์สุดท้าย'),
-      el('div', { class: 'big', html: `y(${esc(fmtS(p.xEnd, 8))}) ≈ w<sub>${p.n}</sub> = ${esc(fmtS(last.y, dp))}` }),
+      el('div', { class: 'small muted' }, 'ผลลัพธ์สุดท้าย · ' + METHOD_NAME[this.mode]),
+      el('div', { class: 'big', html: big }),
       el('div', { class: 'kv' }, items.map(([k, v]) => el('div', {}, el('b', {}, k), el('span', {}, String(v))))),
-      note ? el('p', { class: 'small', style: 'margin:10px 0 0' }, '📉 ' + note) : null));
+      notes.length ? el('ul', { class: 'small', style: 'margin:10px 0 0;padding-left:20px' }, notes.map(n => el('li', {}, '📉 ' + n))) : null));
   }
-  setOptions(o) { Object.assign(this.o, o); this.computeExtras(); this.buildChart(); this.renderBoundNote(); this.go(this.k); }
+  setOptions(o) { Object.assign(this.o, o); const k = this.k; this.computeExtras(); this.build(); this.go(k); }
   rebuildChart() { this.buildChart(); this.updateChart(); }
   /* ---------- Export ---------- */
   toCSV() {
     const p = this.p, cols = this.columns();
     const q = s => /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
-    const head = `# Euler's method: y' = ${p.fStr}, ${p.x0} <= t <= ${p.xEnd}, y(${p.x0}) = ${p.y0}, h = ${p.h}, N = ${p.n}` + (p.ec ? `, exact y(t) = ${p.exactStr}` : '') + (this.o.bound ? `, L = ${this.o.bound.L}, M = ${this.o.bound.M}` : '');
-    return '﻿' + [q(head), cols.map(c => q(c[0])).join(','), ...p.pts.map(r => cols.map(c => q(String(c[1](r)))).join(','))].join('\r\n');
+    const head = `# ${METHOD_NAME[this.mode]}: y' = ${p.fStr}, ${p.x0} <= t <= ${p.xEnd}, y(${p.x0}) = ${p.y0}, h = ${p.h}, N = ${p.n}` + (p.ec ? `, exact y(t) = ${p.exactStr}` : '') + (this.showBound ? `, L = ${this.o.bound.L}, M = ${this.o.bound.M}` : '');
+    return '﻿' + [q(head), cols.map(c => q(c[0])).join(','), ...this.main.map(r => cols.map(c => q(String(c[1](r)))).join(','))].join('\r\n');
   }
   toText() {
-    const p = this.p, dp = p.dp, L = [`Euler's method: y' = ${p.fStr}, ${fmtS(p.x0, dp)} ≤ t ≤ ${fmtS(p.xEnd, 8)}, y(${fmtS(p.x0, dp)}) = α = ${fmtS(p.y0, dp)}, h = ${fmtS(p.h, 8)}, N = ${p.n}`, `w₀ = α,  w_{i+1} = w_i + h·f(t_i, w_i)`, ''];
+    const p = this.p, dp = p.dp;
+    const L = [`${METHOD_NAME[this.mode]}: y' = ${p.fStr}, ${fmtS(p.x0, dp)} ≤ t ≤ ${fmtS(p.xEnd, 8)}, y(${fmtS(p.x0, dp)}) = α = ${fmtS(p.y0, dp)}, h = ${fmtS(p.h, 8)}, N = ${p.n}`];
+    if (this.useE) L.push(`Euler: w₀ = α,  w_{i+1} = w_i + h·f(t_i, w_i)`);
+    if (this.useI) L.push(`Improved Euler: k₁ = f(t_i, w_i), k₂ = f(t_i + h, w_i + h·k₁), w_{i+1} = w_i + (h/2)(k₁ + k₂)`);
+    L.push('');
     for (let k = 1; k <= p.n; k++) {
-      const a = p.pts[k - 1], b = p.pts[k], s = substitute(p.fc.node, a.x, a.y, dp).text;
-      L.push(`i = ${k - 1}:`, `  f(t${sub(k - 1)}, w${sub(k - 1)}) = f(${fmtS(a.x, dp)}, ${fmtS(a.y, dp)}) = ${s} = ${fmtS(a.f, dp)}`,
-        `  h·f = ${fmtS(p.h, 8)} × ${fmtS(a.f, dp)} = ${fmtS(a.hf, dp)}`,
-        `  w${sub(k)} = ${fmtS(a.y, dp)} + ${fmtS(a.hf, dp)} = ${fmtS(b.y, dp)},  t${sub(k)} = ${fmtS(b.x, 8)}` + (p.ec ? `  (y(t${sub(k)}) = ${fmtS(b.ex, dp)}, error ${fmtS(b.err, dp + 2)})` : '') + (Number.isFinite(b.bound) ? `  [bound ${fmtS(b.bound, dp + 2)}]` : ''));
+      L.push(`i = ${k - 1}  (t${sub(k - 1)} = ${fmtS(p.pts[k - 1].x, 8)} → t${sub(k)} = ${fmtS(p.pts[k].x, 8)}):`);
+      if (this.useE) {
+        const a = p.pts[k - 1], b = p.pts[k], s = substitute(p.fc.node, a.x, a.y, dp).text;
+        L.push(`  [Euler] f(t${sub(k - 1)}, w${sub(k - 1)}) = f(${fmtS(a.x, dp)}, ${fmtS(a.y, dp)}) = ${s} = ${fmtS(a.f, dp)};  w${sub(k)} = ${fmtS(a.y, dp)} + ${fmtS(p.h, 8)}×${fmtS(a.f, dp)} = ${fmtS(b.y, dp)}`
+          + (p.ec ? `  (error ${fmtS(b.err, dp + 2)})` : '') + (this.showBound && Number.isFinite(b.bound) ? `  [bound ${fmtS(b.bound, dp + 2)}]` : ''));
+      }
+      if (this.useI) {
+        const a = p.ipts[k - 1], b = p.ipts[k];
+        L.push(`  [Improved] k₁ = f(${fmtS(a.x, dp)}, ${fmtS(a.y, dp)}) = ${fmtS(a.k1, dp)};  w + h·k₁ = ${fmtS(a.pred, dp)};  k₂ = f(${fmtS(b.x, dp)}, ${fmtS(a.pred, dp)}) = ${fmtS(a.k2, dp)};  w${sub(k)} = ${fmtS(a.y, dp)} + (${fmtS(p.h, 8)}/2)(${fmtS(a.k1, dp)} ${a.k2 < 0 ? '−' : '+'} ${fmtS(Math.abs(a.k2), dp)}) = ${fmtS(b.y, dp)}`
+          + (p.ec ? `  (error ${fmtS(b.err, dp + 2)})` : ''));
+      }
     }
-    L.push('', `คำตอบ: y(${fmtS(p.xEnd, 8)}) ≈ w${sub(p.n)} = ${fmtS(p.pts[p.n].y, dp)}`);
+    L.push('');
+    if (this.useE) L.push(`คำตอบ Euler: y(${fmtS(p.xEnd, 8)}) ≈ w${sub(p.n)} = ${fmtS(p.pts[p.n].y, dp)}`);
+    if (this.useI) L.push(`คำตอบ Improved Euler: y(${fmtS(p.xEnd, 8)}) ≈ w${sub(p.n)} = ${fmtS(p.ipts[p.n].y, dp)}`);
+    if (p.ec) L.push(`exact: y(${fmtS(p.xEnd, 8)}) = ${fmtS(p.pts[p.n].ex, dp)}`);
     return L.join('\n');
   }
 }
@@ -1087,17 +1258,34 @@ class StepViewer {
    ส่วนที่ 6: แท็บเครื่องช่วยคิด (Calculator)
    ===================================================================== */
 const CALC_DEFAULT = { f: 'y - t^2 + 1', x0: '0', y0: '0.5', xend: '2', n: '10', h: '0.2', exact: '(t+1)^2 - 0.5*exp(t)', dp: '5' };
-const EXAMPLES = [
-  { label: 'y - t^2 + 1  (Error bound)', f: 'y - t^2 + 1', x0: 0, y0: 0.5, h: 0.2, xend: 2, exact: '(t+1)^2 - 0.5*exp(t)' },
-  { label: 'y*t^2 + 1', f: 'y*t^2 + 1', x0: 0, y0: 0.5, h: 0.5, xend: 2, exact: '' },
-  { label: '1 + (t-y)^2', f: '1 + (t - y)^2', x0: 2, y0: 1, h: 0.5, xend: 3, exact: '' },
-  { label: "-2*y + t^3*exp(-2*t)", f: '-2*y + t^3*exp(-2*t)', x0: 0, y0: 1, h: 0.1, xend: 1, exact: 'exp(-2*t)/4*(t^4 + 4)' },
-  { label: 't + y', f: 't + y', x0: 0, y0: 1, h: 0.1, xend: 0.5, exact: '2*exp(t) - t - 1' },
-  { label: 'y  (→ e)', f: 'y', x0: 0, y0: 1, h: 0.1, xend: 1, exact: 'exp(t)' },
-  { label: '-0.1*(y-25)  กาแฟ', f: '-0.1*(y-25)', x0: 0, y0: 90, h: 1, xend: 2, exact: '25 + 65*exp(-0.1*t)' },
-  { label: 'sin(t) - y', f: 'sin(t) - y', x0: 0, y0: 1, h: 0.2, xend: 2, exact: '0.5*sin(t) - 0.5*cos(t) + 1.5*exp(-t)' },
-  { label: '-15*y  (ไม่เสถียร)', f: '-15*y', x0: 0, y0: 1, h: 0.2, xend: 2, exact: 'exp(-15*t)' },
+/* ตัวอย่างสำเร็จรูป: จัดเป็นหมวด เรียงตามหน้าในเอกสาร Chapter 7 */
+const EXAMPLE_GROUPS = [
+  { title: '📘 ตัวอย่างจากเอกสาร Chapter 7', items: [
+    { tex: "y' = yt^2 + 1", note: 'หน้า 225', f: 'y*t^2 + 1', x0: 0, y0: 0.5, h: 0.5, xend: 2, exact: '' },
+    { tex: "y' = 1 + (t-y)^2", note: 'หน้า 226', f: '1 + (t - y)^2', x0: 2, y0: 1, h: 0.5, xend: 3, exact: 't + 1/(1 - t)' },
+    { tex: "y' = y - t^2 + 1", note: 'หน้า 227–228 · Error bound', f: 'y - t^2 + 1', x0: 0, y0: 0.5, h: 0.2, xend: 2, exact: '(t+1)^2 - 0.5*exp(t)' },
+    { tex: "y' = -2y + t^3e^{-2t}", note: 'หน้า 230–232 · Improved Euler', f: '-2*y + t^3*exp(-2*t)', x0: 0, y0: 1, h: 0.1, xend: 1, exact: 'exp(-2*t)/4*(t^4 + 4)' },
+    { tex: "y' = y(t^2 + 1)", note: 'หน้า 236', f: 'y*(t^2 + 1)', x0: 0, y0: 0.5, h: 0.2, xend: 2, exact: '0.5*exp(t^3/3 + t)' }] },
+  { title: '✅ ตัวเช็กพื้นฐาน', items: [
+    { tex: "y' = t + y", note: 'y(0) = 1, h = 0.1', f: 't + y', x0: 0, y0: 1, h: 0.1, xend: 0.3, exact: '2*exp(t) - t - 1' },
+    { tex: "y' = y", note: 'y(1) ≈ e', f: 'y', x0: 0, y0: 1, h: 0.1, xend: 1, exact: 'exp(t)' },
+    { tex: "y' = -0.1(y - 25)", note: 'กาแฟเย็นลง', f: '-0.1*(y - 25)', x0: 0, y0: 90, h: 1, xend: 2, exact: '25 + 65*exp(-0.1*t)' }] },
+  { title: '🔎 สังเกตพฤติกรรม', items: [
+    { tex: "y' = \\sin(t) - y", note: 'ฟังก์ชันตรีโกณ', f: 'sin(t) - y', x0: 0, y0: 1, h: 0.2, xend: 2, exact: '0.5*sin(t) - 0.5*cos(t) + 1.5*exp(-t)' },
+    { tex: "y' = -15y", note: 'h ใหญ่ไป → ไม่เสถียร', f: '-15*y', x0: 0, y0: 1, h: 0.2, xend: 2, exact: 'exp(-15*t)' }] },
 ];
+const EXAMPLES = EXAMPLE_GROUPS.flatMap(g => g.items);
+/* สร้างปุ่มตัวอย่างแบบแบ่งหมวด */
+function renderExamples() {
+  const box = $('#examples'); box.innerHTML = '';
+  EXAMPLE_GROUPS.forEach(g => {
+    box.append(el('div', { class: 'ex-group' }, g.title));
+    g.items.forEach(ex => box.append(el('button', { class: 'chip ex-chip', title: `ใช้ตัวอย่างนี้: a = ${ex.x0}, α = ${ex.y0}, h = ${ex.h}, b = ${ex.xend}`, onclick: e => {
+      $$('.ex-chip').forEach(c => c.classList.toggle('active', c === e.currentTarget));
+      setRangeMode('xend'); fillCalc(ex); runCalc();
+    } }, el('span', { html: tex(ex.tex) }), el('span', { class: 'ex-note' }, ex.note))));
+  });
+}
 let rangeMode = 'xend';
 
 /* แสดงตัวอย่างสูตรแบบ KaTeX ขณะพิมพ์ */
@@ -1176,7 +1364,9 @@ function showMsgs(box, list, cls) {
   if (!list.length) return;
   box.append(el('div', { class: 'alert ' + cls }, list.length === 1 ? list[0] : el('ul', {}, list.map(m => el('li', {}, m)))));
 }
-function calcOpts() { return { heun: $('#opt-heun').checked, rk4: $('#opt-rk4').checked, slope: $('#opt-slope').checked }; }
+let calcMethod = 'compare';
+function setCalcMethod(m) { calcMethod = m; $$('#method-seg button').forEach(b => b.classList.toggle('active', b.dataset.m === m)); }
+function calcOpts() { return { mode: calcMethod, rk4: $('#opt-rk4').checked, slope: $('#opt-slope').checked }; }
 /* ปุ่ม "คำนวณ" */
 function runCalc() {
   const r = readCalcInputs();
@@ -1191,7 +1381,7 @@ function runCalc() {
 function resetCalc() {
   if (App.viewers[1]) { App.viewers[1].destroy(); App.viewers[1] = null; }
   fillCalc(CALC_DEFAULT); setRangeMode('xend');
-  ['#opt-heun', '#opt-rk4', '#opt-slope'].forEach(s => $(s).checked = false); $('#opt-bound').checked = true; $('#in-L').value = ''; $('#in-M').value = ''; $('#wrap-bound').classList.remove('hidden');
+  ['#opt-rk4', '#opt-slope'].forEach(s => $(s).checked = false); setCalcMethod('compare'); $('#opt-bound').checked = true; $('#in-L').value = ''; $('#in-M').value = ''; $('#wrap-bound').classList.remove('hidden');
   $('#calc-viewer').innerHTML = '<p class="muted">กด "คำนวณ" เพื่อเริ่ม</p>';
   ['#calc-errors', '#calc-warn', '#compare-out'].forEach(s => $(s).innerHTML = '');
   $('#calc-badge').textContent = '';
@@ -1215,7 +1405,7 @@ function runCompare() {
     const raw = (xe - x0) / h, n = Math.round(raw);
     if (n < 1 || Math.abs(raw - n) > 1e-9 * Math.max(1, raw)) { errs.push(`ข้าม h = ${fmtS(h, 8)}: (b − a)/h ไม่เป็นจำนวนเต็ม`); return; }
     if (n > 20000) { errs.push(`ข้าม h = ${fmtS(h, 8)}: step มากเกินไป`); return; }
-    try { runs.push({ h, n, pts: eulerSolve(fc.fn, x0, y0, h, n) }); } catch (e) { errs.push(`h = ${fmtS(h, 8)}: ${e.message}`); }
+    try { runs.push({ h, n, pts: eulerSolve(fc.fn, x0, y0, h, n), ipts: improvedSolve(fc.fn, x0, y0, h, n) }); } catch (e) { errs.push(`h = ${fmtS(h, 8)}: ${e.message}`); }
   });
   if (errs.length) showMsgs(out, errs, 'warn');
   if (!runs.length) return;
@@ -1229,21 +1419,27 @@ function runCompare() {
   const canvas = el('canvas');
   out.append(el('div', { class: 'chart-wrap', style: 'margin-top:12px' }, canvas));
   const exactPts = ec && ec.ok ? sampleExact(ec, x0, xe) : [];
-  const ds = runs.map((r, i) => ({ label: `h = ${fmtS(r.h, 8)}`, data: r.pts.map(p => ({ x: p.x, y: p.y })), showLine: true, pointRadius: r.n > 40 ? 0 : 3, borderColor: H_COLORS[i % 8], backgroundColor: H_COLORS[i % 8], borderWidth: 2 }));
+  // เส้นทึบ = Euler, เส้นประ = Improved Euler (สีเดียวกันต่อค่า h)
+  const ds = runs.flatMap((r, i) => [
+    { label: `Euler h = ${fmtS(r.h, 8)}`, data: r.pts.map(p => ({ x: p.x, y: p.y })), showLine: true, pointRadius: r.n > 40 ? 0 : 3, borderColor: H_COLORS[i % 8], backgroundColor: H_COLORS[i % 8], borderWidth: 2 },
+    { label: `Improved h = ${fmtS(r.h, 8)}`, data: r.ipts.map(p => ({ x: p.x, y: p.y })), showLine: true, pointRadius: r.n > 40 ? 0 : 3, pointStyle: 'rectRot', borderColor: H_COLORS[i % 8], backgroundColor: H_COLORS[i % 8], borderDash: [6, 4], borderWidth: 2 }]);
   if (exactPts.length) ds.unshift({ label: 'Exact', data: exactPts, showLine: true, pointRadius: 0, borderColor: cssVar('--c-exact'), borderWidth: 3 });
   if (App.compareChart) App.compareChart.destroy();
-  App.compareChart = new Chart(canvas, { type: 'scatter', data: { datasets: ds }, options: chartBaseOptions(computeRange(runs.map(r => r.pts), [exactPts])) });
+  App.compareChart = new Chart(canvas, { type: 'scatter', data: { datasets: ds }, options: chartBaseOptions(computeRange(runs.flatMap(r => [r.pts, r.ipts]), [exactPts])) });
   App.compareArgs = true;
   // ตาราง
-  let prevErr = null;
+  let prevE = null, prevI = null, prevH = null;
+  const cell = v => el('td', {}, v);
   const rows = runs.map(r => {
-    const y = r.pts[r.n].y, err = Math.abs(ref - y), ratio = prevErr != null && err > 0 ? prevErr / err : NaN;
-    const row = el('tr', {}, el('td', {}, fmtS(r.h, 8)), el('td', {}, r.n), el('td', {}, fmtF(y, dp)), el('td', {}, fmtF(err, dp + 2)), el('td', {}, fmtF(err / r.h, 4)), el('td', {}, Number.isFinite(ratio) ? fmtF(ratio, 3) : '—'));
-    prevErr = err; return row;
+    const yE = r.pts[r.n].y, yI = r.ipts[r.n].y, eE = Math.abs(ref - yE), eI = Math.abs(ref - yI);
+    const rE = prevE != null && eE > 0 ? prevE / eE : NaN, rI = prevI != null && eI > 0 ? prevI / eI : NaN, hr = prevH != null ? prevH / r.h : NaN;
+    const row = el('tr', {}, cell(fmtS(r.h, 8)), cell(r.n), cell(fmtF(yE, dp)), cell(fmtF(eE, dp + 2)), cell(Number.isFinite(rE) ? fmtF(rE, 2) : '—'),
+      cell(fmtF(yI, dp)), cell(fmtF(eI, dp + 2)), cell(Number.isFinite(rI) ? fmtF(rI, 2) : '—'), cell(Number.isFinite(hr) ? `${fmtS(hr, 2)} / ${fmtS(hr * hr, 2)}` : '—'));
+    prevE = eE; prevI = eI; prevH = r.h; return row;
   });
   out.append(el('div', { class: 'table-wrap' }, el('table', { class: 'data' },
-    el('thead', {}, el('tr', {}, ['h', 'N', `w_N ≈ y(${fmtS(xe, 6)})`, '|y(b) − w_N|', 'error / h', 'error ลดลง (เท่า)'].map(t => el('th', {}, t)))), el('tbody', {}, rows))));
-  out.append(el('p', { class: 'small', style: 'margin-top:10px' }, `ค่าอ้างอิง (${refLabel}) = ${fmtS(ref, dp + 2)} · สังเกตคอลัมน์ error / h มีค่าเกือบคงที่ → error แปรผันตาม h (Global error = O(h)) — ลด h ครึ่งหนึ่ง error ลดลง ≈ 2 เท่า`));
+    el('thead', {}, el('tr', {}, ['h', 'N', 'Euler w_N', '|error| Euler', 'ลดลง (เท่า)', 'Improved w_N', '|error| Improved', 'ลดลง (เท่า)', 'ทฤษฎี O(h) / O(h²)'].map(t => el('th', {}, t)))), el('tbody', {}, rows))));
+  out.append(el('p', { class: 'small', style: 'margin-top:10px' }, `ค่าอ้างอิง y(b) (${refLabel}) = ${fmtS(ref, dp + 2)} · เส้นทึบ = Euler, เส้นประ = Improved Euler · เมื่อลด h ลง k เท่า: error ของ Euler ลด ≈ k เท่า (O(h)) แต่ Improved Euler ลด ≈ k² เท่า (O(h²)) เช่น ลด h ครึ่งหนึ่ง → Euler ลด ≈ 2 เท่า, Improved ลด ≈ 4 เท่า`));
 }
 
 /* =====================================================================
@@ -1280,6 +1476,14 @@ function drawGeo() {
     : `ครบ N = ${N} step: Euler ได้ w${sub(N)} = ${fmtS(last.y, 4)} ≈ y(2) แต่ค่าจริง e² = ${fmtS(Math.exp(2), 4)} (error = ${fmtS(Math.exp(2) - last.y, 4)}) — ลอง h เล็กลงแล้วดู error ลดลง`;
 }
 
+/* ตาราง Euler vs Improved Euler ตามเอกสารหน้า 232 (คำนวณสด) */
+function renderTheoryIETable() {
+  const f = compileExpr('-2*y + t^3*exp(-2*t)', 'f').fn, ex = compileExpr('exp(-2*t)/4*(t^4 + 4)', 'exact').fn;
+  const E1 = eulerSolve(f, 0, 1, 0.1, 10), E2 = eulerSolve(f, 0, 1, 0.05, 20), I1 = improvedSolve(f, 0, 1, 0.1, 10), I2 = improvedSolve(f, 0, 1, 0.05, 20);
+  const rows = E1.map((p, i) => el('tr', {}, [fmtF(p.x, 1), fmtF(p.y, 9), fmtF(E2[2 * i].y, 9), fmtF(I1[i].y, 9), fmtF(I2[2 * i].y, 9), fmtF(ex(p.x), 9)].map(v => el('td', {}, v))));
+  const box = $('#ie-table'); box.innerHTML = '';
+  box.append(el('table', { class: 'data' }, el('thead', {}, el('tr', {}, ['t', 'Euler h = 0.1', 'Euler h = 0.05', 'Improved h = 0.1', 'Improved h = 0.05', 'Exact'].map(t => el('th', {}, t)))), el('tbody', {}, rows)));
+}
 /* ตารางเทียบ Actual error กับ Error bound ในหน้าทฤษฎี (คำนวณสด) */
 function renderTheoryBoundTable() {
   const fc = compileExpr('y - t^2 + 1', 'f'), ec = compileExpr('(t+1)^2 - 0.5*exp(t)', 'exact');
@@ -1311,7 +1515,7 @@ function showHelp() {
     el('p', {}, 'สื่อการเรียนรู้ Euler Method สำหรับแก้ ', el('span', { 'data-tex': "y'=f(x,y),\\ y(x_0)=y_0" })),
     el('ol', { class: 'help-steps' },
       el('li', {}, el('div', {}, el('b', {}, 'ทฤษฎีย่อ'), ' — อ่านสูตร ที่มา และดูภาพการเดินตามเส้นสัมผัส')),
-      el('li', {}, el('div', {}, el('b', {}, 'เครื่องช่วยคิด'), ' — กรอก f(t,y), a, b, α, h แล้วกด "คำนวณ" จากนั้นกด "ขั้นต่อไป" ดูทีละ step พร้อมกราฟ')),
+      el('li', {}, el('div', {}, el('b', {}, 'เครื่องช่วยคิด'), ' — กรอก f(t,y), a, b, α, h เลือกวิธี (Euler / Improved Euler / เทียบ 2 วิธี) แล้วกด "คำนวณ" จากนั้นกด "ขั้นต่อไป" ดูทีละ step พร้อมกราฟ')),
       el('li', {}, el('div', {}, el('b', {}, 'ฝึกโจทย์'), ' — สุ่มโจทย์ ตอบ ใช้ hint และดูเฉลยทีละ step / เพิ่มชุดโจทย์ของตัวเองได้')),
       el('li', {}, el('div', {}, 'ปุ่มลัด: ', el('kbd', {}, '←'), ' ย้อนกลับ ', el('kbd', {}, '→'), ' ขั้นต่อไป · ปุ่ม ', el('b', {}, '?'), ' ข้างตัวแปรมีคำอธิบาย'))),
     el('p', { class: 'small muted' }, 'สัญลักษณ์ตามเอกสาร: a ≤ t ≤ b, y(a) = α, h = (b − a)/N, wᵢ ≈ y(tᵢ) · เขียนสมการ: ใช้ * คูณ, ^ ยกกำลัง, exp(t), sin(t), sqrt(t), log(t) = ln t'));
@@ -1522,12 +1726,39 @@ function getPool() {
   if (src === 'all' || src === 'custom') pool = pool.concat(customQuestions());
   return pool.filter(q => (type === 'all' || q.type === type) && (level === 'all' || q.level === level));
 }
+/* เรียงโจทย์: ในระบบก่อน → ประเภท A, B → ระดับ ง่าย, กลาง, ยาก → จำนวน step น้อยไปมาก → id */
+const LEVEL_ORDER = { easy: 0, medium: 1, hard: 2 };
+function sortedPool() {
+  return getPool().map((q, i) => ({ q, i })).sort((A, B) => {
+    const a = A.q, b = B.q;
+    return (a._src === 'builtin' ? 0 : 1) - (b._src === 'builtin' ? 0 : 1) || String(a.type).localeCompare(String(b.type))
+      || LEVEL_ORDER[a.level] - LEVEL_ORDER[b.level] || (+a.n) - (+b.n) || A.i - B.i;
+  }).map(x => x.q);
+}
+const sameQ = (a, b) => a && b && a.id === b.id && a._src === b._src;
 function updatePoolInfo() {
   if (!$('#pf-source')) return;
-  if ($('#pf-source').value === 'gen') { $('#pool-info').textContent = 'สร้างโจทย์ตัวเลข (ประเภท B) ใหม่ทุกครั้ง ด้วยพารามิเตอร์สุ่ม'; return; }
-  $('#pool-info').textContent = `มีโจทย์ตรงเงื่อนไข ${getPool().length} ข้อ (ในระบบ ${questionBank.length} · ของฉัน ${customQuestions().length})`;
+  const gen = $('#pf-source').value === 'gen', seq = $('#pf-order').value === 'seq';
+  $('#pf-order').disabled = gen; $('#pf-jump').disabled = gen;
+  const jump = $('#pf-jump'); jump.innerHTML = '';
+  if (gen) {
+    $('#pool-info').textContent = 'สร้างโจทย์ตัวเลข (ประเภท B) ใหม่ทุกครั้ง ด้วยพารามิเตอร์สุ่ม';
+    $('#btn-newq').textContent = '🎲 สร้างโจทย์ใหม่'; jump.append(el('option', {}, '— ไม่มีรายการ (สร้างอัตโนมัติ) —')); return;
+  }
+  const pool = sortedPool();
+  jump.append(el('option', { value: '' }, pool.length ? `📋 เลือกข้อจากรายการ (${pool.length} ข้อ)` : '— ไม่มีโจทย์ตรงตัวกรอง —'));
+  pool.forEach((q, i) => jump.append(el('option', { value: String(i) }, `${String(i + 1).padStart(2, '0')}. [${q.type} · ${LEVEL_TH[q.level]}] ${q.title}${q._src === 'custom' ? ' 📚' : ''}`)));
+  const cur = pool.findIndex(q => sameQ(q, Practice.q));
+  if (cur >= 0) jump.value = String(cur);
+  $('#btn-newq').textContent = seq ? (cur >= 0 ? '▶ ข้อถัดไป' : '▶ เริ่มทำข้อแรก') : '🎲 สุ่มโจทย์ใหม่';
+  $('#pool-info').textContent = `มีโจทย์ตรงเงื่อนไข ${pool.length} ข้อ (ในระบบ ${questionBank.length} · ของฉัน ${customQuestions().length}) · เรียง: ประเภท A → B, ง่าย → กลาง → ยาก, step น้อย → มาก`;
 }
 
+/* แปลงสูตรแบบโค้ดเป็นข้อความอ่านง่าย เช่น 2*t^2 - y → 2t² − y */
+function prettyExpr(f) {
+  return String(f).replace(/\^2/g, '²').replace(/\^3/g, '³').replace(/exp\(t\)/g, 'eᵗ').replace(/exp\(-t\)/g, 'e⁻ᵗ')
+    .replace(/(\d)\*(?=[a-z(])/g, '$1').replace(/\*/g, '·').replace(/ - /g, ' − ').replace(/^-/, '−').replace(/\(-/g, '(−');
+}
 /* ---------- สร้างโจทย์ตัวเลขแบบสุ่ม (ประเภท B) ---------- */
 const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 const rint = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
@@ -1561,14 +1792,22 @@ function generateQuestion(level) {
     Object.assign(T, { y0, h, n });
   }
   const xEnd = +(T.n * T.h).toFixed(10);
-  return { id: 'gen-' + Date.now().toString(36) + rint(100, 999), type: 'B', level: L, title: `โจทย์สุ่ม y' = ${T.f}`,
-    story: `กำหนด y' = ${T.f}, y(0) = ${T.y0}, h = ${T.h} จงหา y(${xEnd})`, f: T.f, x0: 0, y0: T.y0, h: T.h, n: T.n, ask: `y(${xEnd})`,
+  const pretty = prettyExpr(T.f);
+  return { id: 'gen-' + Date.now().toString(36) + rint(100, 999), type: 'B', level: L, title: `โจทย์สุ่ม: y' = ${pretty}`,
+    story: `กำหนด y' = ${pretty}, y(0) = ${T.y0}, h = ${T.h} จงหา y(${xEnd})`, f: T.f, x0: 0, y0: T.y0, h: T.h, n: T.n, ask: `y(${xEnd})`,
     hints: ['เริ่มจากหา f(t₀, w₀) โดยแทน t = 0 และ y = α = ' + T.y0, `ต้องเดินทั้งหมด N = ${T.n} step`], exact: T.exact || undefined, _src: 'gen' };
 }
 
-/* ---------- สุ่มโจทย์ (ไม่ซ้ำกับข้อล่าสุด) ---------- */
-function newQuestion() {
+/* ---------- โจทย์ถัดไป: เรียงตามลำดับ หรือ สุ่ม (ไม่ซ้ำกับข้อล่าสุด) ---------- */
+function newQuestion(dir = 1) {
   let q;
+  if ($('#pf-source').value !== 'gen' && $('#pf-order').value === 'seq') {
+    const pool = sortedPool();
+    if (!pool.length) { $('#practice-area').innerHTML = ''; $('#practice-area').append(el('div', { class: 'card' }, el('div', { class: 'alert warn' }, 'ไม่มีโจทย์ตรงกับตัวกรองนี้ — ลองเปลี่ยนแหล่ง/ประเภท/ระดับ หรือเพิ่มชุดโจทย์ของคุณ'))); return; }
+    const cur = pool.findIndex(x => sameQ(x, Practice.q));
+    const idx = cur < 0 ? (dir > 0 ? 0 : pool.length - 1) : (cur + dir + pool.length) % pool.length;
+    renderQuestion(pool[idx]); return;
+  }
   if ($('#pf-source').value === 'gen') {
     if ($('#pf-type').value === 'A') toast('โหมดสร้างอัตโนมัติใช้ได้กับประเภท B เท่านั้น');
     q = generateQuestion($('#pf-level').value);
@@ -1582,22 +1821,37 @@ function newQuestion() {
   Practice.recent.push(q.id); if (Practice.recent.length > 40) Practice.recent.shift();
   renderQuestion(q);
 }
+/* เลือกข้อจากรายการ */
+function jumpToQuestion() {
+  const v = $('#pf-jump').value; if (v === '') return;
+  const q = sortedPool()[+v]; if (q) renderQuestion(q);
+}
 function buildHints(q, prob) {
   const hs = (Array.isArray(q.hints) ? q.hints : []).filter(Boolean).slice(0, 2);
   if (!hs.length && q.modelingSteps && q.modelingSteps.length) hs.push(q.modelingSteps[0]);
   if (!hs.length) hs.push('เริ่มจากแทน t₀ = a และ w₀ = α ลงใน f เพื่อหาความชันแรก');
-  const a = prob.pts[0], b = prob.pts[1];
-  hs.push(`step แรก (i = 0): f(t₀, w₀) = f(${fmtS(a.x)}, ${fmtS(a.y)}) = ${fmtS(a.f)} → w₁ = ${fmtS(a.y)} + ${fmtS(prob.h, 8)}×${texSafe(a.f)} = ${fmtS(b.y)} (ทำแบบนี้ต่ออีก ${prob.n - 1} step)`);
+  if (prob.method === 'improved') {
+    const a = prob.ipts[0], b = prob.ipts[1];
+    hs.push(`Improved Euler step แรก (i = 0): k₁ = f(${fmtS(a.x)}, ${fmtS(a.y)}) = ${fmtS(a.k1)} → w₀ + h·k₁ = ${fmtS(a.pred)} → k₂ = f(${fmtS(b.x)}, ${fmtS(a.pred)}) = ${fmtS(a.k2)} → w₁ = ${fmtS(a.y)} + (${fmtS(prob.h, 8)}/2)(${fmtS(a.k1)} + ${texSafe(a.k2)}) = ${fmtS(b.y)} (ทำต่ออีก ${prob.n - 1} step)`);
+  } else {
+    const a = prob.pts[0], b = prob.pts[1];
+    hs.push(`step แรก (i = 0): f(t₀, w₀) = f(${fmtS(a.x)}, ${fmtS(a.y)}) = ${fmtS(a.f)} → w₁ = ${fmtS(a.y)} + ${fmtS(prob.h, 8)}×${texSafe(a.f)} = ${fmtS(b.y)} (ทำแบบนี้ต่ออีก ${prob.n - 1} step)`);
+  }
   return hs;
 }
 function texSafe(v) { return v < 0 ? `(${fmtS(v)})` : fmtS(v); }
+/* วิธีที่ใช้กับโจทย์: ถ้าโจทย์กำหนด method ไว้ใช้ตามนั้น ไม่งั้นใช้ตัวเลือกด้านบน */
+function questionMethod(q) { return normMethod(q.method) || $('#pf-method').value || 'euler'; }
 
 function renderQuestion(q) {
   if (App.viewers[2]) { App.viewers[2].destroy(); App.viewers[2] = null; }
   const area = $('#practice-area'); area.innerHTML = '';
   let prob;
-  try { prob = buildProblem({ ...q, dp: 4 }); } catch (e) { area.append(el('div', { class: 'card' }, el('div', { class: 'alert err' }, `โจทย์ "${q.title}" มีปัญหา: ${e.message}`))); return; }
+  try { prob = buildProblem({ ...q, method: questionMethod(q), dp: 4 }); } catch (e) { area.append(el('div', { class: 'card' }, el('div', { class: 'alert err' }, `โจทย์ "${q.title}" มีปัญหา: ${e.message}`))); return; }
   Practice.q = q; Practice.prob = prob; Practice.hintLevel = 0; Practice.state = { counted: false, tries: 0, revealed: false };
+  const isI = prob.method === 'improved', mName = METHOD_NAME[prob.method];
+  const pool = q._src === 'gen' ? [] : sortedPool(), pos = pool.findIndex(x => sameQ(x, q)), seq = $('#pf-order').value === 'seq' && q._src !== 'gen';
+  updatePoolInfo();
   const hints = buildHints(q, prob);
   const askLabel = q.ask || `y(${fmtS(prob.xEnd, 8)})`;
   const srcBadge = q._src === 'custom' ? el('span', { class: 'badge amber' }, '📚 ' + (q._set || 'ของฉัน')) : q._src === 'gen' ? el('span', { class: 'badge gray' }, '🎲 สุ่มสร้าง') : el('span', { class: 'badge gray' }, 'ในระบบ');
@@ -1613,44 +1867,51 @@ function renderQuestion(q) {
     Practice.hintLevel++; btnHint.textContent = `💡 ใบ้ (${Practice.hintLevel}/${hints.length})`; if (Practice.hintLevel >= hints.length) btnHint.disabled = true;
   } }, `💡 ใบ้ (0/${hints.length})`);
   const solBox = el('div');
+  const close = (a, v) => Math.abs(a - v) <= Math.max(Math.abs(a) * 0.002, 0.0015);
   const check = () => {
     const v = parseNumber(input.value);
     if (!Number.isFinite(v)) { fb.innerHTML = ''; fb.append(el('div', { class: 'alert warn' }, 'กรุณากรอกคำตอบเป็นตัวเลข เช่น 1.362')); return; }
-    const target = prob.pts[prob.n].y, tol = Math.max(Math.abs(target) * 0.002, 0.0015);
+    const target = prob.sol[prob.n].y;
     Practice.state.tries++;
     fb.innerHTML = '';
-    if (Math.abs(v - target) <= tol) {
+    if (close(target, v)) {
       recordResult(!Practice.state.revealed);
-      fb.append(el('div', { class: 'alert ok' }, `✅ ถูกต้อง! ${askLabel} ≈ ${fmtS(target, 6)} ` + (Practice.state.tries === 1 ? 'เยี่ยมมาก ตอบถูกตั้งแต่ครั้งแรก 🎉' : 'เก่งมาก')));
+      fb.append(el('div', { class: 'alert ok' }, `✅ ถูกต้อง! ${askLabel} ≈ ${fmtS(target, 6)} (${mName}) ` + (Practice.state.tries === 1 ? 'เยี่ยมมาก ตอบถูกตั้งแต่ครั้งแรก 🎉' : 'เก่งมาก')));
     } else {
       if (Practice.state.tries === 1) recordResult(false);
       let tip = 'ยังไม่ถูก ลองตรวจการคำนวณอีกครั้งนะ — กด "ใบ้" ได้';
-      const near = prob.pts.findIndex((p, i) => i < prob.n && Math.abs(p.y - v) <= Math.max(Math.abs(p.y) * 0.002, 0.0015));
-      if (near >= 0) tip = `ค่านี้ตรงกับ w${sub(near)} — ต้องเดินให้ครบ N = ${prob.n} step นะ`;
-      else if (prob.ec && Math.abs(prob.ec.fn(prob.xEnd) - v) <= tol) tip = 'ค่านี้ใกล้กับคำตอบ exact y(b) แต่โจทย์ให้ประมาณด้วย Euler\'s method (w_N)';
+      const other = isI ? prob.pts : prob.ipts;
+      const near = prob.sol.findIndex((p, i) => i < prob.n && close(p.y, v));
+      if (close(other[prob.n].y, v)) tip = isI ? 'ค่านี้คือคำตอบของ Euler\'s method — โจทย์ข้อนี้ให้ใช้ Improved Euler (ต้องหา k₂ แล้วใช้ความชันเฉลี่ย (k₁ + k₂)/2)' : 'ค่านี้คือคำตอบของ Improved Euler — โจทย์ข้อนี้ให้ใช้ Euler\'s method ธรรมดา';
+      else if (near >= 0) tip = `ค่านี้ตรงกับ w${sub(near)} — ต้องเดินให้ครบ N = ${prob.n} step นะ`;
+      else if (isI && prob.ipts.some((p, i) => i < prob.n && close(p.pred, v))) tip = 'ค่านี้คือค่าทำนาย wᵢ + h·k₁ — ยังต้องหา k₂ แล้วเฉลี่ยความชันก่อน';
+      else if (prob.ec && close(prob.ec.fn(prob.xEnd), v)) tip = `ค่านี้ใกล้กับคำตอบ exact y(b) แต่โจทย์ให้ประมาณด้วย ${mName} (w_N)`;
       fb.append(el('div', { class: 'alert err' }, '❌ ' + tip));
       input.classList.remove('shake'); void input.offsetWidth; input.classList.add('shake');
     }
   };
   input.addEventListener('keydown', e => { if (e.key === 'Enter') check(); });
   const card = el('div', { class: 'card q-card' },
-    el('div', { class: 'card-title' }, el('h2', {}, q.title), el('span', { class: 'spacer' }),
+    el('div', { class: 'card-title' }, el('h2', {}, pos >= 0 ? el('span', { class: 'pos-badge' }, `ข้อ ${pos + 1}/${pool.length}`) : null, q.title), el('span', { class: 'spacer' }),
+      el('span', { class: 'badge ' + (isI ? 'amber' : '') }, isI ? '📐 Improved Euler' : '📏 Euler'),
       el('span', { class: 'badge' }, TYPE_TH[q.type]), el('span', { class: 'badge ' + (q.level === 'easy' ? 'green' : q.level === 'hard' ? 'red' : 'amber') }, LEVEL_TH[q.level]), srcBadge),
     el('div', { class: 'q-story' }, q.story), given,
-    q.type === 'A' ? el('p', { class: 'small muted' }, '📝 ประเภท A: ตั้งสมการ dy/dt = f(t, y) จากสถานการณ์เอง แล้วใช้ Euler\'s method') : null,
+    q.type === 'A' ? el('p', { class: 'small muted' }, `📝 ประเภท A: ตั้งสมการ dy/dt = f(t, y) จากสถานการณ์เอง แล้วใช้ ${mName}`) : null,
+    el('div', { class: 'alert ' + (isI ? 'warn' : 'info'), style: 'margin:6px 0' }, el('span', { html: `ใช้ <b>${esc(mName)}</b>: ` + tex(isI ? `k_1 = f(t_i,w_i),\\; k_2 = f(t_i+h,\\,w_i+hk_1),\\; w_{i+1} = w_i + \\tfrac{h}{2}(k_1+k_2)` : `w_{i+1} = w_i + h\\,f(t_i,w_i)`) })),
     el('p', {}, 'หาค่า ', el('b', {}, askLabel), ` ≈ w${sub(prob.n)} ตอบทศนิยมอย่างน้อย 3 ตำแหน่ง`),
     el('div', { class: 'answer-row' }, input, el('button', { class: 'btn primary', onclick: check }, 'ตรวจคำตอบ')),
     fb,
     el('div', { class: 'row', style: 'margin-top:12px' }, btnHint,
       el('button', { class: 'btn', title: 'ถ้าดูเฉลยก่อนตอบถูก ข้อนี้จะไม่นับคะแนน', onclick: () => showSolution(solBox) }, '📖 ดูเฉลย'),
-      el('button', { class: 'btn accent', onclick: newQuestion }, 'ข้อถัดไป ➜')),
+      seq ? el('button', { class: 'btn', onclick: () => newQuestion(-1) }, '◀ ข้อก่อนหน้า') : null,
+      el('button', { class: 'btn accent', onclick: () => newQuestion(1) }, seq ? 'ข้อถัดไป ➜' : 'สุ่มข้อใหม่ ➜')),
     hintBox);
   area.append(card);
   if (q.level === 'hard') area.append(buildTryH(prob));
   area.append(solBox);
   input.focus({ preventScroll: true });
 }
-/* โจทย์ยาก: ให้ลองเลือก h เอง แล้วดู error */
+/* โจทย์ยาก: ให้ลองเลือก h เอง แล้วดู error ของทั้งสองวิธี */
 function buildTryH(prob) {
   const inp = el('input', { type: 'text', inputmode: 'decimal', class: 'mono', value: String(prob.h / 2), style: 'max-width:160px' });
   const out = el('div');
@@ -1662,55 +1923,65 @@ function buildTryH(prob) {
     if (n < 1 || Math.abs(L / h - n) > 1e-9 * Math.max(1, L / h)) return out.append(el('div', { class: 'alert warn' }, `ช่วงยาว ${fmtS(L, 8)} หารด้วย h = ${fmtS(h, 8)} ไม่ลงตัว — เลือก h ที่หารลงตัว`));
     if (n > 100000) return out.append(el('div', { class: 'alert warn' }, 'h เล็กเกินไป'));
     try {
-      const pts = eulerSolve(prob.fc.fn, prob.x0, prob.y0, h, n), y = pts[n].y, ref = referenceValue(prob), e0 = ref ? Math.abs(ref.v - prob.pts[prob.n].y) : NaN, e1 = ref ? Math.abs(ref.v - y) : NaN;
-      out.append(el('div', { class: 'kv' },
-        el('div', {}, el('b', {}, `Euler h = ${fmtS(h, 8)} (N = ${n})`), el('span', {}, fmtS(y, 6))),
-        ref ? el('div', {}, el('b', {}, `ค่าอ้างอิง (${ref.label})`), el('span', {}, fmtS(ref.v, 6))) : null,
-        ref ? el('div', {}, el('b', {}, '|error|'), el('span', {}, fmtS(e1, 6))) : null,
-        ref ? el('div', {}, el('b', {}, `error ลดลงเทียบ h = ${fmtS(prob.h, 8)}`), el('span', {}, fmtS(e0 / e1, 3) + ' เท่า')) : null));
-      if (ref) out.append(el('p', { class: 'small muted', style: 'margin-top:8px' }, `h ลดลง ${fmtS(prob.h / h, 3)} เท่า → error ลดลง ≈ ${fmtS(e0 / e1, 3)} เท่า (Euler เป็น O(h) จึงควรใกล้กัน)`));
+      const ref = referenceValue(prob);
+      const yE = eulerSolve(prob.fc.fn, prob.x0, prob.y0, h, n)[n].y, yI = improvedSolve(prob.fc.fn, prob.x0, prob.y0, h, n)[n].y;
+      const e0E = ref ? Math.abs(ref.v - prob.pts[prob.n].y) : NaN, e0I = ref ? Math.abs(ref.v - prob.ipts[prob.n].y) : NaN;
+      const eE = ref ? Math.abs(ref.v - yE) : NaN, eI = ref ? Math.abs(ref.v - yI) : NaN;
+      out.append(el('div', { class: 'table-wrap' }, el('table', { class: 'data' },
+        el('thead', {}, el('tr', {}, ['วิธี', `w_N (h = ${fmtS(h, 8)}, N = ${n})`, '|error|', `error ลดลงเทียบ h = ${fmtS(prob.h, 8)}`].map(t => el('th', {}, t)))),
+        el('tbody', {}, [['Euler', yE, eE, e0E], ['Improved Euler', yI, eI, e0I]].map(([m, y, e, e0]) => el('tr', {}, el('td', {}, m), el('td', {}, fmtF(y, 6)), el('td', {}, ref ? fmtF(e, 6) : '—'), el('td', {}, ref && e > 0 ? fmtF(e0 / e, 3) + ' เท่า' : '—')))))));
+      if (ref) out.append(el('p', { class: 'small muted', style: 'margin-top:8px' }, `ค่าอ้างอิง y(b) (${ref.label}) = ${fmtS(ref.v, 6)} · h ลดลง ${fmtS(prob.h / h, 3)} เท่า → Euler ควรลด ≈ ${fmtS(prob.h / h, 3)} เท่า (O(h)) และ Improved ≈ ${fmtS((prob.h / h) ** 2, 3)} เท่า (O(h²))`));
     } catch (e) { out.append(el('div', { class: 'alert err' }, e.message)); }
   };
   return el('div', { class: 'card' }, el('div', { class: 'card-title' }, el('h3', {}, '🔬 ระดับยาก: ลองเลือก h เอง')),
-    el('p', { class: 'small muted' }, 'เปลี่ยน h แล้วดูว่า error เปลี่ยนไปอย่างไร (วิเคราะห์ error / เทียบ h สองค่า)'),
+    el('p', { class: 'small muted' }, 'เปลี่ยน h แล้วดูว่า error ของ Euler และ Improved Euler เปลี่ยนไปอย่างไร'),
     el('div', { class: 'row' }, el('span', {}, 'h ='), inp, el('button', { class: 'btn', onclick: run }, 'คำนวณ')), out);
 }
-/* เฉลยทีละ step + ขั้นตอนตั้งสมการ + วิเคราะห์ error */
+/* เฉลยทีละ step + ขั้นตอนตั้งสมการ + วิเคราะห์ error + เทียบสองวิธี */
 function showSolution(box) {
-  const q = Practice.q, prob = Practice.prob;
+  const q = Practice.q, prob = Practice.prob, isI = prob.method === 'improved', N = prob.n;
   if (!Practice.state.counted) { Practice.state.revealed = true; recordResult(false); }
   if (App.viewers[2]) App.viewers[2].destroy();
   box.innerHTML = '';
-  const card = el('div', { class: 'card' }, el('div', { class: 'card-title' }, el('h2', {}, '📖 เฉลยทีละ step')));
+  const vbox = el('div');
+  const modeSeg = el('div', { class: 'seg' }, [[prob.method, `เฉลยด้วย ${isI ? 'Improved Euler' : 'Euler'}`], ['compare', 'เทียบ 2 วิธี']].map(([m, l], i) =>
+    el('button', { class: i === 0 ? 'active' : '', onclick: e => { $$('button', modeSeg).forEach(b => b.classList.toggle('active', b === e.currentTarget)); App.viewers[2].setOptions({ mode: m }); } }, l)));
+  const card = el('div', { class: 'card' }, el('div', { class: 'card-title' }, el('h2', {}, '📖 เฉลยทีละ step'), el('span', { class: 'spacer' }), modeSeg));
   if (q.type === 'A' && Array.isArray(q.modelingSteps) && q.modelingSteps.length) {
     card.append(el('div', { class: 'model-steps' }, el('b', {}, 'ขั้นที่ 0: ตั้งสมการจากสถานการณ์'),
       el('ol', {}, q.modelingSteps.map(s => el('li', {}, s))),
       el('div', { html: tex(`\\Rightarrow\\; \\frac{dy}{dt} = ${prob.fc.node.toTex({ parenthesis: 'keep' })},\\quad ${fmtS(prob.x0, 8)}\\le t\\le ${fmtS(prob.xEnd, 8)},\\quad y(${fmtS(prob.x0, 8)}) = ${fmtS(prob.y0, 8)}`, true) })));
   }
-  const vbox = el('div'); card.append(vbox);
+  card.append(vbox);
   const errBox = el('div'); card.append(errBox);
   box.append(card);
-  App.viewers[2] = new StepViewer(vbox, prob, { explain: true });
+  App.viewers[2] = new StepViewer(vbox, prob, { explain: true, mode: prob.method });
   // วิเคราะห์ error ท้ายเฉลย
   const ref = referenceValue(prob);
   if (ref && Number.isFinite(ref.v)) {
-    const yE = prob.pts[prob.n].y, eN = Math.abs(ref.v - yE);
-    const e1 = prob.ec ? prob.pts[1].err : NaN;
-    const under = ref.v > yE;
+    const sol = prob.sol, yM = sol[N].y, eN = Math.abs(ref.v - yM);
+    const yE = prob.pts[N].y, yI = prob.ipts[N].y, eE = Math.abs(ref.v - yE), eI = Math.abs(ref.v - yI);
+    const e1 = prob.ec ? sol[1].err : NaN, under = ref.v > yM;
     const notes = [
-      `ค่าอ้างอิง y(b) (${ref.label}) = ${fmtS(ref.v, 6)} · Euler w${sub(prob.n)} = ${fmtS(yE, 6)} · |y(b) − w${sub(prob.n)}| = ${fmtS(eN, 6)}` + (ref.v !== 0 ? ` (${fmtS(Math.abs(eN / ref.v) * 100, 3)}%)` : ''),
-      Number.isFinite(e1) ? `error หลัง step 1 (local error) = ${fmtS(e1, 6)} แต่หลัง N = ${prob.n} step สะสมเป็น ${fmtS(eN, 6)}` : null,
-      (() => { try { const B = estimateLM(prob), bd = errorBound(prob.h, B.L, B.M, prob.xEnd, prob.x0); return Number.isFinite(bd) ? `Error bound ที่ b: (hM/2L)[e^{L(b−a)} − 1] = ${fmtS(bd, 6)} (ประมาณ L ≈ ${fmtS(B.L, 4)}, M ≈ ${fmtS(B.M, 4)}) ซึ่ง ≥ error จริง ${fmtS(eN, 6)}` : null; } catch (e) { return null; } })(),
-      'error สะสมมาจาก: (1) แต่ละ step ใช้ความชันที่ "ต้นช่วง" f(tᵢ, wᵢ) แทนความชันเฉลี่ยทั้งช่วง (local error O(h²)) และ (2) step ถัดไปเริ่มจาก wᵢ ที่คลาดเคลื่อนจาก y(tᵢ) อยู่แล้ว จึงส่งต่อ error ไปเรื่อยๆ (global error O(h))',
-      eN > 1e-12 ? (under ? 'Euler ได้ค่าต่ำกว่าค่าจริง — กราฟคำตอบโค้งขึ้น (y″ > 0) เส้นสัมผัสจึงอยู่ใต้กราฟ' : 'Euler ได้ค่าสูงกว่าค่าจริง — กราฟคำตอบโค้งลง (y″ < 0) เส้นสัมผัสจึงอยู่เหนือกราฟ') : null
+      `ค่าอ้างอิง y(b) (${ref.label}) = ${fmtS(ref.v, 6)} · ${isI ? 'Improved Euler' : 'Euler'} w${sub(N)} = ${fmtS(yM, 6)} · |y(b) − w${sub(N)}| = ${fmtS(eN, 6)}` + (ref.v !== 0 ? ` (${fmtS(Math.abs(eN / ref.v) * 100, 3)}%)` : ''),
+      Number.isFinite(e1) ? `error หลัง step 1 (local error) = ${fmtS(e1, 6)} แต่หลัง N = ${N} step สะสมเป็น ${fmtS(eN, 6)}` : null,
+      !isI ? (() => { try { const B = estimateLM(prob), bd = errorBound(prob.h, B.L, B.M, prob.xEnd, prob.x0); return Number.isFinite(bd) ? `Error bound ที่ b: (hM/2L)[e^{L(b−a)} − 1] = ${fmtS(bd, 6)} (ประมาณ L ≈ ${fmtS(B.L, 4)}, M ≈ ${fmtS(B.M, 4)}) ซึ่ง ≥ error จริง ${fmtS(eN, 6)}` : null; } catch (e) { return null; } })() : null,
+      isI ? 'error ของ Improved Euler น้อยกว่าเพราะใช้ความชันเฉลี่ยของต้นช่วง (k₁) กับปลายช่วง (k₂) แทนความชันต้นช่วงอย่างเดียว — local error O(h³), global error O(h²)'
+        : 'error สะสมมาจาก: (1) แต่ละ step ใช้ความชันที่ "ต้นช่วง" f(tᵢ, wᵢ) แทนความชันเฉลี่ยทั้งช่วง (local error O(h²)) และ (2) step ถัดไปเริ่มจาก wᵢ ที่คลาดเคลื่อนจาก y(tᵢ) อยู่แล้ว จึงส่งต่อ error ไปเรื่อยๆ (global error O(h))',
+      !isI && eN > 1e-12 ? (under ? 'Euler ได้ค่าต่ำกว่าค่าจริง — กราฟคำตอบโค้งขึ้น (y″ > 0) เส้นสัมผัสจึงอยู่ใต้กราฟ' : 'Euler ได้ค่าสูงกว่าค่าจริง — กราฟคำตอบโค้งลง (y″ < 0) เส้นสัมผัสจึงอยู่เหนือกราฟ') : null
     ].filter(Boolean);
     errBox.append(el('div', { class: 'alert info', style: 'margin-top:14px' }, el('b', {}, '📊 วิเคราะห์ error'), el('ul', {}, notes.map(n => el('li', {}, n)))));
+    // เทียบ Euler กับ Improved Euler ทุกข้อ
+    errBox.append(el('div', { class: 'table-wrap' }, el('table', { class: 'data' },
+      el('thead', {}, el('tr', {}, ['วิธี', `w_N ≈ y(${fmtS(prob.xEnd, 8)})`, '|error|', 'จำนวนครั้งที่คำนวณ f', 'Global error'].map(t => el('th', {}, t)))),
+      el('tbody', {}, [["Euler's method", yE, eE, N, 'O(h)'], ["Improved Euler's method", yI, eI, 2 * N, 'O(h²)']].map(r => el('tr', { class: (r[0].startsWith('Improved') === isI) ? 'cur' : '' }, r.map((v, j) => el('td', {}, j === 1 ? fmtF(v, 6) : j === 2 ? fmtF(v, 6) : String(v)))))))),
+      el('p', { class: 'small muted' }, eI > 1e-15 ? `Improved Euler แม่นกว่า Euler ≈ ${fmtS(eE / eI, 1)} เท่า ในโจทย์ข้อนี้ (กด "เทียบ 2 วิธี" ด้านบนเพื่อดูทีละ step คู่กัน)` : ''));
     if (q.level === 'hard') {
-      const rows = [prob.h, prob.h / 2, prob.h / 4].map(h => { const n = Math.round(prob.n * prob.h / h); const y = eulerSolve(prob.fc.fn, prob.x0, prob.y0, h, n)[n].y; return { h, n, y, e: Math.abs(ref.v - y) }; });
+      const rows = [prob.h, prob.h / 2, prob.h / 4].map(h => { const n = Math.round(N * prob.h / h); const a = eulerSolve(prob.fc.fn, prob.x0, prob.y0, h, n)[n].y, b = improvedSolve(prob.fc.fn, prob.x0, prob.y0, h, n)[n].y; return { h, n, eE: Math.abs(ref.v - a), eI: Math.abs(ref.v - b) }; });
       errBox.append(el('div', { class: 'table-wrap' }, el('table', { class: 'data' },
-        el('thead', {}, el('tr', {}, ['h', 'N', 'w_N', '|y(b) − w_N|', 'error / h'].map(t => el('th', {}, t)))),
-        el('tbody', {}, rows.map(r => el('tr', {}, el('td', {}, fmtS(r.h, 8)), el('td', {}, r.n), el('td', {}, fmtF(r.y, 6)), el('td', {}, fmtF(r.e, 6)), el('td', {}, fmtF(r.e / r.h, 4))))))),
-        el('p', { class: 'small muted' }, 'เทียบ h สองค่า (และสามค่า): error / h เกือบคงที่ → error แปรผันตาม h ตามทฤษฎี'));
+        el('thead', {}, el('tr', {}, ['h', 'N', '|error| Euler', 'error / h', '|error| Improved', 'error / h²'].map(t => el('th', {}, t)))),
+        el('tbody', {}, rows.map(r => el('tr', {}, el('td', {}, fmtS(r.h, 8)), el('td', {}, r.n), el('td', {}, fmtF(r.eE, 6)), el('td', {}, fmtF(r.eE / r.h, 4)), el('td', {}, fmtF(r.eI, 7)), el('td', {}, fmtF(r.eI / (r.h * r.h), 4))))))),
+        el('p', { class: 'small muted' }, 'เทียบหลายค่า h: Euler มี error / h เกือบคงที่ (O(h)) ส่วน Improved Euler มี error / h² เกือบคงที่ (O(h²))'));
     }
   }
   card.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1737,6 +2008,7 @@ function validateQuestion(raw) {
   if (raw.type != null && String(raw.type).trim() !== '' && !['A', 'B'].includes(type)) errors.push(`type ต้องเป็น "A" หรือ "B" (พบ "${raw.type}")`);
   const level = LEVEL_MAP[String(raw.level ?? '').trim().toLowerCase()];
   if (raw.level != null && String(raw.level).trim() !== '' && !level) errors.push(`level ต้องเป็น easy, medium หรือ hard (พบ "${raw.level}")`);
+  if (raw.method != null && String(raw.method).trim() !== '' && !normMethod(raw.method)) errors.push(`method ต้องเป็น "euler" หรือ "improved" (พบ "${raw.method}")`);
   const num = k => { const v = typeof raw[k] === 'number' ? raw[k] : parseNumber(raw[k]); return v; };
   const x0 = num('x0'), y0 = num('y0'), h = num('h'), n = num('n');
   if (raw.x0 != null && raw.x0 !== '' && !Number.isFinite(x0)) errors.push(`x0 ต้องเป็นตัวเลข (พบ "${raw.x0}")`);
@@ -1760,6 +2032,7 @@ function validateQuestion(raw) {
   if (hs.length) clean.hints = hs;
   if (exact) clean.exact = exact;
   if (raw.ask && String(raw.ask).trim()) clean.ask = String(raw.ask).trim();
+  if (raw.method && String(raw.method).trim()) clean.method = normMethod(raw.method);
   return { ok: true, errors, warnings, clean };
 }
 /* แยก CSV (รองรับเครื่องหมายคำพูด, , หรือ ;) */
@@ -1865,7 +2138,7 @@ const TEMPLATE = {
       f: 'x + y', x0: 0, y0: 1, h: 0.1, n: 3, ask: 'y(0.3)', hints: ['หา y1 ก่อน'], exact: '2*exp(x) - x - 1' }
   ]
 };
-const CSV_COLS = ['id', 'type', 'level', 'title', 'story', 'modelingSteps', 'f', 'x0', 'y0', 'h', 'n', 'ask', 'hints', 'exact'];
+const CSV_COLS = ['id', 'type', 'level', 'title', 'story', 'modelingSteps', 'f', 'x0', 'y0', 'h', 'n', 'ask', 'hints', 'exact', 'method'];
 function csvCell(v) { const s = Array.isArray(v) ? v.join(' | ') : String(v ?? ''); return /[",;\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; }
 function questionsToCSV(qs) { return '﻿' + [CSV_COLS.join(','), ...qs.map(q => CSV_COLS.map(c => csvCell(q[c])).join(','))].join('\r\n'); }
 function templateJSON() { return JSON.stringify(TEMPLATE, null, 2); }
@@ -1882,7 +2155,8 @@ function buildAIPrompt(level, type, count) {
 - ห้ามใส่คำตอบหรือช่อง answer/solution (ระบบคำนวณเฉลยเอง)
 - id ห้ามซ้ำ เช่น "ai-001", "ai-002"
 - hints 2–3 ข้อ เป็นภาษาไทยสั้นๆ, ประเภท A ใช้บริบทหลากหลาย (การเย็นตัว, ประชากร, วงจร RC, ยาในเลือด, ดอกเบี้ย ฯลฯ)
-- ฟิลด์จำเป็น: id, type, level, title, story, f, x0, y0, h, n · ไม่บังคับ: modelingSteps, hints, exact, ask
+- method (ไม่บังคับ): "euler" หรือ "improved" ถ้าต้องการบังคับวิธี (ถ้าไม่ใส่ ผู้เรียนเลือกวิธีเองได้)
+- ฟิลด์จำเป็น: id, type, level, title, story, f, x0, y0, h, n · ไม่บังคับ: modelingSteps, hints, exact, ask, method
 
 รูปแบบ JSON:
 ${templateJSON()}`;
@@ -2062,6 +2336,16 @@ async function runSelfTests() {
     const g = F('-2*y + t^3*exp(-2*t)'), e1 = eulerSolve(g, 0, 1, 0.1, 10)[10].y, e2 = eulerSolve(g, 0, 1, 0.05, 20)[20].y, h1 = heunSolve(g, 0, 1, 0.1, 10)[10].y, h2 = heunSolve(g, 0, 1, 0.05, 20)[20].y;
     add('ตาราง Euler vs Improved Euler ตามเอกสาร (t = 1.0)', e1.toFixed(9) === '0.139778910' && e2.toFixed(9) === '0.154715925' && h1.toFixed(9) === '0.171388070' && h2.toFixed(9) === '0.169680673',
       `Euler h=0.1: ${e1.toFixed(9)}, h=0.05: ${e2.toFixed(9)} · Improved h=0.1: ${h1.toFixed(9)}, h=0.05: ${h2.toFixed(9)}`); }
+  // 4c) Improved Euler: ตารางเอกสารหน้า 232 ทุกแถว + อันดับ O(h²)
+  { const g = F('-2*y + t^3*exp(-2*t)'), I1 = improvedSolve(g, 0, 1, 0.1, 10).map(p => p.y.toFixed(9)), E1 = eulerSolve(g, 0, 1, 0.1, 10).map(p => p.y.toFixed(9));
+    const bookI = ['1.000000000', '0.820040937', '0.672734445', '0.552597643', '0.455160637', '0.376681251', '0.313970920', '0.264287611', '0.225267702', '0.194879501', '0.171388070'];
+    const bookE = ['1.000000000', '0.800000000', '0.640081873', '0.512601754', '0.411563195', '0.332126261', '0.270299502', '0.222745397', '0.186654593', '0.159660776', '0.139778910'];
+    const badI = bookI.filter((v, i) => v !== I1[i]).length, badE = bookE.filter((v, i) => v !== E1[i]).length;
+    add('Improved Euler / Euler ตามตารางเอกสาร (h = 0.1, 11 แถว)', !badI && !badE, `ไม่ตรง: Improved ${badI} แถว, Euler ${badE} แถว · Improved w₁ = ${I1[1]}, w₁₀ = ${I1[10]}`);
+    const f = F('t + y'), ex = E('2*exp(t) - t - 1')(1), hs = [0.1, 0.05, 0.025, 0.0125];
+    const errs = hs.map(h => { const n = Math.round(1 / h); return Math.abs(ex - improvedSolve(f, 0, 1, h, n)[n].y); });
+    const ratios = errs.slice(1).map((e, i) => errs[i] / e);
+    add('Improved Euler: h ลดครึ่ง → error ลด ≈ 4 เท่า (O(h²))', ratios.every(r => r > 3.6 && r < 4.4), `errors=${errs.map(e => e.toExponential(3)).join(', ')} · อัตราส่วน=${ratios.map(r => r.toFixed(3)).join(', ')}`); }
   // 5) คลังโจทย์
   { const cnt = {}; let bad = [];
     questionBank.forEach(q => {
@@ -2071,12 +2355,14 @@ async function runSelfTests() {
       if (v.warnings.length) bad.push(`${q.id}: ${v.warnings.join(';')}`);
       const p = buildProblem(q), ind = eulerIndependent(compileExpr(q.f, 'f').fn, q.x0, q.y0, q.h, q.n);
       if (Math.abs(p.pts[q.n].y - ind) > 1e-9 * Math.max(1, Math.abs(ind))) bad.push(`${q.id}: เฉลยไม่ตรง`);
+      let yy = q.y0; const ff = compileExpr(q.f, 'f').fn; for (let i = 0; i < q.n; i++) { const t = q.x0 + i * q.h, k1 = ff(t, yy), k2 = ff(t + q.h, yy + q.h * k1); yy += q.h / 2 * (k1 + k2); }
+      if (Math.abs(p.ipts[q.n].y - yy) > 1e-9 * Math.max(1, Math.abs(yy))) bad.push(`${q.id}: เฉลย Improved Euler ไม่ตรง`);
       const m = /\(([-\d.]+)\)/.exec(q.ask || ''); if (m && Math.abs(+m[1] - p.xEnd) > 1e-9) bad.push(`${q.id}: ask ไม่ตรงกับ x0 + n·h`);
       const nOK = q.level === 'easy' ? q.n <= 2 : q.level === 'medium' ? q.n >= 3 && q.n <= 5 : q.n >= 6; if (!nOK) bad.push(`${q.id}: จำนวน step ไม่ตรงระดับ`);
     });
     const ids = new Set(questionBank.map(q => q.id)); if (ids.size !== questionBank.length) bad.push('มี id ซ้ำ');
     const groups = ['Aeasy', 'Amedium', 'Ahard', 'Beasy', 'Bmedium', 'Bhard'].map(k => `${k}=${cnt[k] || 0}`);
-    add(`คลังโจทย์ในระบบ ${questionBank.length} ข้อ คำนวณ/ตรวจผ่านทุกข้อ`, questionBank.length >= 60 && !bad.length && Object.values(cnt).every(v => v >= 10), (bad.length ? 'ปัญหา: ' + bad.join(' | ') : 'ผ่านทั้งหมด') + ' · ' + groups.join(', ')); }
+    add(`คลังโจทย์ในระบบ ${questionBank.length} ข้อ คำนวณถูกทั้ง Euler และ Improved Euler`, questionBank.length >= 60 && !bad.length && Object.values(cnt).every(v => v >= 10), (bad.length ? 'ปัญหา: ' + bad.join(' | ') : 'ผ่านทั้งหมด') + ' · ' + groups.join(', ')); }
   // 6) template.json
   { const r = await importQuestions(templateJSON(), 'template.json', { dryRun: true });
     add('นำเข้า template.json', r.imported === 2 && r.errors.length === 0, `นำเข้าสำเร็จ ${r.imported} ข้อ, ข้ามไป ${r.skipped} ข้อ`);
@@ -2124,16 +2410,17 @@ function init() {
   $('#geo-reset').addEventListener('click', () => { Geo.k = 0; drawGeo(); });
   drawGeo();
   // แท็บเครื่องช่วยคิด
-  EXAMPLES.forEach(ex => $('#examples').append(el('button', { class: 'chip', title: 'ใช้ตัวอย่างนี้', onclick: () => { setRangeMode('xend'); fillCalc(ex); runCalc(); } }, ex.label)));
+  renderExamples(); $$('.ex-chip')[2].classList.add('active');
   $$('#range-mode button').forEach(b => b.addEventListener('click', () => setRangeMode(b.dataset.mode)));
   livePreview('#in-f', '#pv-f', 'f'); livePreview('#in-exact', '#pv-exact', 'exact');
   $('#btn-calc').addEventListener('click', runCalc);
   $('#btn-reset').addEventListener('click', resetCalc);
   $$('.inputs input[type=text]').forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') runCalc(); }));
-  ['#opt-heun', '#opt-rk4', '#opt-slope'].forEach(s => $(s).addEventListener('change', () => { if (App.viewers[1]) App.viewers[1].setOptions(calcOpts()); }));
+  ['#opt-rk4', '#opt-slope'].forEach(s => $(s).addEventListener('change', () => { if (App.viewers[1]) App.viewers[1].setOptions(calcOpts()); }));
+  $$('#method-seg button').forEach(b => b.addEventListener('click', () => { setCalcMethod(b.dataset.m); if (App.viewers[1]) App.viewers[1].setOptions(calcOpts()); }));
   $('#opt-bound').addEventListener('change', () => { $('#wrap-bound').classList.toggle('hidden', !$('#opt-bound').checked); if (App.viewers[1]) runCalc(); });
   ['#in-L', '#in-M'].forEach(s => $(s).addEventListener('change', () => { if (App.viewers[1]) runCalc(); }));
-  renderTheoryBoundTable();
+  renderTheoryBoundTable(); renderTheoryIETable();
   $('#in-dp').addEventListener('change', () => { if (App.viewers[1]) runCalc(); });
   $('#btn-compare').addEventListener('click', runCompare);
   $('#btn-csv').addEventListener('click', () => { const v = App.viewers[1]; if (!v) return toast('กด "คำนวณ" ก่อน'); downloadFile('euler_table.csv', v.toCSV(), 'text/csv;charset=utf-8'); });
@@ -2144,8 +2431,10 @@ function init() {
     setTimeout(() => { window.print(); $('#tab-1').classList.remove('print-me'); }, 400);
   });
   // แท็บฝึกโจทย์
-  ['#pf-source', '#pf-type', '#pf-level'].forEach(s => $(s).addEventListener('change', updatePoolInfo));
-  $('#btn-newq').addEventListener('click', newQuestion);
+  ['#pf-source', '#pf-type', '#pf-level', '#pf-order'].forEach(s => $(s).addEventListener('change', updatePoolInfo));
+  $('#pf-method').addEventListener('change', () => { if (Practice.q) renderQuestion(Practice.q); });
+  $('#pf-jump').addEventListener('change', jumpToQuestion);
+  $('#btn-newq').addEventListener('click', () => newQuestion(1));
   $('#btn-mysets').addEventListener('click', () => openMySets('list'));
   $('#btn-reset-score').addEventListener('click', async () => { if (await confirmBox('ล้างคะแนน', 'ล้างคะแนนและ streak ทั้งหมดใช่ไหม?', 'ล้าง', true)) { Store.set(SCORE_KEY, null); renderScore(); } });
   $('#btn-selftest').addEventListener('click', showSelfTests);
@@ -2156,7 +2445,7 @@ function init() {
 }
 window.addEventListener('load', init);
 /* เปิดให้เรียกจาก console เพื่อทดสอบ */
-window.EulerLab = { eulerSolve, heunSolve, rk4Solve, compileExpr, buildProblem, validateQuestion, importQuestions, parseImportText, runSelfTests, questionBank, templateJSON, questionsToCSV, generateQuestion, buildAIPrompt };
+window.EulerLab = { eulerSolve, improvedSolve, heunSolve, rk4Solve, compileExpr, buildProblem, validateQuestion, importQuestions, parseImportText, runSelfTests, questionBank, templateJSON, questionsToCSV, generateQuestion, buildAIPrompt };
 </script>
 </body>
 </html>
