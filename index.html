@@ -185,6 +185,8 @@ table.data th{position:sticky;top:0;background:var(--bg2);text-align:right;paddi
 table.data td{padding:7px 10px;text-align:right;border-top:1px solid var(--border);font-family:var(--mono);white-space:nowrap}
 table.data th:first-child,table.data td:first-child{text-align:center}
 table.data tr.cur td{background:var(--primary-soft)}
+table.data.compact th{white-space:normal;line-height:1.3;vertical-align:bottom}
+table.data.compact th,table.data.compact td{padding:7px 8px;font-size:.86rem}
 table.data tr{animation:pop .25s ease}
 .summary{border-radius:14px;padding:16px;margin-top:14px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--border);animation:pop .35s ease}
 .summary .big{font-family:var(--mono);font-size:1.6rem;font-weight:700;color:var(--primary)}
@@ -1437,7 +1439,7 @@ function runCompare() {
       cell(fmtF(yI, dp)), cell(fmtF(eI, dp + 2)), cell(Number.isFinite(rI) ? fmtF(rI, 2) : '—'), cell(Number.isFinite(hr) ? `${fmtS(hr, 2)} / ${fmtS(hr * hr, 2)}` : '—'));
     prevE = eE; prevI = eI; prevH = r.h; return row;
   });
-  out.append(el('div', { class: 'table-wrap' }, el('table', { class: 'data' },
+  out.append(el('div', { class: 'table-wrap' }, el('table', { class: 'data compact' },
     el('thead', {}, el('tr', {}, ['h', 'N', 'Euler w_N', '|error| Euler', 'ลดลง (เท่า)', 'Improved w_N', '|error| Improved', 'ลดลง (เท่า)', 'ทฤษฎี O(h) / O(h²)'].map(t => el('th', {}, t)))), el('tbody', {}, rows))));
   out.append(el('p', { class: 'small', style: 'margin-top:10px' }, `ค่าอ้างอิง y(b) (${refLabel}) = ${fmtS(ref, dp + 2)} · เส้นทึบ = Euler, เส้นประ = Improved Euler · เมื่อลด h ลง k เท่า: error ของ Euler ลด ≈ k เท่า (O(h)) แต่ Improved Euler ลด ≈ k² เท่า (O(h²)) เช่น ลด h ครึ่งหนึ่ง → Euler ลด ≈ 2 เท่า, Improved ลด ≈ 4 เท่า`));
 }
